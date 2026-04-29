@@ -46,7 +46,7 @@ app.MapPost("/api/v1/training-requests", async (
         return Results.ValidationProblem(errors, statusCode: StatusCodes.Status400BadRequest);
     }
 })
-.WithName("CreateTrainingRequest")
+.WithName("CreateTrainingRequest1!!")
 .WithOpenApi();
 
 app.Run();
