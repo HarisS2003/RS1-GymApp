@@ -1,0 +1,21 @@
+---
+description: Keep backend API contracts and frontend api-services synchronized
+alwaysApply: true
+---
+
+# eGymSystem Contract Sync Rule
+
+When endpoint or payload changes, update both sides in same task:
+
+- Backend: controller/action + application request/response DTOs + validators
+- Frontend: `api-services/<feature>/<feature>-api.models.ts` + `<feature>-api.service.ts`
+
+Sync checklist:
+
+- Route path and HTTP method match.
+- Query/body field names and optionality match.
+- Enum values and status transitions match.
+- Error handling still maps to existing error DTO flow.
+- Add/adjust tests for changed contract behavior.
+
+Do not leave half-synced contract changes.

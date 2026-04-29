@@ -1,0 +1,25 @@
+---
+description: Generate frontend code following eGymSystem.Frontend module and api-service patterns
+globs: eGymSystem.Frontend/src/**/*.{ts,html,scss}
+alwaysApply: false
+---
+
+# eGymSystem.Frontend Structure Rule
+
+Apply in `eGymSystem.Frontend/src` with this structure:
+
+- `app/modules/<area>/...` -> pages, feature components, area routing/module files
+- `app/api-services/<feature>/` -> `<feature>-api.service.ts` + `<feature>-api.models.ts`
+- `app/core/` -> interceptors, cross-cutting services, helpers
+- `app/modules/shared/` -> reusable UI/shared module/material bundles
+
+Generation rules:
+
+- For backend endpoint integration, add/update feature API service first.
+- API service naming: `<feature>-api.service.ts`; models colocated in same feature folder.
+- Use Angular style already in repo (`inject(HttpClient)`, `providedIn: 'root'`).
+- Keep module pattern filenames already used: `*-module.ts`, `*-routing-module.ts`.
+- Components stay in feature folders with triplet files (`.component.ts/.html/.scss`) when present.
+- Reuse existing interceptors/error flow; do not duplicate auth/error plumbing inside components.
+- Use shared UI utilities/components before creating new duplicates.
+- Do not create/edit files in `Market.Frontend`; frontend target is `eGymSystem.Frontend` only.

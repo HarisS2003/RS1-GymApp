@@ -1,0 +1,21 @@
+---
+description: Root routing rule for eGymSystem backend/frontend codegen
+alwaysApply: true
+---
+
+# eGymSystem Codegen Root Rule
+
+Use this rule first, then follow child rule by target area:
+
+- Backend target -> follow `market-backend-structure.mdc` scoped to `eGymSystem.Backend`
+- Frontend target -> follow `market-frontend-structure.mdc` scoped to `eGymSystem.Frontend`
+- API contract change -> follow both backend + frontend rules and `market-contract-sync.mdc`
+
+Hard constraints:
+
+- Keep existing folder architecture. Do not invent new top-level architecture style.
+- Keep naming style already used in repo.
+- Prefer minimal diff touching smallest valid layer set.
+- For feature work, create/modify tests in corresponding test area.
+- Hard guard: do not generate or modify code under `Market.Backend` or `Market.Frontend`.
+- Hard guard: all new work targets `eGymSystem.Backend` and `eGymSystem.Frontend` only.

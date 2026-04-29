@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eGymSystem.Backend", "eGymSystem.Backend", "{658BC528-2839-4C63-9B6C-6D996B1B97B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGymSystem.API", "eGymSystem.Backend\eGymSystem.API\eGymSystem.API.csproj", "{C8DFD2AB-E907-49A6-9C0B-CA2A236740EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGymSystem.Application", "eGymSystem.Backend\eGymSystem.Application\eGymSystem.Application.csproj", "{F9805D66-39DA-4C8D-808E-0989B2561FF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGymSystem.Domain", "eGymSystem.Backend\eGymSystem.Domain\eGymSystem.Domain.csproj", "{449936C0-6E56-4B62-B9F7-1E491F698F35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGymSystem.Infrastructure", "eGymSystem.Backend\eGymSystem.Infrastructure\eGymSystem.Infrastructure.csproj", "{B523310B-BD0B-45CD-B0F8-50284AB36191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGymSystem.Shared", "eGymSystem.Backend\eGymSystem.Shared\eGymSystem.Shared.csproj", "{2B7637D0-92C4-461E-9B99-B084CA1F5363}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGymSystem.Tests", "eGymSystem.Backend\eGymSystem.Tests\eGymSystem.Tests.csproj", "{DBC1A5BB-5772-4F52-92C5-D4D363E02688}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8DFD2AB-E907-49A6-9C0B-CA2A236740EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8DFD2AB-E907-49A6-9C0B-CA2A236740EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8DFD2AB-E907-49A6-9C0B-CA2A236740EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8DFD2AB-E907-49A6-9C0B-CA2A236740EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9805D66-39DA-4C8D-808E-0989B2561FF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9805D66-39DA-4C8D-808E-0989B2561FF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9805D66-39DA-4C8D-808E-0989B2561FF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9805D66-39DA-4C8D-808E-0989B2561FF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{449936C0-6E56-4B62-B9F7-1E491F698F35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{449936C0-6E56-4B62-B9F7-1E491F698F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{449936C0-6E56-4B62-B9F7-1E491F698F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{449936C0-6E56-4B62-B9F7-1E491F698F35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B523310B-BD0B-45CD-B0F8-50284AB36191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B523310B-BD0B-45CD-B0F8-50284AB36191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B523310B-BD0B-45CD-B0F8-50284AB36191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B523310B-BD0B-45CD-B0F8-50284AB36191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B7637D0-92C4-461E-9B99-B084CA1F5363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B7637D0-92C4-461E-9B99-B084CA1F5363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B7637D0-92C4-461E-9B99-B084CA1F5363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B7637D0-92C4-461E-9B99-B084CA1F5363}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBC1A5BB-5772-4F52-92C5-D4D363E02688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBC1A5BB-5772-4F52-92C5-D4D363E02688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBC1A5BB-5772-4F52-92C5-D4D363E02688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBC1A5BB-5772-4F52-92C5-D4D363E02688}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C8DFD2AB-E907-49A6-9C0B-CA2A236740EA} = {658BC528-2839-4C63-9B6C-6D996B1B97B0}
+		{F9805D66-39DA-4C8D-808E-0989B2561FF8} = {658BC528-2839-4C63-9B6C-6D996B1B97B0}
+		{449936C0-6E56-4B62-B9F7-1E491F698F35} = {658BC528-2839-4C63-9B6C-6D996B1B97B0}
+		{B523310B-BD0B-45CD-B0F8-50284AB36191} = {658BC528-2839-4C63-9B6C-6D996B1B97B0}
+		{2B7637D0-92C4-461E-9B99-B084CA1F5363} = {658BC528-2839-4C63-9B6C-6D996B1B97B0}
+		{DBC1A5BB-5772-4F52-92C5-D4D363E02688} = {658BC528-2839-4C63-9B6C-6D996B1B97B0}
+	EndGlobalSection
+EndGlobal

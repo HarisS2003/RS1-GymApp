@@ -1,0 +1,27 @@
+---
+description: Generate backend code following eGymSystem.Backend clean layering + CQRS
+globs: eGymSystem.Backend/**/*.cs
+alwaysApply: false
+---
+
+# eGymSystem.Backend Structure Rule
+
+Apply in `eGymSystem.Backend` with this project layout:
+
+- `eGymSystem.API` -> controllers, middleware, DI wiring only
+- `eGymSystem.Application` -> CQRS commands/queries/handlers, validators, behaviors
+- `eGymSystem.Domain` -> entities/enums/domain logic
+- `eGymSystem.Infrastructure` -> EF Core, DbContext, configurations, migrations, external services
+- `eGymSystem.Shared` -> shared DTOs/options/constants
+- `eGymSystem.Tests` -> unit/integration tests
+
+Generation rules:
+
+- Keep controllers thin; call MediatR from API layer.
+- New business flow: add `Command/Query` + `Handler` under `eGymSystem.Application/Modules/<Area>/...`.
+- Validation belongs to Application (FluentValidation + pipeline behavior), not controller.
+- Persistence mapping/config belongs to `eGymSystem.Infrastructure/Database/Configurations`.
+- Reuse unified error shape (`ErrorDto`, exception handler path) instead of custom response style.
+- Keep auth flow compatible with existing JWT setup and fallback policy.
+- Register new services via layer `DependencyInjection.cs`, not in random files.
+- Do not create/edit files in `Market.Backend`; backend target is `eGymSystem.Backend` only.
