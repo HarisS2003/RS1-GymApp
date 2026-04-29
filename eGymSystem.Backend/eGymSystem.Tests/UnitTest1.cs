@@ -2,6 +2,7 @@ using eGymSystem.Application;
 using eGymSystem.Application.Abstractions.Messaging;
 using eGymSystem.Application.Abstractions.Validation;
 using eGymSystem.Application.Modules.Training.Commands;
+using eGymSystem.Shared.Errors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace eGymSystem.Tests;
@@ -39,6 +40,15 @@ public class CommandPipelineTests
         var act = () => dispatcher.Send(command);
 
         var exception = await Assert.ThrowsAsync<CommandValidationException>(act);
-        Assert.NotEmpty(exception.Errors);
+        Assert.Equal(3, exception.Errors.Count);
+        Assert.Contains("UserId must be greater than 0.", exception.Errors);
+        Assert.Contains("TrainerId must be greater than 0.", exception.Errors);
+        Assert.Contains("RequestedTimeUtc must be in future.", exception.Errors);
+    }
+
+    [Fact]
+    public void ValidationErrorCode_IsStable()
+    {
+        Assert.Equal("VALIDATION_FAILED", ApiErrorCodes.ValidationFailed);
     }
 }

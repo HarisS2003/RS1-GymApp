@@ -22,6 +22,9 @@ Generation rules:
 - Validation belongs to Application (FluentValidation + pipeline behavior), not controller.
 - Persistence mapping/config belongs to `eGymSystem.Infrastructure/Database/Configurations`.
 - Reuse unified error shape (`ErrorDto`, exception handler path) instead of custom response style.
+- Validation failures must return canonical envelope with stable error code + trace id.
 - Keep auth flow compatible with existing JWT setup and fallback policy.
 - Register new services via layer `DependencyInjection.cs`, not in random files.
 - Do not create/edit files in `Market.Backend`; backend target is `eGymSystem.Backend` only.
+- For scaffolding stage, expose full CRUD route surface with placeholder responses and no service/domain execution.
+- Mirror `Market.Backend` folder/file naming patterns in `eGymSystem.Backend` whenever adding backend scaffold files (Controllers, Modules, DTO folders, Options, DI files, Common middleware/handlers, test layout).

@@ -1,54 +1,69 @@
+using eGymSystem.API;
+using eGymSystem.API.Endpoints;
+using eGymSystem.API.Middleware;
 using eGymSystem.Application;
-using eGymSystem.Application.Abstractions.Messaging;
-using eGymSystem.Application.Abstractions.Validation;
-using eGymSystem.Application.Modules.Training.Commands;
+using eGymSystem.Infrastructure;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddApplication();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public partial class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    private static async Task Main(string[] args)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
+
+        try
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((ctx, services, cfg) =>
+            {
+                cfg.ReadFrom.Configuration(ctx.Configuration)
+                   .ReadFrom.Services(services)
+                   .Enrich.FromLogContext()
+                   .Enrich.WithThreadId()
+                   .Enrich.WithProcessId()
+                   .Enrich.WithMachineName();
+            });
+
+            builder.Logging.ClearProviders();
+
+            builder.Services
+                .AddAPI(builder.Configuration, builder.Environment)
+                .AddInfrastructure(builder.Configuration, builder.Environment)
+                .AddApplication();
+
+            var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseExceptionHandler();
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.MapControllers();
+            app.MapCrudSkeletonEndpoints();
+
+            await app.Services.InitializeDatabaseAsync(app.Environment);
+            app.Run();
+        }
+        catch (HostAbortedException)
+        {
+            Log.Information("Host aborted by tooling.");
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "eGymSystem API terminated unexpectedly.");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.MapPost("/api/v1/training-requests", async (
-    CreateTrainingRequestHttpRequest request,
-    ICommandDispatcher dispatcher,
-    CancellationToken cancellationToken) =>
-{
-    try
-    {
-        var command = new CreateTrainingRequestCommand(
-            request.UserId,
-            request.TrainerId,
-            request.RequestedTimeUtc);
-
-        var result = await dispatcher.Send(command, cancellationToken);
-        return Results.Created($"/api/v1/training-requests/{result.RequestId}", result);
-    }
-    catch (CommandValidationException ex)
-    {
-        var errors = ex.Errors
-            .Select((error, idx) => new { idx, error })
-            .ToDictionary(x => $"rule_{x.idx + 1}", x => new[] { x.error });
-
-        return Results.ValidationProblem(errors, statusCode: StatusCodes.Status400BadRequest);
-    }
-})
-.WithName("CreateTrainingRequest1!!")
-.WithOpenApi();
-
-app.Run();
-
-public sealed record CreateTrainingRequestHttpRequest(int UserId, int TrainerId, DateTime RequestedTimeUtc);
