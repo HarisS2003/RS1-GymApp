@@ -171,6 +171,9 @@ namespace Market.Infrastructure.Database.Migrations.Gym
                     b.Property<int>("DurationDays")
                         .HasColumnType("int");
 
+                    b.Property<int>("GymId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -187,6 +190,8 @@ namespace Market.Infrastructure.Database.Migrations.Gym
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GymId");
 
                     b.ToTable("MembershipPlans", (string)null);
                 });
@@ -738,6 +743,17 @@ namespace Market.Infrastructure.Database.Migrations.Gym
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.MembershipPlanEntity", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.GymEntity", "Gym")
+                        .WithMany("MembershipPlans")
+                        .HasForeignKey("GymId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Gym");
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.NotificationEntity", b =>
                 {
                     b.HasOne("Market.Domain.Entities.HashtagTagEntity", "HashtagTag")
@@ -941,6 +957,8 @@ namespace Market.Infrastructure.Database.Migrations.Gym
 
             modelBuilder.Entity("Market.Domain.Entities.GymEntity", b =>
                 {
+                    b.Navigation("MembershipPlans");
+
                     b.Navigation("Products");
 
                     b.Navigation("Trainers");

@@ -19,5 +19,11 @@ public class MembershipPlanEntityConfiguration : IEntityTypeConfiguration<Member
         builder
             .Property(x => x.DiscountPercentage)
             .HasPrecision(5, 2);
+
+        builder
+            .HasOne(x => x.Gym)
+            .WithMany(x => x.MembershipPlans)
+            .HasForeignKey(x => x.GymId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

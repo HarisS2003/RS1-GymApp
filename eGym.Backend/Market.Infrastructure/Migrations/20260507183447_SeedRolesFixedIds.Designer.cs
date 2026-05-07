@@ -4,6 +4,7 @@ using Market.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Market.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260507183447_SeedRolesFixedIds")]
+    partial class SeedRolesFixedIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,9 +174,6 @@ namespace Market.Infrastructure.Migrations
                     b.Property<int>("DurationDays")
                         .HasColumnType("int");
 
-                    b.Property<int>("GymId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -190,8 +190,6 @@ namespace Market.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GymId");
 
                     b.ToTable("MembershipPlans", (string)null);
                 });
@@ -465,6 +463,29 @@ namespace Market.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            Name = "trainer"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            Name = "user"
+                        });
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.TrainerEntity", b =>
@@ -743,17 +764,6 @@ namespace Market.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Market.Domain.Entities.MembershipPlanEntity", b =>
-                {
-                    b.HasOne("Market.Domain.Entities.GymEntity", "Gym")
-                        .WithMany("MembershipPlans")
-                        .HasForeignKey("GymId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Gym");
-                });
-
             modelBuilder.Entity("Market.Domain.Entities.NotificationEntity", b =>
                 {
                     b.HasOne("Market.Domain.Entities.HashtagTagEntity", "HashtagTag")
@@ -957,8 +967,6 @@ namespace Market.Infrastructure.Migrations
 
             modelBuilder.Entity("Market.Domain.Entities.GymEntity", b =>
                 {
-                    b.Navigation("MembershipPlans");
-
                     b.Navigation("Products");
 
                     b.Navigation("Trainers");
