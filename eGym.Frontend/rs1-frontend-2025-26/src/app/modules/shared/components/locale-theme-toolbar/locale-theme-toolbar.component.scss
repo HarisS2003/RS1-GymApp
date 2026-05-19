@@ -1,0 +1,33 @@
+.locale-theme-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.locale-theme-toolbar__lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-color: var(--app-border, #e2e8f0) !important;
+  color: var(--app-text, #0f1724) !important;
+  background: var(--app-surface, #fff) !important;
+}
+
+.locale-theme-toolbar__theme {
+  color: var(--app-accent, #ff6600) !important;
+}
+
+.active-lang {
+  font-weight: 600;
+}
+
+.check {
+  margin-left: auto;
+  color: var(--app-accent, #ff6600);
+}
+
+.locale-theme-toolbar--compact .locale-theme-toolbar__lang span:not(.mat-icon) {
+  @media (max-width: 480px) {
+    display: none;
+  }
+}

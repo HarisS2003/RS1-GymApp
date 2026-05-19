@@ -1,0 +1,102 @@
+<div class="admin-dash">
+  <header class="admin-dash__head">
+    <div>
+      <h1>{{ 'ADMIN_DASH.TITLE' | translate }}</h1>
+      <p>{{ 'ADMIN_DASH.SUB' | translate }}</p>
+    </div>
+    <div class="admin-tabs">
+      <button type="button" [class.active]="activeTab === 'trainers'" (click)="setTab('trainers')">
+        {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
+      </button>
+      <button type="button" [class.active]="activeTab === 'members'" (click)="setTab('members')">
+        {{ 'ADMIN_DASH.TAB_MEMBERS' | translate }}
+      </button>
+    </div>
+  </header>
+
+  @if (loading) {
+    <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (activeTab === 'trainers') {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>{{ 'ADMIN_DASH.COL_ID' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_NAME' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_SPEC' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_EXP' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_STATUS' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_ACTIONS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of trainerRows; track row.trainer.id) {
+            <tr>
+              <td>{{ row.trainer.id }}</td>
+              <td>{{ trainerName(row) }}</td>
+              <td>{{ row.trainer.bio || '—' }}</td>
+              <td>{{ row.trainer.experienceYears }} {{ 'ADMIN_DASH.YEARS' | translate }}</td>
+              <td><span class="status-active">{{ 'COMMON.ACTIVE' | translate }}</span></td>
+              <td class="actions">
+                <button mat-icon-button type="button" color="warn" (click)="deleteTrainer(row)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="empty-cell">{{ 'ADMIN_DASH.NO_TRAINERS' | translate }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>{{ 'ADMIN_DASH.COL_ID' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_NAME' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_EMAIL' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_GYM' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_STATUS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of members; track m.id) {
+            <tr>
+              <td>{{ m.id }}</td>
+              <td>{{ m.firstName }} {{ m.lastName }}</td>
+              <td>{{ m.email }}</td>
+              <td>{{ m.gymId }}</td>
+              <td><span class="status-active">{{ 'COMMON.ACTIVE' | translate }}</span></td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty-cell">{{ 'ADMIN_DASH.NO_MEMBERS' | translate }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <section class="admin-summary">
+    <article class="summary-card summary-card--blue">
+      <span>{{ 'ADMIN_DASH.SUMMARY_MEMBERS' | translate }}</span>
+      <strong>{{ memberCount }}</strong>
+      <small>{{ 'ADMIN_DASH.SUMMARY_MEMBERS_SUB' | translate }}</small>
+    </article>
+    <article class="summary-card summary-card--orange">
+      <span>{{ 'ADMIN_DASH.SUMMARY_REVENUE' | translate }}</span>
+      <strong>{{ monthlyRevenue | number: '1.0-0' }} KM</strong>
+      <small>{{ 'ADMIN_DASH.SUMMARY_REVENUE_SUB' | translate }}</small>
+    </article>
+    <article class="summary-card summary-card--green">
+      <span>{{ 'ADMIN_DASH.SUMMARY_TRAININGS' | translate }}</span>
+      <strong>{{ activeTrainings }}</strong>
+      <small>{{ 'ADMIN_DASH.SUMMARY_TRAININGS_SUB' | translate }}</small>
+    </article>
+  </section>
+</div>

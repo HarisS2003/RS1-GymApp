@@ -1,0 +1,26 @@
+<h1 class="page-title">{{ 'CLIENT.SHOP.TITLE' | translate }}</h1>
+<p class="page-sub">{{ 'CLIENT.SHOP.SUB' | translate }}</p>
+
+@if (loading) {
+  <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+} @else if (products.length === 0) {
+  <p class="empty-msg">{{ 'CLIENT.HOME.NO_PRODUCTS' | translate }}</p>
+} @else {
+  <div class="products-grid">
+    @for (product of products; track product.id) {
+      <article class="product-card">
+        <span class="product-badge">{{ product.categoryName }}</span>
+        <div class="product-card__img"><mat-icon>inventory_2</mat-icon></div>
+        <h3>{{ product.name }}</h3>
+        @if (product.description) {
+          <p>{{ product.description }}</p>
+        }
+        <span class="stock">{{ 'CLIENT.SHOP.STOCK' | translate }}: {{ product.stockQuantity }}</span>
+        <div class="product-card__footer">
+          <strong>{{ product.price }} KM</strong>
+          <button mat-flat-button type="button">{{ 'COMMON.ADD' | translate }}</button>
+        </div>
+      </article>
+    }
+  </div>
+}

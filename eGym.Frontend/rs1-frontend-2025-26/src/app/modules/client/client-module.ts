@@ -1,14 +1,24 @@
-import {NgModule} from '@angular/core';
-
-import {ClientRoutingModule} from './client-routing-module';
-import {SharedModule} from '../shared/shared-module';
-
+import { NgModule } from '@angular/core';
+import { ClientRoutingModule } from './client-routing-module';
+import { SharedModule } from '../shared/shared-module';
+import { ClientLayoutComponent } from './layout/client-layout.component';
+import { ClientHomeComponent } from './pages/home/client-home.component';
+import { TrainerHomeComponent } from './pages/trainer-home/trainer-home.component';
+import { ClientTrainersComponent } from './pages/trainers/client-trainers.component';
+import { ClientShopComponent } from './pages/shop/client-shop.component';
+import { ClientProfileComponent } from './pages/profile/client-profile.component';
+import { ClientScheduleComponent } from './pages/schedule/client-schedule.component';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    SharedModule,
-    ClientRoutingModule
-  ]
+  declarations: [
+    ClientLayoutComponent,
+    ClientHomeComponent,
+    TrainerHomeComponent,
+    ClientTrainersComponent,
+    ClientShopComponent,
+    ClientProfileComponent,
+    ClientScheduleComponent,
+  ],
+  imports: [SharedModule, ClientRoutingModule],
 })
-export class ClientModule { }
+export class ClientModule {}

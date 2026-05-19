@@ -18,12 +18,11 @@ export class CurrentUserService {
     return this.auth.currentUser();
   }
 
-  /** Pravilo: admin > ostali → client */
   getDefaultRoute(): string {
     const user = this.snapshot;
-    if (!user) return '/login';
+    if (!user) return '/auth/login';
 
-    if (user.isAdmin) return '/admin';
+    if (user.isAdmin) return '/admin/dashboard';
     return '/client';
   }
 }

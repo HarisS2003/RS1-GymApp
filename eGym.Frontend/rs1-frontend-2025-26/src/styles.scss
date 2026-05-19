@@ -46,8 +46,69 @@ body {
 
 
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// === App theme tokens (light default) ===
+:root,
+:root.theme-light {
+  --app-bg: #f1f5f9;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f8fafc;
+  --app-text: #0f1724;
+  --app-text-muted: #64748b;
+  --app-border: #e2e8f0;
+  --app-accent: #ff6600;
+  --app-sidebar-bg: #0f1724;
+  --app-sidebar-text: #ffffff;
+  --app-header-bg: #ffffff;
+  --app-input-bg: #ffffff;
+  --app-hero-overlay: linear-gradient(
+    135deg,
+    rgba(255, 102, 0, 0.88) 0%,
+    rgba(15, 23, 36, 0.92) 55%,
+    rgba(10, 14, 22, 0.95) 100%
+  );
+  --app-landing-bg: linear-gradient(180deg, #0f1724 0%, #1a2332 55%, #141c28 100%);
+}
+
+:root.theme-dark {
+  color-scheme: dark;
+  --app-bg: #0b1220;
+  --app-surface: #111827;
+  --app-surface-muted: #1e293b;
+  --app-text: #f1f5f9;
+  --app-text-muted: #94a3b8;
+  --app-border: #334155;
+  --app-accent: #ff7a1a;
+  --app-sidebar-bg: #070d18;
+  --app-sidebar-text: #f8fafc;
+  --app-header-bg: #111827;
+  --app-input-bg: #1e293b;
+  --app-hero-overlay: linear-gradient(
+    135deg,
+    rgba(255, 102, 0, 0.75) 0%,
+    rgba(15, 23, 36, 0.95) 55%,
+    rgba(5, 8, 14, 0.98) 100%
+  );
+  --app-landing-bg: linear-gradient(180deg, #05080f 0%, #0f1724 55%, #0b1220 100%);
+}
+
+body.theme-dark {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+}
+
+body.theme-light {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+}
 
 
 // Add this to your global styles.scss

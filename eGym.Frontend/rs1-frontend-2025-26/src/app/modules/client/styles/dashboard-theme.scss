@@ -1,0 +1,13 @@
+$accent: var(--app-accent, #ff6600);
+$sidebar-bg: var(--app-sidebar-bg, #0f1724);
+$sidebar-active: var(--app-accent, #ff6600);
+$page-bg: var(--app-bg, #f1f5f9);
+$text-dark: var(--app-text, #0f1724);
+$text-muted: var(--app-text-muted, #64748b);
+
+@mixin card {
+  background: var(--app-surface, #fff);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(15, 23, 36, 0.06);
+  border: 1px solid var(--app-border, transparent);
+}

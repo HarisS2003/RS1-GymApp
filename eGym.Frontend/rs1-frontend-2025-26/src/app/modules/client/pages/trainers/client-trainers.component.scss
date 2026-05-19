@@ -1,0 +1,71 @@
+@import '../../styles/dashboard-theme';
+
+.page-title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  color: #0f1724;
+}
+
+.page-sub {
+  margin: 0 0 24px;
+  color: #64748b;
+}
+
+.page-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.trainer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.trainer-card {
+  @include card;
+  padding: 20px;
+  text-align: center;
+
+  h3 {
+    margin: 12px 0 8px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.5;
+  }
+}
+
+.trainer-card__avatar {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #ffedd5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    color: #ff6600;
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.trainer-meta {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ff6600;
+}
+
+.empty-msg {
+  color: #64748b;
+}

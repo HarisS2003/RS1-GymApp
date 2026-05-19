@@ -2,9 +2,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { CurrentUserService } from '../services/auth/current-user.service';
+import { UserProfileService } from '../services/user-profile.service';
+import { ADMIN_ROLE_ID } from '../../modules/auth/constants/auth.constants';
 
 export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const currentUser = inject(CurrentUserService);
+  const profileService = inject(UserProfileService);
   const router = inject(Router);
 
   const requireAuth = route.data['requireAuth'] === true;
@@ -33,8 +36,11 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   }
 
   if (requireAdmin && !user.isAdmin) {
-    router.navigate([currentUser.getDefaultRoute()]);
-    return false;
+    const profileRole = profileService.profile()?.roleId;
+    if (profileRole !== ADMIN_ROLE_ID) {
+      router.navigate([currentUser.getDefaultRoute()]);
+      return false;
+    }
   }
 
   if (requireManager && !user.isManager) {

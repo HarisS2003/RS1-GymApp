@@ -1,0 +1,134 @@
+$accent: #ff6600;
+
+.admin-dash__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 32px;
+    color: #0f1724;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+
+  button {
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &.active {
+      background: $accent;
+      border-color: $accent;
+      color: #fff;
+    }
+  }
+}
+
+.page-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.admin-table-wrap {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(15, 23, 36, 0.06);
+  overflow: auto;
+  margin-bottom: 24px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+  }
+
+  th {
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+  }
+}
+
+.status-active {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.actions {
+  white-space: nowrap;
+}
+
+.empty-cell {
+  text-align: center;
+  color: #64748b;
+  padding: 32px !important;
+}
+
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-card {
+  border-radius: 14px;
+  padding: 24px;
+  color: #fff;
+
+  span {
+    display: block;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  strong {
+    display: block;
+    font-size: 36px;
+    margin: 8px 0;
+  }
+
+  small {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  &--blue {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
+
+  &--orange {
+    background: linear-gradient(135deg, #ff6600, #ea580c);
+  }
+
+  &--green {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+  }
+}

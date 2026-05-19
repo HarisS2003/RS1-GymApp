@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AuthFacadeService } from '../../../core/services/auth/auth-facade.service';
+import { UserProfileService } from '../../../core/services/user-profile.service';
 
 @Component({
   selector: 'app-logout',
@@ -20,6 +21,7 @@ import { AuthFacadeService } from '../../../core/services/auth/auth-facade.servi
 export class LogoutComponent implements OnInit {
   private router = inject(Router);
   private auth = inject(AuthFacadeService);
+  private profileService = inject(UserProfileService);
 
   countdownSeconds = 2;
 
@@ -37,7 +39,8 @@ export class LogoutComponent implements OnInit {
 
       if (this.countdownSeconds <= 0) {
         clearInterval(intervalId);
-        this.router.navigate(['/login']);
+        this.profileService.clear();
+        this.router.navigate(['/auth/login']);
       }
     }, 1000);
   }

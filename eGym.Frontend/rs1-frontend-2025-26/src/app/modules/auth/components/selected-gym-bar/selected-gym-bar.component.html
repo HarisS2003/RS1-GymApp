@@ -1,0 +1,15 @@
+@if (gym) {
+  <div class="selected-gym">
+    <div class="selected-gym__info">
+      <mat-icon>fitness_center</mat-icon>
+      <div>
+        <span class="selected-gym__label">{{ 'AUTH.SELECTED_GYM' | translate }}</span>
+        <strong>{{ gym.name }}</strong>
+        <span class="selected-gym__meta">{{ gym.city }}</span>
+      </div>
+    </div>
+    <button type="button" class="selected-gym__change" (click)="changeGym()">
+      {{ 'AUTH.CHANGE_GYM' | translate }}
+    </button>
+  </div>
+}

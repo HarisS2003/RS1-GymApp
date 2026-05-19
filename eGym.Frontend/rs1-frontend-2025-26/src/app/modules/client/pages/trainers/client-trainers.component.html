@@ -1,0 +1,21 @@
+<h1 class="page-title">{{ 'CLIENT.TRAINERS_PAGE.TITLE' | translate }}</h1>
+<p class="page-sub">{{ 'CLIENT.TRAINERS_PAGE.SUB' | translate }}</p>
+
+@if (loading) {
+  <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+} @else if (rows.length === 0) {
+  <p class="empty-msg">{{ 'CLIENT.TRAINERS_PAGE.NO_TRAINERS' | translate }}</p>
+} @else {
+  <div class="trainer-grid">
+    @for (row of rows; track row.trainer.id) {
+      <article class="trainer-card">
+        <div class="trainer-card__avatar"><mat-icon>person</mat-icon></div>
+        <h3>{{ displayName(row) }}</h3>
+        <p>{{ row.trainer.bio || ('CLIENT.TRAINERS_PAGE.NO_BIO' | translate) }}</p>
+        <span class="trainer-meta">
+          {{ row.trainer.experienceYears }} {{ 'CLIENT.TRAINERS_PAGE.EXPERIENCE' | translate }}
+        </span>
+      </article>
+    }
+  </div>
+}

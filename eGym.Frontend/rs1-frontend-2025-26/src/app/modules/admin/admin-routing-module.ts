@@ -8,12 +8,15 @@ import { ProductsEditComponent } from './catalogs/products/products-edit/product
 import { ProductCategoriesComponent } from './catalogs/product-categories/product-categories.component';
 import {AdminOrdersComponent} from './orders/admin-orders.component';
 import {AdminSettingsComponent} from './admin-settings/admin-settings.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
     children: [
+      { path: 'dashboard', component: AdminDashboardComponent },
+
       // PRODUCTS
       {
         path: 'products',
@@ -45,10 +48,9 @@ const routes: Routes = [
       },
 
 
-      // default admin route → /admin/products
       {
         path: '',
-        redirectTo: 'products',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
     ],

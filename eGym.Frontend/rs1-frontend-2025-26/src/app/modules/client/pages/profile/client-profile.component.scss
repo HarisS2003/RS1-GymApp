@@ -1,0 +1,345 @@
+@import '../../styles/dashboard-theme';
+
+.profile-page__head {
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 800;
+    color: $text-dark;
+  }
+
+  p {
+    margin: 0;
+    color: $text-muted;
+    font-size: 15px;
+  }
+}
+
+.page-loading {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-summary {
+  @include card;
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.profile-summary__avatar {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: $accent;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.profile-summary h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: $text-dark;
+}
+
+.profile-summary__email {
+  margin: 0 0 12px;
+  color: $text-muted;
+  font-size: 14px;
+}
+
+.profile-summary__role {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--app-surface-muted, #f1f5f9);
+  color: $text-muted;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.membership-card {
+  @include card;
+  overflow: hidden;
+  padding: 0;
+}
+
+.membership-card--empty {
+  padding: 20px;
+  color: $text-muted;
+  font-size: 14px;
+
+  p {
+    margin: 0;
+  }
+}
+
+.membership-card__banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: $accent;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.membership-card__body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.membership-card__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+
+  span {
+    color: $text-muted;
+  }
+
+  strong {
+    color: $text-dark;
+    text-align: right;
+  }
+}
+
+.membership-card__cta {
+  margin-top: 8px;
+  width: 100%;
+  background: $accent !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+
+.profile-panel {
+  @include card;
+  padding: 22px 24px;
+}
+
+.profile-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: $text-dark;
+  }
+}
+
+.profile-panel > h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: $text-dark;
+}
+
+.profile-panel__edit {
+  border-color: var(--app-border, #e2e8f0) !important;
+  color: $text-muted !important;
+  font-size: 13px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+  }
+}
+
+.profile-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    span {
+      font-size: 12px;
+      font-weight: 600;
+      color: $text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    input {
+      height: 44px;
+      border: 1px solid var(--app-border, #e2e8f0);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: $text-dark;
+      background: var(--app-input-bg, #f8fafc);
+    }
+  }
+}
+
+.training-upcoming {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.training-upcoming__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--app-surface-muted, #f8fafc);
+  border: 1px solid var(--app-border, #e2e8f0);
+}
+
+.training-upcoming__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(255, 102, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    color: $accent;
+  }
+}
+
+.training-upcoming__info {
+  flex: 1;
+  min-width: 0;
+
+  strong {
+    display: block;
+    color: $text-dark;
+    font-size: 15px;
+  }
+
+  span {
+    font-size: 13px;
+    color: $text-muted;
+  }
+}
+
+.training-upcoming__date {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-dark;
+  white-space: nowrap;
+}
+
+.purchase-table-wrap {
+  overflow-x: auto;
+}
+
+.purchase-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    color: $text-muted;
+    font-weight: 600;
+    border-bottom: 1px solid var(--app-border, #e2e8f0);
+  }
+
+  td {
+    padding: 14px 12px;
+    color: $text-dark;
+    border-bottom: 1px solid var(--app-border, #e2e8f0);
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.purchase-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tag--purple {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.tag--blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.tag--green {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.tag--pink {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.tag--gray {
+  background: var(--app-surface-muted, #f1f5f9);
+  color: $text-muted;
+}
+
+.empty-msg {
+  margin: 0;
+  color: $text-muted;
+  font-size: 14px;
+}

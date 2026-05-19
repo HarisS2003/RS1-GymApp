@@ -1,0 +1,35 @@
+@import '../home/client-home.component.scss';
+
+.training-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.training-item {
+  @include card;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  strong {
+    display: block;
+    color: #0f1724;
+  }
+
+  span {
+    font-size: 13px;
+    color: #64748b;
+  }
+}
+
+.training-type {
+  background: #fff7ed;
+  color: #ff6600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}

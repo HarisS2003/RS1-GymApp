@@ -8,15 +8,15 @@ import { FitConfirmDialogComponent } from './components/fit-confirm-dialog/fit-c
 import {DialogHelperService} from './services/dialog-helper.service';
 import { FitLoadingBarComponent } from './components/fit-loading-bar/fit-loading-bar.component';
 import { FitTableSkeletonComponent } from './components/fit-table-skeleton/fit-table-skeleton.component';
-
-
+import { LocaleThemeToolbarComponent } from './components/locale-theme-toolbar/locale-theme-toolbar.component';
 
 @NgModule({
   declarations: [
     FitPaginatorBarComponent,
     FitConfirmDialogComponent,
     FitLoadingBarComponent,
-    FitTableSkeletonComponent
+    FitTableSkeletonComponent,
+    LocaleThemeToolbarComponent,
   ],
   imports: [
     CommonModule,
@@ -36,7 +36,8 @@ import { FitTableSkeletonComponent } from './components/fit-table-skeleton/fit-t
     FormsModule,
     FitLoadingBarComponent,
     FitTableSkeletonComponent,
-    materialModules
-  ]
+    LocaleThemeToolbarComponent,
+    materialModules,
+  ],
 })
 export class SharedModule { }

@@ -1,10 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ClientLayoutComponent } from './layout/client-layout.component';
+import { ClientHomeComponent } from './pages/home/client-home.component';
+import { ClientTrainersComponent } from './pages/trainers/client-trainers.component';
+import { ClientShopComponent } from './pages/shop/client-shop.component';
+import { ClientProfileComponent } from './pages/profile/client-profile.component';
+import { ClientScheduleComponent } from './pages/schedule/client-schedule.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '',
+    component: ClientLayoutComponent,
+    children: [
+      { path: '', component: ClientHomeComponent },
+      { path: 'trainers', component: ClientTrainersComponent },
+      { path: 'shop', component: ClientShopComponent },
+      { path: 'profile', component: ClientProfileComponent },
+      { path: 'schedule', component: ClientScheduleComponent },
+      { path: '**', redirectTo: '' },
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ClientRoutingModule { }
+export class ClientRoutingModule {}

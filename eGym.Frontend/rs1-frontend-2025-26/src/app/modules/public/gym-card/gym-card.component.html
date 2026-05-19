@@ -1,0 +1,35 @@
+<article class="gym-card">
+  <div class="gym-card__header" [ngClass]="'gym-card__header--' + (accentIndex % 3)">
+    <div class="gym-card__header-overlay"></div>
+    <div class="gym-card__header-caption">
+      <h3>{{ gym.name }}</h3>
+      <p>
+        <mat-icon>location_on</mat-icon>
+        {{ gym.city }}
+      </p>
+    </div>
+  </div>
+
+  <div class="gym-card__body">
+    <div class="gym-card__info-row">
+      <mat-icon>place</mat-icon>
+      <div>
+        <span class="gym-card__info-label">{{ 'COMMON.ADDRESS' | translate }}</span>
+        <span class="gym-card__info-value">{{ gym.address }}</span>
+      </div>
+    </div>
+
+    <div class="gym-card__info-row">
+      <mat-icon>location_city</mat-icon>
+      <div>
+        <span class="gym-card__info-label">{{ 'COMMON.CITY' | translate }}</span>
+        <span class="gym-card__info-value">{{ gym.city }}</span>
+      </div>
+    </div>
+
+    <button mat-flat-button type="button" class="gym-card__cta" (click)="onSelect()">
+      {{ 'LANDING.SELECT_GYM' | translate }}
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+</article>

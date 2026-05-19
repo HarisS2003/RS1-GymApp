@@ -1,0 +1,39 @@
+<div class="locale-theme-toolbar" [class.locale-theme-toolbar--compact]="compact">
+  <button
+    mat-stroked-button
+    type="button"
+    class="locale-theme-toolbar__lang"
+    [matMenuTriggerFor]="langMenu"
+  >
+    <mat-icon>language</mat-icon>
+    <span>{{ currentLangLabelKey() | translate }}</span>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <mat-menu #langMenu="matMenu">
+    @for (lang of locale.languages; track lang.code) {
+      <button
+        mat-menu-item
+        type="button"
+        (click)="setLanguage(lang.code)"
+        [class.active-lang]="locale.currentLang() === lang.code"
+      >
+        <span>{{ lang.labelKey | translate }}</span>
+        @if (locale.currentLang() === lang.code) {
+          <mat-icon class="check">check</mat-icon>
+        }
+      </button>
+    }
+  </mat-menu>
+
+  <button
+    mat-icon-button
+    type="button"
+    class="locale-theme-toolbar__theme"
+    (click)="toggleTheme()"
+    [attr.aria-label]="(theme.isDark() ? 'COMMON.THEME.LIGHT' : 'COMMON.THEME.DARK') | translate"
+    [matTooltip]="(theme.isDark() ? 'COMMON.THEME.LIGHT' : 'COMMON.THEME.DARK') | translate"
+  >
+    <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+</div>

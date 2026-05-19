@@ -16,6 +16,10 @@ import {
 import { AuthStorageService } from './auth-storage.service';
 import { CurrentUserDto } from './current-user.dto';
 import { JwtPayloadDto } from './jwt-payload.dto';
+import {
+  ADMIN_ROLE_ID,
+  TRAINER_ROLE_ID,
+} from '../../../modules/auth/constants/auth.constants';
 
 /**
  * Glavni auth servis (façade).
@@ -110,7 +114,7 @@ export class AuthFacadeService {
    */
   redirectToLogin(): void {
     this.clearUserState();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   // =========================================================
@@ -148,6 +152,18 @@ export class AuthFacadeService {
   /**
    * Dekodiraj JWT i postavi current user state.
    */
+  applyRoleFromProfile(roleId: number): void {
+    const user = this._currentUser();
+    if (!user) return;
+
+    this._currentUser.set({
+      ...user,
+      isAdmin: roleId === ADMIN_ROLE_ID,
+      isManager: false,
+      isEmployee: roleId === TRAINER_ROLE_ID,
+    });
+  }
+
   private decodeAndSetUser(token: string): void {
     try {
       const payload = jwtDecode<JwtPayloadDto>(token);

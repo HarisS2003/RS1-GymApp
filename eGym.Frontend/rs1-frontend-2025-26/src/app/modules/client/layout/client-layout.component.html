@@ -1,0 +1,65 @@
+<div class="dash">
+  <aside class="dash-sidebar">
+    <div class="dash-brand">
+      <mat-icon>fitness_center</mat-icon>
+      <span>eGym</span>
+    </div>
+
+    <nav class="dash-nav">
+      <a routerLink="/client" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon>home</mat-icon>
+        {{ 'CLIENT.NAV.HOME' | translate }}
+      </a>
+      @if (!isTrainer()) {
+        <a routerLink="/client/trainers" routerLinkActive="active">
+          <mat-icon>groups</mat-icon>
+          {{ 'CLIENT.NAV.TRAINERS' | translate }}
+        </a>
+        <a routerLink="/client/shop" routerLinkActive="active">
+          <mat-icon>shopping_bag</mat-icon>
+          {{ 'CLIENT.NAV.SHOP' | translate }}
+        </a>
+      } @else {
+        <a routerLink="/client/schedule" routerLinkActive="active">
+          <mat-icon>event</mat-icon>
+          {{ 'CLIENT.NAV.SCHEDULE' | translate }}
+        </a>
+      }
+      <a routerLink="/client/profile" routerLinkActive="active">
+        <mat-icon>person</mat-icon>
+        {{ 'CLIENT.NAV.PROFILE' | translate }}
+      </a>
+    </nav>
+
+    @if (profile(); as p) {
+      <div class="dash-sidebar-user">
+        <strong>{{ p.fullName }}</strong>
+        <span>{{ p.gymName || ('COMMON.GYM' | translate) }}</span>
+      </div>
+    }
+  </aside>
+
+  <div class="dash-main">
+    <header class="dash-header">
+      <div class="dash-header__user">
+        <div class="dash-avatar">{{ (profile()?.firstName || 'U')[0] }}</div>
+        <div>
+          <strong>{{ profile()?.fullName || auth.currentUser()?.email }}</strong>
+          <span>{{ profile()?.email || '' }}</span>
+        </div>
+      </div>
+      <div class="dash-header__actions">
+        <span class="dash-points"><mat-icon>stars</mat-icon> 500</span>
+        <button mat-icon-button type="button"><mat-icon>notifications</mat-icon></button>
+        <app-locale-theme-toolbar [compact]="true"></app-locale-theme-toolbar>
+        <button mat-flat-button type="button" class="dash-logout" (click)="logout()">
+          {{ 'COMMON.LOGOUT' | translate }}
+        </button>
+      </div>
+    </header>
+
+    <div class="dash-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

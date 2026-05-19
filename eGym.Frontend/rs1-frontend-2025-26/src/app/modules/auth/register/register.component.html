@@ -1,1 +1,128 @@
-<p>register works!</p>
+<div class="auth-form-wrap">
+  <app-selected-gym-bar></app-selected-gym-bar>
+
+  <h2 class="auth-form__title">{{ 'AUTH.REGISTER_TITLE' | translate }}</h2>
+  <p class="auth-form__subtitle">{{ 'AUTH.REGISTER_SUB' | translate }}</p>
+
+  @if (errorMessage) {
+    <div class="auth-alert auth-alert--error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  <form class="auth-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="auth-name-row">
+      <div class="auth-field">
+        <label for="firstName">{{ 'AUTH.FIRST_NAME' | translate }}</label>
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          [placeholder]="'AUTH.FIRST_NAME' | translate"
+          autocomplete="given-name"
+          [class.invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched"
+        />
+        @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+          <span class="auth-field-error">{{ 'AUTH.NAME_REQUIRED' | translate }}</span>
+        }
+      </div>
+
+      <div class="auth-field">
+        <label for="lastName">{{ 'AUTH.LAST_NAME' | translate }}</label>
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          [placeholder]="'AUTH.LAST_NAME' | translate"
+          autocomplete="family-name"
+          [class.invalid]="form.get('lastName')?.invalid && form.get('lastName')?.touched"
+        />
+        @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+          <span class="auth-field-error">{{ 'AUTH.NAME_REQUIRED' | translate }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="auth-field">
+      <label for="reg-email">{{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }}</label>
+      <input
+        id="reg-email"
+        type="email"
+        formControlName="email"
+        [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate"
+        autocomplete="email"
+        [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+      />
+      @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+        <span class="auth-field-error">{{ 'AUTH.EMAIL_REQUIRED' | translate }}</span>
+      }
+      @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+        <span class="auth-field-error">{{ 'AUTH.EMAIL_INVALID' | translate }}</span>
+      }
+    </div>
+
+    <div class="auth-field auth-field--password">
+      <label for="reg-password">{{ 'AUTH.LOGIN.PASSWORD_LABEL' | translate }}</label>
+      <input
+        id="reg-password"
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
+        autocomplete="new-password"
+        [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+      />
+      <button
+        type="button"
+        (click)="hidePassword = !hidePassword"
+        [attr.aria-label]="'AUTH.SHOW_PASSWORD' | translate"
+      >
+        <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+      @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+        <span class="auth-field-error">{{ 'AUTH.PASSWORD_REQUIRED' | translate }}</span>
+      }
+      @if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+        <span class="auth-field-error">{{ 'AUTH.PASSWORD_MIN' | translate }}</span>
+      }
+    </div>
+
+    <div class="auth-field auth-field--password">
+      <label for="confirmPassword">{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label>
+      <input
+        id="confirmPassword"
+        [type]="hideConfirmPassword ? 'password' : 'text'"
+        formControlName="confirmPassword"
+        [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
+        autocomplete="new-password"
+        [class.invalid]="
+          (form.get('confirmPassword')?.invalid || form.hasError('passwordMismatch')) &&
+          form.get('confirmPassword')?.touched
+        "
+      />
+      <button
+        type="button"
+        (click)="hideConfirmPassword = !hideConfirmPassword"
+        [attr.aria-label]="'AUTH.SHOW_PASSWORD' | translate"
+      >
+        <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+      @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
+        <span class="auth-field-error">{{ 'AUTH.PASSWORD_MISMATCH' | translate }}</span>
+      }
+    </div>
+
+    <button class="auth-submit" type="submit" [disabled]="form.invalid || isLoading">
+      @if (isLoading) {
+        {{ 'AUTH.REGISTER.LOADING' | translate }}
+      } @else {
+        {{ 'AUTH.REGISTER.BUTTON' | translate }}
+      }
+    </button>
+
+    <p class="auth-switch">
+      {{ 'AUTH.HAS_ACCOUNT' | translate }}
+      <a routerLink="/auth/login">{{ 'AUTH.LOGIN_LINK' | translate }}</a>
+    </p>
+  </form>
+</div>
