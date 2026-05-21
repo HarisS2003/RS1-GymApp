@@ -17,3 +17,19 @@ export interface ListTrainersQueryDto {
 }
 
 export type ListTrainersResponse = PageResult<ListTrainersQueryDto>;
+
+/** Matches CreateTrainerCommand.cs */
+export interface CreateTrainerCommand {
+  userId: number;
+  gymId: number;
+  bio: string;
+  experienceYears: number;
+}
+
+/** Matches UpdateTrainerCommand.cs */
+export interface UpdateTrainerCommand {
+  userId: number;
+  gymId: number;
+  bio: string;
+  experienceYears: number;
+}

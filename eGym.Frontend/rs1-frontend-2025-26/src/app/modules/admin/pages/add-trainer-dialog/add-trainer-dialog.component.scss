@@ -1,0 +1,88 @@
+.add-trainer-dialog__content {
+  min-width: 400px;
+  max-width: 480px;
+  padding-top: 8px !important;
+}
+
+.add-trainer-dialog__search {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.add-trainer-dialog__loading {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}
+
+.add-trainer-dialog__empty,
+.add-trainer-dialog__hint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.add-trainer-dialog__list {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.add-trainer-dialog__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 8px 4px;
+  border-bottom: 1px solid #f1f5f9;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.add-trainer-dialog__details {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f1724;
+  }
+}
+
+.add-trainer-dialog__picked {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.add-trainer-dialog__field {
+  width: 100%;
+  display: block;
+}
+
+.add-trainer-dialog__name {
+  display: block;
+  font-weight: 600;
+  color: #0f1724;
+}
+
+.add-trainer-dialog__email {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.add-trainer-dialog__apply {
+  background: #ff6600 !important;
+  color: #fff !important;
+}

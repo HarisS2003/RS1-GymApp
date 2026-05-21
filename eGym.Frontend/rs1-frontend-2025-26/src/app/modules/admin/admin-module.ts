@@ -15,10 +15,14 @@ import {SharedModule} from '../shared/shared-module';
 import { OrderDetailsDialogComponent } from './orders/admin-orders-details-dialog/order-details-dialog.component';
 import { ChangeStatusDialogComponent } from './orders/change-status-dialog/change-status-dialog.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { AddTrainerDialogComponent } from './pages/add-trainer-dialog/add-trainer-dialog.component';
+import { EditTrainerDialogComponent } from './pages/edit-trainer-dialog/edit-trainer-dialog.component';
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
+    AddTrainerDialogComponent,
+    EditTrainerDialogComponent,
     ProductsComponent,
     ProductsAddComponent,
     ProductsEditComponent,

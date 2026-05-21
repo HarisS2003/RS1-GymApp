@@ -3,9 +3,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-admin-settings',
   standalone: false,
-  templateUrl: './admin-settings.component.html',
-  styleUrl: './admin-settings.component.scss',
+  template: '<app-account-profile></app-account-profile>',
 })
-export class AdminSettingsComponent {
-
-}
+export class AdminSettingsComponent {}

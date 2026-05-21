@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{ 'ADMIN_DASH.EDIT_TRAINER_TITLE' | translate }}</h2>
+
+<mat-dialog-content [formGroup]="form" class="edit-trainer-dialog">
+  <mat-form-field appearance="outline" class="edit-trainer-dialog__field">
+    <mat-label>{{ 'ADMIN_DASH.COL_SPEC' | translate }}</mat-label>
+    <textarea matInput formControlName="bio" rows="3"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="edit-trainer-dialog__field">
+    <mat-label>{{ 'ADMIN_DASH.COL_EXP' | translate }}</mat-label>
+    <input matInput type="number" formControlName="experienceYears" min="0" />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">{{ 'ADMIN_DASH.DIALOG_CANCEL' | translate }}</button>
+  <button
+    mat-flat-button
+    type="button"
+    class="edit-trainer-dialog__apply"
+    [disabled]="form.invalid || saving"
+    (click)="apply()"
+  >
+    {{ 'ADMIN_DASH.DIALOG_APPLY' | translate }}
+  </button>
+</mat-dialog-actions>

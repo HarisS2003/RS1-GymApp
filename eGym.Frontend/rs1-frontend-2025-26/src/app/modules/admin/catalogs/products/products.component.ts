@@ -27,14 +27,9 @@ export class ProductsComponent
   private toaster = inject(ToasterService);
   private dialogHelper = inject(DialogHelperService);
 
-  displayedColumns: string[] = [
-    'name',
-    'categoryName',
-    'price',
-    'stockQuantity',
-    'isEnabled',
-    'actions'
-  ];
+  totalProducts = 0;
+  activeProducts = 0;
+  lowStockCount = 0;
 
   constructor() {
     super();
@@ -43,6 +38,11 @@ export class ProductsComponent
 
   ngOnInit(): void {
     this.initList();
+    this.loadProductStats();
+  }
+
+  goTrainers(): void {
+    this.router.navigate(['/admin/dashboard']);
   }
 
   protected loadPagedData(): void {
@@ -53,10 +53,24 @@ export class ProductsComponent
         this.handlePageResult(response);
         this.stopLoading();
       },
-      error: (err) => {
+      error: () => {
         this.stopLoading('Failed to load products');
-        console.error('Load products error:', err);
-      }
+      },
+    });
+  }
+
+  private loadProductStats(): void {
+    const statsReq = new ListProductsRequest();
+    statsReq.paging.page = 1;
+    statsReq.paging.pageSize = 500;
+
+    this.api.list(statsReq).subscribe({
+      next: (res) => {
+        const all = res.items ?? [];
+        this.totalProducts = res.totalItems ?? all.length;
+        this.activeProducts = all.filter((p) => p.isEnabled).length;
+        this.lowStockCount = all.filter((p) => p.stockQuantity < 5).length;
+      },
     });
   }
 
@@ -85,6 +99,7 @@ export class ProductsComponent
       next: () => {
         this.dialogHelper.product.showDeleteSuccess().subscribe();
         this.loadPagedData();
+        this.loadProductStats();
       },
       error: (err) => {
         this.stopLoading();

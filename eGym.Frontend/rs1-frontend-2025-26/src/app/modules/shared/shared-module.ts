@@ -9,6 +9,7 @@ import {DialogHelperService} from './services/dialog-helper.service';
 import { FitLoadingBarComponent } from './components/fit-loading-bar/fit-loading-bar.component';
 import { FitTableSkeletonComponent } from './components/fit-table-skeleton/fit-table-skeleton.component';
 import { LocaleThemeToolbarComponent } from './components/locale-theme-toolbar/locale-theme-toolbar.component';
+import { AccountProfileComponent } from './components/account-profile/account-profile.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { LocaleThemeToolbarComponent } from './components/locale-theme-toolbar/l
     FitLoadingBarComponent,
     FitTableSkeletonComponent,
     LocaleThemeToolbarComponent,
+    AccountProfileComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { LocaleThemeToolbarComponent } from './components/locale-theme-toolbar/l
     FitLoadingBarComponent,
     FitTableSkeletonComponent,
     LocaleThemeToolbarComponent,
+    AccountProfileComponent,
     materialModules,
   ],
 })

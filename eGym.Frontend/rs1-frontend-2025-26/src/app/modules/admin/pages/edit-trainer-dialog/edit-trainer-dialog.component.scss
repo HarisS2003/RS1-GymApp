@@ -1,0 +1,16 @@
+.edit-trainer-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 360px;
+  padding-top: 8px !important;
+}
+
+.edit-trainer-dialog__field {
+  width: 100%;
+}
+
+.edit-trainer-dialog__apply {
+  background: #ff6600 !important;
+  color: #fff !important;
+}

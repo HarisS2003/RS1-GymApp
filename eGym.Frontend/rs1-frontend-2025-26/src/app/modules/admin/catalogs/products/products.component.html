@@ -1,147 +1,127 @@
-<div class="container">
-  <!-- Header kartica -->
-  <div class="header-card mat-elevation-z2">
-    <div class="header-card-content">
-      <!-- Lijevo: naslov -->
+<div class="admin-dash">
+  <div class="admin-dash__top">
+    <div class="admin-dash__intro">
       <h1>{{ 'PRODUCTS.TITLE' | translate }}</h1>
-
-      <!-- Desno: search + novi proizvod -->
-      <div class="actions-container">
-        <mat-form-field class="search-field" appearance="fill">
-          <mat-label>{{ 'PRODUCTS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
-          <input
-            matInput
-            [placeholder]="'PRODUCTS.SEARCH_INPUT_PLACEHOLDER' | translate"
-            (keyup.enter)="request.paging.page = 1; loadPagedData()"
-            [(ngModel)]="request.search"
-          />
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="onCreate()">
-          <mat-icon>add</mat-icon>
-          {{ 'PRODUCTS.NEW_PRODUCT' | translate }}
-        </button>
-      </div>
+      <p>{{ 'ADMIN_DASH.PRODUCTS_SUB' | translate }}</p>
+    </div>
+    <div class="admin-dash__top-actions">
+      <mat-form-field appearance="outline" class="admin-dash__search">
+        <mat-label>{{ 'PRODUCTS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          [(ngModel)]="request.search"
+          [placeholder]="'PRODUCTS.SEARCH_INPUT_PLACEHOLDER' | translate"
+          (keyup.enter)="onSearch()"
+        />
+      </mat-form-field>
+      <button mat-flat-button type="button" class="add-panel-btn" (click)="onCreate()">
+        <mat-icon>add</mat-icon>
+        {{ 'PRODUCTS.NEW_PRODUCT' | translate }}
+      </button>
     </div>
   </div>
 
-  <!-- Loading / error -->
-  <div *ngIf="isLoading" class="loading">
-    {{ 'PRODUCTS.LOADING' | translate }}
+  <div class="admin-tabs">
+    <button type="button" (click)="goTrainers()">
+      <mat-icon>groups</mat-icon>
+      {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
+    </button>
+    <button type="button" class="active">
+      <mat-icon>shopping_bag</mat-icon>
+      {{ 'ADMIN_DASH.TAB_PRODUCTS' | translate }}
+    </button>
   </div>
 
-  <div *ngIf="!isLoading && errorMessage" class="error">
-    {{ errorMessage }}
-  </div>
+  @if (isLoading) {
+    <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (errorMessage) {
+    <p class="admin-error">{{ errorMessage }}</p>
+  } @else {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>{{ 'ADMIN_DASH.COL_NO' | translate }}</th>
+            <th>{{ 'PRODUCTS.TABLE.NAME' | translate }}</th>
+            <th>{{ 'PRODUCTS.TABLE.CATEGORY' | translate }}</th>
+            <th>{{ 'PRODUCTS.TABLE.PRICE' | translate }}</th>
+            <th>{{ 'PRODUCTS.TABLE.STOCK' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_STATUS' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_ACTIONS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of items; track product.id) {
+            <tr>
+              <td><span class="row-id">#{{ product.id }}</span></td>
+              <td><strong>{{ product.name }}</strong></td>
+              <td>{{ product.categoryName || '—' }}</td>
+              <td>{{ product.price | number: '1.2-2' }} KM</td>
+              <td [class.stock-low]="product.stockQuantity < 5">{{ product.stockQuantity }}</td>
+              <td>
+                @if (product.isEnabled) {
+                  <span class="status-pill">{{ 'COMMON.ACTIVE' | translate }}</span>
+                } @else {
+                  <span class="status-pill status-pill--inactive">{{ 'COMMON.INACTIVE' | translate }}</span>
+                }
+              </td>
+              <td class="actions">
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="action-edit"
+                  (click)="onEdit(product)"
+                  [attr.aria-label]="'PRODUCTS.ACTIONS.EDIT_TOOLTIP' | translate"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="action-delete"
+                  (click)="onDelete(product)"
+                  [attr.aria-label]="'PRODUCTS.ACTIONS.DELETE_TOOLTIP' | translate"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="empty-cell">
+                @if (request.search) {
+                  {{ 'PRODUCTS.NO_DATA_FILTER' | translate }}
+                } @else {
+                  {{ 'PRODUCTS.NO_DATA' | translate }}
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
 
-  <!-- Tabela -->
-  <div class="mat-elevation-z8" *ngIf="!isLoading && !errorMessage">
-    <table mat-table [dataSource]="items">
-      <!-- Naziv -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>{{ 'PRODUCTS.TABLE.NAME' | translate }}</th>
-        <td mat-cell *matCellDef="let product">
-          <span style="font-weight: 500">{{ product.name }}</span>
-        </td>
-      </ng-container>
+      <div class="admin-table-footer">
+        <app-fit-paginator-bar [vm]="this" />
+      </div>
+    </div>
 
-      <!-- Kategorija -->
-      <ng-container matColumnDef="categoryName">
-        <th mat-header-cell *matHeaderCellDef>{{ 'PRODUCTS.TABLE.CATEGORY' | translate }}</th>
-        <td mat-cell *matCellDef="let product">
-          {{ product.categoryName }}
-        </td>
-      </ng-container>
-
-      <!-- Cijena -->
-      <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef>{{ 'PRODUCTS.TABLE.PRICE' | translate }}</th>
-        <td mat-cell *matCellDef="let product">
-          <span style="font-weight: 600; color: #4976b5"
-            >{{ product.price | number : '1.2-2' }} KM</span
-          >
-        </td>
-      </ng-container>
-
-      <!-- Stanje -->
-      <ng-container matColumnDef="stockQuantity">
-        <th mat-header-cell *matHeaderCellDef>{{ 'PRODUCTS.TABLE.STOCK' | translate }}</th>
-        <td mat-cell *matCellDef="let product">
-          <span
-            [style.color]="product.stockQuantity > 0 ? '#66bb6a' : '#ef5350'"
-            style="font-weight: 500"
-          >
-            {{ product.stockQuantity }}
-          </span>
-        </td>
-      </ng-container>
-
-      <!-- Aktivno -->
-      <ng-container matColumnDef="isEnabled">
-        <th mat-header-cell *matHeaderCellDef>{{ 'PRODUCTS.TABLE.ACTIVE' | translate }}</th>
-        <td mat-cell *matCellDef="let product">
-          <mat-icon [ngClass]="product.isEnabled ? 'icon-enabled' : 'icon-disabled'">
-            {{ product.isEnabled ? 'check_circle' : 'cancel' }}
-          </mat-icon>
-        </td>
-      </ng-container>
-
-      <!-- Akcije -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>{{ 'PRODUCTS.TABLE.ACTIONS' | translate }}</th>
-        <td mat-cell *matCellDef="let product">
-          <button
-            mat-icon-button
-            color="primary"
-            (click)="onEdit(product)"
-            [matTooltip]="'PRODUCTS.ACTIONS.EDIT_TOOLTIP' | translate"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="onDelete(product)"
-            [matTooltip]="'PRODUCTS.ACTIONS.DELETE_TOOLTIP' | translate"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr
-        mat-header-row
-        *matHeaderRowDef="[
-          'name',
-          'categoryName',
-          'price',
-          'stockQuantity',
-          'isEnabled',
-          'actions'
-        ]"
-      ></tr>
-      <tr
-        mat-row
-        *matRowDef="
-          let row;
-          columns: ['name', 'categoryName', 'price', 'stockQuantity', 'isEnabled', 'actions']
-        "
-      ></tr>
-
-      <!-- No data -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="6">
-          <ng-container *ngIf="request.search; else noDataDefault">
-            {{ 'PRODUCTS.NO_DATA_FILTER' | translate }}
-          </ng-container>
-          <ng-template #noDataDefault>
-            {{ 'PRODUCTS.NO_DATA' | translate }}
-          </ng-template>
-        </td>
-      </tr>
-    </table>
-
-    <app-fit-paginator-bar [vm]="this" />
-  </div>
+    <section class="admin-summary">
+      <article class="summary-card summary-card--blue">
+        <span>{{ 'ADMIN_DASH.SUMMARY_TOTAL_PRODUCTS' | translate }}</span>
+        <strong>{{ totalProducts | number }}</strong>
+        <small>{{ 'ADMIN_DASH.SUMMARY_MEMBERS_TREND' | translate }}</small>
+      </article>
+      <article class="summary-card summary-card--orange">
+        <span>{{ 'ADMIN_DASH.SUMMARY_ACTIVE_PRODUCTS' | translate }}</span>
+        <strong>{{ activeProducts | number }}</strong>
+        <small>{{ 'ADMIN_DASH.SUMMARY_ACTIVE_PRODUCTS_SUB' | translate }}</small>
+      </article>
+      <article class="summary-card summary-card--green">
+        <span>{{ 'ADMIN_DASH.SUMMARY_LOW_STOCK' | translate }}</span>
+        <strong>{{ lowStockCount | number }}</strong>
+        <small>{{ 'ADMIN_DASH.SUMMARY_LOW_STOCK_SUB' | translate }}</small>
+      </article>
+    </section>
+  }
 </div>

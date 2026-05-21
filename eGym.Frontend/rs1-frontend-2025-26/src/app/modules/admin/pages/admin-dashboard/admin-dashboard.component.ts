@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { forkJoin, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { TrainersApiService } from '../../../../api-services/trainers/trainers-api.service';
 import { UsersApiService } from '../../../../api-services/users/users-api.service';
 import { TrainingsApiService } from '../../../../api-services/trainings/trainings-api.service';
@@ -10,14 +11,21 @@ import { OrdersApiService } from '../../../../api-services/orders/orders-api.ser
 import { ListTrainersRequest } from '../../../../api-services/trainers/trainers-api.models';
 import { ListUsersRequest } from '../../../../api-services/users/users-api.models';
 import { ListTrainingsRequest } from '../../../../api-services/trainings/trainings-api.models';
-import { ListTrainingsQueryDto } from '../../../../api-services/trainings/trainings-api.models';
 import { ListOrdersRequest } from '../../../../api-services/orders/orders-api.models';
 import { ListTrainersQueryDto } from '../../../../api-services/trainers/trainers-api.models';
 import { ListUsersQueryDto } from '../../../../api-services/users/users-api.models';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
-import { MEMBER_ROLE_ID } from '../../../auth/constants/auth.constants';
+import { MEMBER_ROLE_ID, TRAINER_ROLE_ID } from '../../../auth/constants/auth.constants';
 import { ToasterService } from '../../../../core/services/toaster.service';
-
+import {
+  AddTrainerDialogComponent,
+  AddTrainerDialogData,
+  AddTrainerDialogResult,
+} from '../add-trainer-dialog/add-trainer-dialog.component';
+import {
+  EditTrainerDialogComponent,
+  EditTrainerDialogData,
+} from '../edit-trainer-dialog/edit-trainer-dialog.component';
 export interface AdminTrainerRow {
   trainer: ListTrainersQueryDto;
   user?: ListUsersQueryDto;
@@ -35,71 +43,159 @@ export class AdminDashboardComponent implements OnInit {
   private trainingsApi = inject(TrainingsApiService);
   private ordersApi = inject(OrdersApiService);
   private toaster = inject(ToasterService);
+  private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
-  private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
   profileService = inject(UserProfileService);
 
-  activeTab: 'trainers' | 'trainings' | 'members' = 'trainers';
+  addingTrainers = false;
+  activeTab: 'trainers' | 'products' = 'trainers';
   loading = true;
 
   trainerRows: AdminTrainerRow[] = [];
-  trainingRows: ListTrainingsQueryDto[] = [];
-  members: ListUsersQueryDto[] = [];
-  trainerNameMap = new Map<number, string>();
-
   memberCount = 0;
   monthlyRevenue = 0;
   activeTrainings = 0;
-  private pendingTrainings: ListTrainingsQueryDto[] = [];
 
   ngOnInit(): void {
+    if (this.profileService.profile()) {
+      this.load();
+      return;
+    }
     this.profileService.loadProfile().subscribe(() => this.load());
   }
 
-  setTab(tab: 'trainers' | 'trainings' | 'members'): void {
+  setTab(tab: 'trainers' | 'products'): void {
+    if (tab === 'products') {
+      this.router.navigate(['/admin/products']);
+      return;
+    }
     this.activeTab = tab;
   }
 
   trainerName(row: AdminTrainerRow): string {
     if (row.user) return `${row.user.firstName} ${row.user.lastName}`;
-    return `Trener #${row.trainer.id}`;
+    return this.translate.instant('CLIENT.PROFILE.TRAINER_FALLBACK', { id: row.trainer.id });
   }
 
-  trainerNameById(trainerId: number): string {
-    return this.trainerNameMap.get(trainerId) ?? `Trener #${trainerId}`;
+  openAddTrainer(): void {
+    const gymId = this.profileService.profile()?.gymId;
+    if (!gymId) {
+      this.toaster.error(this.translate.instant('ADMIN_DASH.ADD_TRAINER_NO_GYM'));
+      return;
+    }
+
+    const data: AddTrainerDialogData = {
+      gymId,
+      existingTrainerUserIds: this.trainerRows.map((r) => r.trainer.userId),
+    };
+
+    this.dialog
+      .open(AddTrainerDialogComponent, {
+        width: '520px',
+        maxHeight: '90vh',
+        autoFocus: 'first-tabbable',
+        data,
+      })
+      .afterClosed()
+      .subscribe((result: AddTrainerDialogResult | undefined) => {
+        if (result) this.promoteToTrainer(result, gymId);
+      });
   }
 
-  trainingTypeLabel(type: number): string {
-    return type === 2
-      ? this.translate.instant('ADMIN_DASH.TYPE_GROUP')
-      : this.translate.instant('ADMIN_DASH.TYPE_INDIVIDUAL');
+  editTrainer(row: AdminTrainerRow): void {
+    const data: EditTrainerDialogData = { row };
+    this.dialog
+      .open(EditTrainerDialogComponent, { width: '420px', data })
+      .afterClosed()
+      .subscribe((ok) => {
+        if (ok) {
+          this.toaster.success(this.translate.instant('ADMIN_DASH.EDIT_TRAINER_SUCCESS'));
+          this.load();
+        }
+      });
   }
 
-  onAddTrainer(): void {
-    this.snackBar.open(this.translate.instant('ADMIN_DASH.ADD_UNAVAILABLE'), undefined, {
-      duration: 3500,
-    });
+  degradeTrainer(row: AdminTrainerRow): void {
+    const name = this.trainerName(row);
+    const msg = this.translate.instant('ADMIN_DASH.DEGRADE_CONFIRM', { name });
+    if (!confirm(msg)) return;
+
+    const user = row.user;
+    if (!user) {
+      this.toaster.error(this.translate.instant('ADMIN_DASH.DEGRADE_ERROR'));
+      return;
+    }
+
+    this.usersApi
+      .update(user.id, {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        roleId: MEMBER_ROLE_ID,
+        gymId: user.gymId,
+      })
+      .pipe(switchMap(() => this.trainersApi.delete(row.trainer.id)))
+      .subscribe({
+        next: () => {
+          this.toaster.success(this.translate.instant('ADMIN_DASH.DEGRADE_SUCCESS', { name }));
+          this.load();
+        },
+        error: (err) => {
+          const message =
+            err?.error?.message ??
+            err?.error?.title ??
+            this.translate.instant('ADMIN_DASH.DEGRADE_ERROR');
+          this.toaster.error(message);
+        },
+      });
   }
 
-  onEditTrainer(_row: AdminTrainerRow): void {
-    this.snackBar.open(this.translate.instant('ADMIN_DASH.EDIT_UNAVAILABLE'), undefined, {
-      duration: 3500,
-    });
-  }
+  private promoteToTrainer(result: AddTrainerDialogResult, gymId: number): void {
+    if (this.addingTrainers) return;
+    this.addingTrainers = true;
 
-  deleteTrainer(row: AdminTrainerRow): void {
-    if (!confirm(this.translate.instant('ADMIN_DASH.DELETE_CONFIRM'))) return;
-    this.trainersApi.delete(row.trainer.id).subscribe({
-      next: () => {
-        this.toaster.success(this.translate.instant('ADMIN_DASH.DELETE_SUCCESS'));
-        this.load();
-      },
-      error: () => this.toaster.error(this.translate.instant('ADMIN_DASH.DELETE_ERROR')),
-    });
+    const u = result.user;
+
+    this.usersApi
+      .update(u.id, {
+        firstName: u.firstName,
+        lastName: u.lastName,
+        email: u.email,
+        roleId: TRAINER_ROLE_ID,
+        gymId: u.gymId,
+      })
+      .pipe(
+        switchMap(() =>
+          this.trainersApi.create({
+            userId: u.id,
+            gymId,
+            bio: result.bio,
+            experienceYears: result.experienceYears,
+          }),
+        ),
+      )
+      .subscribe({
+        next: () => {
+          this.addingTrainers = false;
+          this.toaster.success(this.translate.instant('ADMIN_DASH.ADD_TRAINER_SUCCESS'));
+          this.load();
+        },
+        error: (err) => {
+          this.addingTrainers = false;
+          const msg =
+            err?.error?.message ??
+            err?.error?.title ??
+            this.translate.instant('ADMIN_DASH.ADD_TRAINER_ERROR');
+          this.toaster.error(msg);
+          this.load();
+        },
+      });
   }
 
   private load(): void {
     const gymId = this.profileService.profile()?.gymId;
+    this.loading = true;
 
     const trainersReq = new ListTrainersRequest();
     trainersReq.paging.pageSize = 200;
@@ -123,10 +219,8 @@ export class AdminDashboardComponent implements OnInit {
       orders: this.ordersApi.list(ordersReq).pipe(catchError(() => of({ items: [] } as any))),
     }).subscribe({
       next: ({ trainers, members, trainings, orders }) => {
-        this.members = members.items ?? [];
-        this.memberCount = members.totalItems ?? this.members.length;
-        this.pendingTrainings = trainings.items ?? [];
-        this.activeTrainings = this.pendingTrainings.length;
+        this.memberCount = members.totalItems ?? members.items?.length ?? 0;
+        this.activeTrainings = trainings.items?.length ?? 0;
         this.monthlyRevenue = (orders.items ?? []).reduce(
           (sum: number, o: { totalAmount?: number }) => sum + (o.totalAmount ?? 0),
           0,
@@ -140,7 +234,6 @@ export class AdminDashboardComponent implements OnInit {
   private mapTrainerRows(list: ListTrainersQueryDto[]): void {
     if (!list.length) {
       this.trainerRows = [];
-      this.trainerNameMap.clear();
       this.loading = false;
       return;
     }
@@ -158,15 +251,6 @@ export class AdminDashboardComponent implements OnInit {
     ).subscribe({
       next: (rows) => {
         this.trainerRows = rows as AdminTrainerRow[];
-        this.trainerNameMap.clear();
-        this.trainerRows.forEach((r) => {
-          this.trainerNameMap.set(r.trainer.id, this.trainerName(r));
-        });
-        const gymTrainerIds = new Set(this.trainerRows.map((r) => r.trainer.id));
-        this.trainingRows =
-          gymTrainerIds.size > 0
-            ? this.pendingTrainings.filter((t) => gymTrainerIds.has(t.trainerId))
-            : this.pendingTrainings;
         this.loading = false;
       },
       error: () => (this.loading = false),

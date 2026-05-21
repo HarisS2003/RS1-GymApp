@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>{{ 'ADMIN_DASH.ADD_TRAINER_TITLE' | translate }}</h2>
+
+<mat-dialog-content class="add-trainer-dialog__content">
+  <mat-form-field appearance="outline" class="add-trainer-dialog__search">
+    <mat-label>{{ 'ADMIN_DASH.SEARCH_USERS' | translate }}</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [(ngModel)]="search" [placeholder]="'ADMIN_DASH.SEARCH_PLACEHOLDER' | translate" />
+  </mat-form-field>
+
+  @if (loading) {
+    <div class="add-trainer-dialog__loading">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+  } @else if (filteredUsers.length === 0) {
+    <p class="add-trainer-dialog__empty">{{ 'ADMIN_DASH.NO_USERS_TO_ADD' | translate }}</p>
+  } @else {
+    <p class="add-trainer-dialog__hint">{{ 'ADMIN_DASH.SELECT_ONE_USER' | translate }}</p>
+    <mat-radio-group
+      class="add-trainer-dialog__list"
+      [value]="selectedUserId"
+      (change)="selectUser($event.value)"
+    >
+      @for (user of filteredUsers; track user.id) {
+        <mat-radio-button class="add-trainer-dialog__item" [value]="user.id">
+          <span class="add-trainer-dialog__name">{{ user.firstName }} {{ user.lastName }}</span>
+          <span class="add-trainer-dialog__email">{{ user.email }}</span>
+        </mat-radio-button>
+      }
+    </mat-radio-group>
+
+    @if (selectedUser) {
+      <section class="add-trainer-dialog__details" [formGroup]="detailsForm">
+        <h3>{{ 'ADMIN_DASH.TRAINER_DETAILS' | translate }}</h3>
+        <p class="add-trainer-dialog__picked">
+          {{ selectedUser.firstName }} {{ selectedUser.lastName }} · {{ selectedUser.email }}
+        </p>
+
+        <mat-form-field appearance="outline" class="add-trainer-dialog__field">
+          <mat-label>{{ 'ADMIN_DASH.COL_SPEC' | translate }}</mat-label>
+          <textarea matInput formControlName="bio" rows="3"></textarea>
+          @if (detailsForm.get('bio')?.hasError('required') && detailsForm.get('bio')?.touched) {
+            <mat-error>{{ 'ADMIN_DASH.BIO_REQUIRED' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="add-trainer-dialog__field">
+          <mat-label>{{ 'ADMIN_DASH.COL_EXP' | translate }}</mat-label>
+          <input matInput type="number" formControlName="experienceYears" min="0" />
+          @if (
+            detailsForm.get('experienceYears')?.hasError('required') &&
+            detailsForm.get('experienceYears')?.touched
+          ) {
+            <mat-error>{{ 'ADMIN_DASH.EXP_REQUIRED' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      </section>
+    }
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    {{ 'ADMIN_DASH.DIALOG_CANCEL' | translate }}
+  </button>
+  <button
+    mat-flat-button
+    type="button"
+    class="add-trainer-dialog__apply"
+    [disabled]="!canApply()"
+    (click)="apply()"
+  >
+    {{ 'ADMIN_DASH.DIALOG_APPLY' | translate }}
+  </button>
+</mat-dialog-actions>

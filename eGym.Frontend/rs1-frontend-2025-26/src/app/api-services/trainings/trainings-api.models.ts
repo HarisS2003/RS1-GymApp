@@ -3,9 +3,6 @@ import { PageResult } from '../../core/models/paging/page-result';
 
 export class ListTrainingsRequest extends BasePagedQuery {
   trainerId?: number | null;
-  type?: number | null;
-  dateFrom?: string | null;
-  dateTo?: string | null;
 }
 
 export interface ListTrainingsQueryDto {
