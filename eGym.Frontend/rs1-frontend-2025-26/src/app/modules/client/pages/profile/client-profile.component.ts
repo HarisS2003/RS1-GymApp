@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -40,6 +41,7 @@ export interface UpcomingTrainingView {
 })
 export class ClientProfileComponent implements OnInit {
   profileService = inject(UserProfileService);
+  private fb = inject(FormBuilder);
   private translate = inject(TranslateService);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
@@ -50,7 +52,15 @@ export class ClientProfileComponent implements OnInit {
   private ordersApi = inject(OrdersApiService);
 
   loading = true;
+  isEditing = false;
+  saving = false;
   membershipPlan: ListMembershipPlansQueryDto | null = null;
+
+  profileForm = this.fb.group({
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+  });
   upcomingTrainings: UpcomingTrainingView[] = [];
   purchases: ListOrdersWithItemsQueryDto[] = [];
 
@@ -109,9 +119,60 @@ export class ClientProfileComponent implements OnInit {
   }
 
   onEditClick(): void {
-    this.snackBar.open(this.translate.instant('CLIENT.PROFILE.EDIT_UNAVAILABLE'), undefined, {
-      duration: 3500,
+    const p = this.profileService.profile();
+    if (!p) return;
+    this.profileForm.reset({
+      firstName: p.firstName,
+      lastName: p.lastName,
+      email: p.email,
     });
+    this.isEditing = true;
+  }
+
+  onCancelEdit(): void {
+    this.isEditing = false;
+    this.profileForm.markAsPristine();
+  }
+
+  onSubmitProfile(): void {
+    if (this.profileForm.invalid || this.saving) {
+      this.profileForm.markAllAsTouched();
+      return;
+    }
+
+    const p = this.profileService.profile();
+    if (!p) return;
+
+    const { firstName, lastName, email } = this.profileForm.getRawValue();
+    this.saving = true;
+
+    this.usersApi
+      .update(p.id, {
+        firstName: firstName ?? '',
+        lastName: lastName ?? '',
+        email: email ?? '',
+        roleId: p.roleId,
+        gymId: p.gymId,
+        password: null,
+      })
+      .pipe(switchMap(() => this.profileService.loadProfile()))
+      .subscribe({
+        next: () => {
+          this.saving = false;
+          this.isEditing = false;
+          this.snackBar.open(this.translate.instant('CLIENT.PROFILE.SAVE_SUCCESS'), undefined, {
+            duration: 3000,
+          });
+        },
+        error: (err) => {
+          this.saving = false;
+          const message =
+            err?.error?.message ??
+            err?.error?.title ??
+            this.translate.instant('CLIENT.PROFILE.SAVE_ERROR');
+          this.snackBar.open(message, undefined, { duration: 4000 });
+        },
+      });
   }
 
   extendMembership(): void {

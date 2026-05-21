@@ -4,15 +4,26 @@
       <h1>{{ 'ADMIN_DASH.TITLE' | translate }}</h1>
       <p>{{ 'ADMIN_DASH.SUB' | translate }}</p>
     </div>
-    <div class="admin-tabs">
-      <button type="button" [class.active]="activeTab === 'trainers'" (click)="setTab('trainers')">
-        {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
-      </button>
-      <button type="button" [class.active]="activeTab === 'members'" (click)="setTab('members')">
-        {{ 'ADMIN_DASH.TAB_MEMBERS' | translate }}
-      </button>
-    </div>
+    <button mat-flat-button type="button" class="admin-add-btn" (click)="onAddTrainer()">
+      <mat-icon>add</mat-icon>
+      {{ 'ADMIN_DASH.ADD_TRAINER' | translate }}
+    </button>
   </header>
+
+  <div class="admin-tabs">
+    <button type="button" [class.active]="activeTab === 'trainers'" (click)="setTab('trainers')">
+      <mat-icon>groups</mat-icon>
+      {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
+    </button>
+    <button type="button" [class.active]="activeTab === 'trainings'" (click)="setTab('trainings')">
+      <mat-icon>event</mat-icon>
+      {{ 'ADMIN_DASH.TAB_TRAININGS' | translate }}
+    </button>
+    <button type="button" [class.active]="activeTab === 'members'" (click)="setTab('members')">
+      <mat-icon>folder</mat-icon>
+      {{ 'ADMIN_DASH.TAB_MEMBERS' | translate }}
+    </button>
+  </div>
 
   @if (loading) {
     <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
@@ -32,12 +43,15 @@
         <tbody>
           @for (row of trainerRows; track row.trainer.id) {
             <tr>
-              <td>{{ row.trainer.id }}</td>
+              <td>#{{ row.trainer.id }}</td>
               <td>{{ trainerName(row) }}</td>
               <td>{{ row.trainer.bio || '—' }}</td>
               <td>{{ row.trainer.experienceYears }} {{ 'ADMIN_DASH.YEARS' | translate }}</td>
-              <td><span class="status-active">{{ 'COMMON.ACTIVE' | translate }}</span></td>
+              <td><span class="status-active">{{ 'ADMIN_DASH.STATUS_ACTIVE' | translate }}</span></td>
               <td class="actions">
+                <button mat-icon-button type="button" (click)="onEditTrainer(row)">
+                  <mat-icon>edit</mat-icon>
+                </button>
                 <button mat-icon-button type="button" color="warn" (click)="deleteTrainer(row)">
                   <mat-icon>delete</mat-icon>
                 </button>
@@ -46,6 +60,41 @@
           } @empty {
             <tr>
               <td colspan="6" class="empty-cell">{{ 'ADMIN_DASH.NO_TRAINERS' | translate }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else if (activeTab === 'trainings') {
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>{{ 'ADMIN_DASH.COL_ID' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_TRAINER' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_DATE' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_TIME' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_TYPE' | translate }}</th>
+            <th>{{ 'ADMIN_DASH.COL_PARTICIPANTS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (t of trainingRows; track t.id) {
+            <tr>
+              <td>#{{ t.id }}</td>
+              <td>{{ trainerNameById(t.trainerId) }}</td>
+              <td>{{ t.date | date: 'd.M.yyyy' }}</td>
+              <td>{{ t.startTime }}</td>
+              <td>
+                <span class="type-pill" [class.type-pill--group]="t.type === 2">
+                  {{ trainingTypeLabel(t.type) }}
+                </span>
+              </td>
+              <td>{{ t.participantsCount }}/{{ t.capacity }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="empty-cell">{{ 'ADMIN_DASH.NO_TRAININGS' | translate }}</td>
             </tr>
           }
         </tbody>
@@ -66,11 +115,11 @@
         <tbody>
           @for (m of members; track m.id) {
             <tr>
-              <td>{{ m.id }}</td>
+              <td>#{{ m.id }}</td>
               <td>{{ m.firstName }} {{ m.lastName }}</td>
               <td>{{ m.email }}</td>
               <td>{{ m.gymId }}</td>
-              <td><span class="status-active">{{ 'COMMON.ACTIVE' | translate }}</span></td>
+              <td><span class="status-active">{{ 'ADMIN_DASH.STATUS_ACTIVE' | translate }}</span></td>
             </tr>
           } @empty {
             <tr>

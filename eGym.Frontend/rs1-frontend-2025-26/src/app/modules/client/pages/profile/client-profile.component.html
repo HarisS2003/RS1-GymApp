@@ -55,29 +55,85 @@
         <section class="profile-panel">
           <div class="profile-panel__head">
             <h3>{{ 'CLIENT.PROFILE.PERSONAL_DATA' | translate }}</h3>
-            <button mat-stroked-button type="button" class="profile-panel__edit" (click)="onEditClick()">
-              <mat-icon>edit</mat-icon>
-              {{ 'CLIENT.PROFILE.EDIT' | translate }}
-            </button>
+            @if (!isEditing) {
+              <button mat-stroked-button type="button" class="profile-panel__edit" (click)="onEditClick()">
+                <mat-icon>edit</mat-icon>
+                {{ 'CLIENT.PROFILE.EDIT' | translate }}
+              </button>
+            }
           </div>
-          <div class="profile-fields">
-            <label>
-              <span>{{ 'CLIENT.PROFILE.FULL_NAME' | translate }}</span>
-              <input type="text" readonly [value]="p.fullName" />
-            </label>
-            <label>
-              <span>{{ 'CLIENT.PROFILE.EMAIL' | translate }}</span>
-              <input type="email" readonly [value]="p.email" />
-            </label>
-            <label>
-              <span>{{ 'CLIENT.PROFILE.PHONE' | translate }}</span>
-              <input type="text" readonly [value]="'CLIENT.PROFILE.NOT_AVAILABLE' | translate" />
-            </label>
-            <label>
-              <span>{{ 'CLIENT.PROFILE.BIRTH_DATE' | translate }}</span>
-              <input type="text" readonly [value]="'CLIENT.PROFILE.NOT_AVAILABLE' | translate" />
-            </label>
-          </div>
+
+          @if (isEditing) {
+            <form class="profile-fields" [formGroup]="profileForm" (ngSubmit)="onSubmitProfile()">
+              <label>
+                <span>{{ 'CLIENT.PROFILE.FIRST_NAME' | translate }}</span>
+                <input type="text" formControlName="firstName" autocomplete="given-name" />
+                @if (profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) {
+                  <span class="field-error">{{ 'CLIENT.PROFILE.FIELD_REQUIRED' | translate }}</span>
+                }
+              </label>
+              <label>
+                <span>{{ 'CLIENT.PROFILE.LAST_NAME' | translate }}</span>
+                <input type="text" formControlName="lastName" autocomplete="family-name" />
+                @if (profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) {
+                  <span class="field-error">{{ 'CLIENT.PROFILE.FIELD_REQUIRED' | translate }}</span>
+                }
+              </label>
+              <label>
+                <span>{{ 'CLIENT.PROFILE.EMAIL' | translate }}</span>
+                <input type="email" formControlName="email" autocomplete="email" />
+                @if (profileForm.get('email')?.hasError('required') && profileForm.get('email')?.touched) {
+                  <span class="field-error">{{ 'CLIENT.PROFILE.FIELD_REQUIRED' | translate }}</span>
+                }
+                @if (profileForm.get('email')?.hasError('email') && profileForm.get('email')?.touched) {
+                  <span class="field-error">{{ 'CLIENT.PROFILE.EMAIL_INVALID' | translate }}</span>
+                }
+              </label>
+              <label class="profile-fields__readonly">
+                <span>{{ 'CLIENT.PROFILE.PHONE' | translate }}</span>
+                <input type="text" readonly [value]="'CLIENT.PROFILE.NOT_AVAILABLE' | translate" />
+              </label>
+              <label class="profile-fields__readonly">
+                <span>{{ 'CLIENT.PROFILE.BIRTH_DATE' | translate }}</span>
+                <input type="text" readonly [value]="'CLIENT.PROFILE.NOT_AVAILABLE' | translate" />
+              </label>
+              <div class="profile-form-actions">
+                <button mat-stroked-button type="button" (click)="onCancelEdit()" [disabled]="saving">
+                  {{ 'CLIENT.PROFILE.CANCEL' | translate }}
+                </button>
+                <button mat-flat-button type="submit" class="profile-submit-btn" [disabled]="saving">
+                  @if (saving) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                  } @else {
+                    {{ 'CLIENT.PROFILE.SUBMIT' | translate }}
+                  }
+                </button>
+              </div>
+            </form>
+          } @else {
+            <div class="profile-fields">
+              <label>
+                <span>{{ 'CLIENT.PROFILE.FIRST_NAME' | translate }}</span>
+                <input type="text" readonly [value]="p.firstName" />
+              </label>
+              <label>
+                <span>{{ 'CLIENT.PROFILE.LAST_NAME' | translate }}</span>
+                <input type="text" readonly [value]="p.lastName" />
+              </label>
+              <label>
+                <span>{{ 'CLIENT.PROFILE.EMAIL' | translate }}</span>
+                <input type="email" readonly [value]="p.email" />
+              </label>
+              <label>
+                <span>{{ 'CLIENT.PROFILE.PHONE' | translate }}</span>
+                <input type="text" readonly [value]="'CLIENT.PROFILE.NOT_AVAILABLE' | translate" />
+              </label>
+              <label>
+                <span>{{ 'CLIENT.PROFILE.BIRTH_DATE' | translate }}</span>
+                <input type="text" readonly [value]="'CLIENT.PROFILE.NOT_AVAILABLE' | translate" />
+              </label>
+            </div>
+          }
         </section>
 
         <section class="profile-panel">

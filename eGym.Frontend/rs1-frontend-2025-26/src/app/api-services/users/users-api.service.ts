@@ -8,6 +8,7 @@ import {
   GetUserByIdQueryDto,
   ListUsersRequest,
   ListUsersResponse,
+  UpdateUserCommand,
 } from './users-api.models';
 
 @Injectable({
@@ -28,6 +29,10 @@ export class UsersApiService {
 
   create(payload: CreateUserCommand): Observable<number> {
     return this.http.post<number>(this.baseUrl, payload);
+  }
+
+  update(id: number, payload: UpdateUserCommand): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
   }
 
   delete(id: number): Observable<void> {

@@ -36,3 +36,13 @@ export interface CreateUserCommand {
   roleId: number;
   gymId: number;
 }
+
+/** Matches UpdateUserCommand.cs */
+export interface UpdateUserCommand {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password?: string | null;
+  roleId: number;
+  gymId: number;
+}
