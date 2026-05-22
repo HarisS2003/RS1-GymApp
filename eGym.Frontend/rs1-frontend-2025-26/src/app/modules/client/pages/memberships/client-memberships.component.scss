@@ -1,0 +1,13 @@
+@import '../home/client-home.component.scss';
+
+.page-hint {
+  margin: -8px 0 20px;
+  font-size: 14px;
+  color: $text-muted;
+}
+
+.plan-card__btn--buy {
+  background: $accent !important;
+  color: #fff !important;
+  width: 100%;
+}

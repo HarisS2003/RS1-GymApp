@@ -7,11 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
 import { ToasterService } from '../../../../core/services/toaster.service';
 import { ADMIN_ROLE_ID, MEMBER_ROLE_ID, TRAINER_ROLE_ID } from '../../../auth/constants/auth.constants';
-import { MembershipPlansApiService } from '../../../../api-services/membership-plans/membership-plans-api.service';
-import {
-  ListMembershipPlansQueryDto,
-  ListMembershipPlansRequest,
-} from '../../../../api-services/membership-plans/membership-plans-api.models';
+import { UserMembershipsApiService } from '../../../../api-services/user-memberships/user-memberships-api.service';
+import { GetMyActiveUserMembershipQueryDto } from '../../../../api-services/user-memberships/user-memberships-api.models';
 import { TrainingsApiService } from '../../../../api-services/trainings/trainings-api.service';
 import {
   ListTrainingsQueryDto,
@@ -60,7 +57,7 @@ export class AccountProfileComponent implements OnInit {
   private router = inject(Router);
   private toaster = inject(ToasterService);
   private usersApi = inject(UsersApiService);
-  private plansApi = inject(MembershipPlansApiService);
+  private membershipsApi = inject(UserMembershipsApiService);
   private trainingsApi = inject(TrainingsApiService);
   private trainersApi = inject(TrainersApiService);
   private ordersApi = inject(OrdersApiService);
@@ -71,7 +68,7 @@ export class AccountProfileComponent implements OnInit {
   editing = false;
   saveError: string | null = null;
 
-  membershipPlan: ListMembershipPlansQueryDto | null = null;
+  activeMembership: GetMyActiveUserMembershipQueryDto | null = null;
   trainerRecord: ListTrainersQueryDto | null = null;
   upcomingTrainings: UpcomingTrainingView[] = [];
   purchases: PurchaseHistoryRow[] = [];
@@ -136,13 +133,8 @@ export class AccountProfileComponent implements OnInit {
     return `${days} ${this.translate.instant('COMMON.DAYS')}`;
   }
 
-  planPrice(plan: ListMembershipPlansQueryDto): number {
-    const discount = (plan.price * plan.discountPercentage) / 100;
-    return Math.round((plan.price - discount) * 100) / 100;
-  }
-
   renewMembership(): void {
-    this.router.navigate(['/client']);
+    this.router.navigate(['/client/memberships']);
   }
 
   startEdit(): void {
@@ -229,10 +221,6 @@ export class AccountProfileComponent implements OnInit {
 
     this.loading = true;
 
-    const plansReq = new ListMembershipPlansRequest();
-    plansReq.gymId = profile.gymId;
-    plansReq.paging.pageSize = 50;
-
     const gymTrainersReq = new ListTrainersRequest();
     gymTrainersReq.gymId = profile.gymId;
     gymTrainersReq.paging.pageSize = 100;
@@ -260,7 +248,9 @@ export class AccountProfileComponent implements OnInit {
     };
 
     if (this.isMember) {
-      loads['plans'] = this.plansApi.list(plansReq).pipe(catchError(() => of({ items: [] })));
+      loads['membership'] = this.membershipsApi
+        .getMyActive()
+        .pipe(catchError(() => of(null)));
     }
 
     forkJoin(loads)
@@ -295,12 +285,7 @@ export class AccountProfileComponent implements OnInit {
         next: (data: any) => {
           this.trainerRecord = data.myTrainer?.items?.[0] ?? null;
 
-          if (this.isMember) {
-            const plans = data.plans?.items ?? [];
-            this.membershipPlan = this.pickMembershipPlan(plans);
-          } else {
-            this.membershipPlan = null;
-          }
+          this.activeMembership = this.isMember ? (data.membership ?? null) : null;
 
           const trainerNames: Map<number, string> = data.trainerUsers ?? new Map();
           const today = new Date().toISOString().slice(0, 10);
@@ -365,15 +350,6 @@ export class AccountProfileComponent implements OnInit {
         },
         error: () => (this.loading = false),
       });
-  }
-
-  private pickMembershipPlan(
-    plans: ListMembershipPlansQueryDto[],
-  ): ListMembershipPlansQueryDto | null {
-    if (!plans.length) return null;
-    const monthly = plans.find((p) => p.durationDays === 30);
-    if (monthly) return monthly;
-    return [...plans].sort((a, b) => a.durationDays - b.durationDays)[0];
   }
 
   private trainingTypeLabel(type: number): string {

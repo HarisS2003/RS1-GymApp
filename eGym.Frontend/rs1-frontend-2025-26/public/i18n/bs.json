@@ -483,6 +483,7 @@
       "HOME": "Početna",
       "TRAINERS": "Treneri",
       "SHOP": "Kupovina",
+      "MEMBERSHIPS": "Članarine",
       "SCHEDULE": "Moj Raspored",
       "PROFILE": "Profil"
     },
@@ -524,6 +525,21 @@
       "SUB": "Suplementi i oprema iz ponude",
       "STOCK": "Zaliha"
     },
+    "MEMBERSHIPS": {
+      "TITLE": "Članarine",
+      "SUB": "Pregled i kupovina planova članarine",
+      "VIEW_ALL": "Pregled članarina",
+      "BUY": "Kupi članarinu",
+      "LIVE_PAYMENT_HINT": "Plaćanje samo gotovinom u teretani — članarina se aktivira nakon potvrde.",
+      "PURCHASE_TITLE": "Potvrda kupovine",
+      "PURCHASE_SUB": "Provjerite detalje prije plaćanja gotovinom",
+      "PURCHASE_BADGE": "Gotovina",
+      "TOTAL": "Ukupno",
+      "PAY_NOW": "Potvrdi (gotovina)",
+      "PURCHASE_CONFIRM": "Kupiti plan \"{{name}}\" za {{price}} KM online plaćanjem?",
+      "PURCHASE_SUCCESS": "Članarina \"{{name}}\" je aktivirana.",
+      "PURCHASE_ERROR": "Kupovina članarine nije uspjela."
+    },
     "PROFILE": {
       "TITLE": "Moj Profil",
       "SUBTITLE": "Upravljajte svojim nalogom i postavkama",
@@ -535,6 +551,7 @@
       "ACTIVE_MEMBERSHIP": "Aktivna Članarina",
       "PLAN_OFFER": "Ponuda članarine",
       "DURATION": "Trajanje",
+      "VALID_UNTIL": "Važi do",
       "GYM_LABEL": "Teretana",
       "PRICE": "Cijena",
       "RENEW": "Produži članarinu",

@@ -108,6 +108,24 @@
   }
 }
 
+.section-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.section-link-btn {
+  border-color: $accent !important;
+  color: $accent !important;
+}
+
 .section-sub {
   margin: 0 0 16px;
   color: $text-muted;

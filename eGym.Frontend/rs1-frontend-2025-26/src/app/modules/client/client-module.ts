@@ -6,6 +6,7 @@ import { ClientHomeComponent } from './pages/home/client-home.component';
 import { TrainerHomeComponent } from './pages/trainer-home/trainer-home.component';
 import { ClientTrainersComponent } from './pages/trainers/client-trainers.component';
 import { ClientShopComponent } from './pages/shop/client-shop.component';
+import { ClientMembershipsComponent } from './pages/memberships/client-memberships.component';
 import { ClientProfileComponent } from './pages/profile/client-profile.component';
 import { ClientScheduleComponent } from './pages/schedule/client-schedule.component';
 
@@ -16,6 +17,7 @@ import { ClientScheduleComponent } from './pages/schedule/client-schedule.compon
     TrainerHomeComponent,
     ClientTrainersComponent,
     ClientShopComponent,
+    ClientMembershipsComponent,
     ClientProfileComponent,
     ClientScheduleComponent,
   ],

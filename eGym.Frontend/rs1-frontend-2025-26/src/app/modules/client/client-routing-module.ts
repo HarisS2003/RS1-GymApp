@@ -4,6 +4,7 @@ import { ClientLayoutComponent } from './layout/client-layout.component';
 import { ClientHomeComponent } from './pages/home/client-home.component';
 import { ClientTrainersComponent } from './pages/trainers/client-trainers.component';
 import { ClientShopComponent } from './pages/shop/client-shop.component';
+import { ClientMembershipsComponent } from './pages/memberships/client-memberships.component';
 import { ClientProfileComponent } from './pages/profile/client-profile.component';
 import { ClientScheduleComponent } from './pages/schedule/client-schedule.component';
 
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: '', component: ClientHomeComponent },
       { path: 'trainers', component: ClientTrainersComponent },
       { path: 'shop', component: ClientShopComponent },
+      { path: 'memberships', component: ClientMembershipsComponent },
       { path: 'profile', component: ClientProfileComponent },
       { path: 'schedule', component: ClientScheduleComponent },
       { path: '**', redirectTo: '' },

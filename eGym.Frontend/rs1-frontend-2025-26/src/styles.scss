@@ -168,3 +168,8 @@ body.theme-light {
     color: white !important;
   }
 }
+
+.membership-purchase-panel .mat-mdc-dialog-surface {
+  border-radius: 18px !important;
+  overflow: hidden;
+}

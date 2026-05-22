@@ -1,0 +1,46 @@
+<div class="purchase-dialog">
+  <div class="purchase-dialog__hero">
+    <div class="purchase-dialog__icon">
+      <mat-icon>card_membership</mat-icon>
+    </div>
+    <span class="purchase-dialog__badge">{{ 'CLIENT.MEMBERSHIPS.PURCHASE_BADGE' | translate }}</span>
+    <h2>{{ 'CLIENT.MEMBERSHIPS.PURCHASE_TITLE' | translate }}</h2>
+    <p>{{ 'CLIENT.MEMBERSHIPS.PURCHASE_SUB' | translate }}</p>
+  </div>
+
+  <div class="purchase-dialog__card">
+    <div class="purchase-dialog__row">
+      <span>{{ 'MEMBERSHIP_PLANS.TABLE.NAME' | translate }}</span>
+      <strong>{{ plan.name }}</strong>
+    </div>
+    <div class="purchase-dialog__row">
+      <span>{{ 'MEMBERSHIP_PLANS.TABLE.DURATION' | translate }}</span>
+      <strong>{{ data.durationLabel }}</strong>
+    </div>
+    @if (hasDiscount) {
+      <div class="purchase-dialog__row purchase-dialog__row--muted">
+        <span>{{ 'MEMBERSHIP_PLANS.TABLE.DISCOUNT' | translate }}</span>
+        <strong>-{{ plan.discountPercentage }}%</strong>
+      </div>
+    }
+    <div class="purchase-dialog__row purchase-dialog__row--price">
+      <span>{{ 'CLIENT.MEMBERSHIPS.TOTAL' | translate }}</span>
+      <strong>{{ data.finalPrice | number: '1.2-2' }} KM</strong>
+    </div>
+  </div>
+
+  <div class="purchase-dialog__payment">
+    <mat-icon>payments</mat-icon>
+    <span>{{ 'CLIENT.MEMBERSHIPS.LIVE_PAYMENT_HINT' | translate }}</span>
+  </div>
+
+  <div class="purchase-dialog__actions">
+    <button mat-stroked-button type="button" (click)="cancel()">
+      {{ 'MEMBERSHIP_PLANS.FORM.CANCEL' | translate }}
+    </button>
+    <button mat-flat-button type="button" class="purchase-dialog__pay" (click)="confirm()">
+      <mat-icon>payments</mat-icon>
+      {{ 'CLIENT.MEMBERSHIPS.PAY_NOW' | translate }}
+    </button>
+  </div>
+</div>

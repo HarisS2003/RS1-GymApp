@@ -1,0 +1,42 @@
+<h1 class="page-title">{{ 'CLIENT.MEMBERSHIPS.TITLE' | translate }}</h1>
+<p class="page-sub">{{ 'CLIENT.MEMBERSHIPS.SUB' | translate }}</p>
+<p class="page-hint">{{ 'CLIENT.MEMBERSHIPS.LIVE_PAYMENT_HINT' | translate }}</p>
+
+@if (loading) {
+  <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+} @else if (plans.length === 0) {
+  <p class="empty-msg">{{ 'CLIENT.HOME.NO_PLANS' | translate }}</p>
+} @else {
+  <div class="plans-row">
+    @for (plan of plans; track plan.id; let i = $index) {
+      <article class="plan-card" [class]="'plan-card--' + (i % 4)" [class.plan-card--featured]="isRecommended(plan)">
+        @if (isRecommended(plan)) {
+          <span class="plan-badge">{{ 'CLIENT.HOME.RECOMMENDED' | translate }}</span>
+        }
+        <div class="plan-card__head">
+          <h3>{{ plan.name }}</h3>
+          <span>{{ formatDuration(plan.durationDays) }}</span>
+        </div>
+        <div class="plan-card__price">
+          {{ finalPrice(plan) }} KM
+          @if (plan.discountPercentage > 0) {
+            <small>-{{ plan.discountPercentage }}%</small>
+          }
+        </div>
+        <button
+          mat-flat-button
+          type="button"
+          class="plan-card__btn plan-card__btn--buy"
+          [disabled]="purchasingId !== null"
+          (click)="buyPlan(plan)"
+        >
+          @if (purchasingId === plan.id) {
+            <mat-spinner diameter="22"></mat-spinner>
+          } @else {
+            {{ 'CLIENT.MEMBERSHIPS.BUY' | translate }}
+          }
+        </button>
+      </article>
+    }
+  </div>
+}

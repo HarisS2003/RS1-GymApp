@@ -291,6 +291,25 @@ export class DialogHelperService {
     }
   };
 
+  membershipPurchase = {
+    confirm: (planName: string, price: number) => {
+      return this.confirmOkCancel(
+        'CLIENT.MEMBERSHIPS.PURCHASE_TITLE',
+        'CLIENT.MEMBERSHIPS.PURCHASE_CONFIRM',
+        { name: planName, price },
+        'payment',
+      );
+    },
+
+    showSuccess: (planName: string) => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'CLIENT.MEMBERSHIPS.PURCHASE_SUCCESS',
+        { name: planName },
+      );
+    },
+  };
+
   membershipPlan = {
     confirmDelete: (planName: string) => {
       return this.confirmDelete(

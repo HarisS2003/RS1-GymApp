@@ -15,22 +15,22 @@
         <span class="profile-role-pill">{{ roleLabel(p.roleId) }}</span>
       </div>
 
-      @if (isMember && membershipPlan; as plan) {
+      @if (isMember && activeMembership; as m) {
         <div class="membership-card">
           <span class="membership-card__badge">{{ 'CLIENT.PROFILE.ACTIVE_MEMBERSHIP' | translate }}</span>
-          <h3>{{ plan.name }}</h3>
+          <h3>{{ m.planName }}</h3>
           <ul>
             <li>
               <span>{{ 'CLIENT.PROFILE.DURATION' | translate }}</span>
-              <strong>{{ planDurationLabel(plan.durationDays) }}</strong>
+              <strong>{{ planDurationLabel(m.durationDays) }}</strong>
             </li>
             <li>
-              <span>{{ 'CLIENT.PROFILE.GYM_LABEL' | translate }}</span>
-              <strong>{{ p.gymName || ('COMMON.GYM' | translate) }}</strong>
+              <span>{{ 'CLIENT.PROFILE.VALID_UNTIL' | translate }}</span>
+              <strong>{{ m.endDate | date: 'dd.MM.yyyy' }}</strong>
             </li>
             <li>
               <span>{{ 'CLIENT.PROFILE.PRICE' | translate }}</span>
-              <strong>{{ planPrice(plan) }} KM</strong>
+              <strong>{{ m.finalPrice }} KM</strong>
             </li>
           </ul>
         </div>

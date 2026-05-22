@@ -483,6 +483,7 @@
       "HOME": "Home",
       "TRAINERS": "Trainers",
       "SHOP": "Shop",
+      "MEMBERSHIPS": "Memberships",
       "SCHEDULE": "My Schedule",
       "PROFILE": "Profile"
     },
@@ -524,6 +525,21 @@
       "SUB": "Supplements and equipment",
       "STOCK": "Stock"
     },
+    "MEMBERSHIPS": {
+      "TITLE": "Memberships",
+      "SUB": "Browse and purchase membership plans",
+      "VIEW_ALL": "View memberships",
+      "BUY": "Buy membership",
+      "LIVE_PAYMENT_HINT": "Cash payment at the gym only — membership activates after you confirm.",
+      "PURCHASE_TITLE": "Confirm purchase",
+      "PURCHASE_SUB": "Review details before cash payment",
+      "PURCHASE_BADGE": "Cash",
+      "TOTAL": "Total",
+      "PAY_NOW": "Confirm (cash)",
+      "PURCHASE_CONFIRM": "Buy plan \"{{name}}\" for {{price}} KM with online payment?",
+      "PURCHASE_SUCCESS": "Membership \"{{name}}\" is now active.",
+      "PURCHASE_ERROR": "Membership purchase failed."
+    },
     "PROFILE": {
       "TITLE": "My Profile",
       "SUBTITLE": "Manage your account and settings",
@@ -535,6 +551,7 @@
       "ACTIVE_MEMBERSHIP": "Active Membership",
       "PLAN_OFFER": "Membership offer",
       "DURATION": "Duration",
+      "VALID_UNTIL": "Valid until",
       "GYM_LABEL": "Gym",
       "PRICE": "Price",
       "RENEW": "Renew membership",

@@ -1,0 +1,138 @@
+$accent: var(--app-accent, #ff6600);
+$text: #1e293b;
+$muted: #64748b;
+$border: rgba(15, 23, 42, 0.08);
+
+.purchase-dialog {
+  padding: 8px 4px 4px;
+  min-width: 380px;
+  max-width: 440px;
+}
+
+.purchase-dialog__hero {
+  text-align: center;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 12px 0 6px;
+    font-size: 22px;
+    font-weight: 700;
+    color: $text;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: $muted;
+  }
+}
+
+.purchase-dialog__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $accent 0%, #ff8533 100%);
+  box-shadow: 0 8px 24px rgba(255, 102, 0, 0.35);
+
+  mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: #fff;
+  }
+}
+
+.purchase-dialog__badge {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(255, 102, 0, 0.12);
+  color: $accent;
+}
+
+.purchase-dialog__card {
+  background: #f8fafc;
+  border: 1px solid $border;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.purchase-dialog__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 14px;
+
+  span {
+    color: $muted;
+  }
+
+  strong {
+    color: $text;
+    text-align: right;
+  }
+
+  &--muted strong {
+    color: #16a34a;
+  }
+
+  &--price {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px dashed $border;
+
+    strong {
+      font-size: 22px;
+      color: $accent;
+    }
+  }
+}
+
+.purchase-dialog__payment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  font-size: 13px;
+  color: #9a3412;
+  margin-bottom: 20px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+.purchase-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.purchase-dialog__pay {
+  background: $accent !important;
+  color: #fff !important;
+  min-width: 160px;
+
+  mat-icon {
+    margin-right: 4px;
+  }
+}
