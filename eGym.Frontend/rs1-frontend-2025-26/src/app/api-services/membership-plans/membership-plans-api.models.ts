@@ -15,4 +15,29 @@ export interface ListMembershipPlansQueryDto {
   gymId: number;
 }
 
+export interface GetMembershipPlanByIdQueryDto {
+  id: number;
+  name: string;
+  durationDays: number;
+  price: number;
+  discountPercentage: number;
+  gymId: number;
+}
+
 export type ListMembershipPlansResponse = PageResult<ListMembershipPlansQueryDto>;
+
+export interface CreateMembershipPlanCommand {
+  name: string;
+  durationDays: number;
+  price: number;
+  discountPercentage: number;
+  gymId: number;
+}
+
+export interface UpdateMembershipPlanCommand {
+  name: string;
+  durationDays: number;
+  price: number;
+  discountPercentage: number;
+  gymId: number;
+}

@@ -48,9 +48,20 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- Price and Category Row -->
       <div class="form-row">
-        <!-- Price -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'PRODUCTS.FORM.CATEGORY' | translate }}</mat-label>
+          <input
+            matInput
+            formControlName="categoryName"
+            [placeholder]="'PRODUCTS.FORM.CATEGORY' | translate"
+          />
+          <mat-icon matSuffix>category</mat-icon>
+          <mat-error *ngIf="hasError('categoryName')">
+            {{ getErrorMessage('categoryName') }}
+          </mat-error>
+        </mat-form-field>
+
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>{{ 'PRODUCTS.FORM.PRICE' | translate }}</mat-label>
           <input
@@ -66,21 +77,15 @@
             {{ getErrorMessage('price') }}
           </mat-error>
         </mat-form-field>
-
-        <!-- Category -->
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>{{ 'PRODUCTS.FORM.CATEGORY' | translate }}</mat-label>
-          <mat-select formControlName="categoryId">
-            <mat-option *ngFor="let category of categories" [value]="category.id">
-              {{ category.name }}
-            </mat-option>
-          </mat-select>
-          <mat-icon matSuffix>category</mat-icon>
-          <mat-error *ngIf="hasError('categoryId')">
-            {{ getErrorMessage('categoryId') }}
-          </mat-error>
-        </mat-form-field>
       </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'PRODUCTS.TABLE.STOCK' | translate }}</mat-label>
+        <input matInput type="number" formControlName="stockQuantity" min="0" />
+        <mat-error *ngIf="hasError('stockQuantity')">
+          {{ getErrorMessage('stockQuantity') }}
+        </mat-error>
+      </mat-form-field>
 
       <!-- Actions -->
       <div class="form-actions">

@@ -159,7 +159,7 @@
       "UPDATE": "Ažuriraj"
     },
     "DIALOGS": {
-      "DELETE_TITLE": "Brisanje Proizvoda",
+      "DELETE_TITLE": "Brisanje proizvoda",
       "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati proizvod \"{{name}}\"?",
       "SUCCESS_CREATE": "Proizvod uspješno kreiran.",
       "SUCCESS_UPDATE": "Proizvod uspješno ažuriran.",
@@ -169,6 +169,47 @@
       "ERROR_DELETE": "Greška pri brisanju proizvoda.",
       "UNSAVED_CHANGES": "Imate nesačuvane izmjene u formi.",
       "CONFIRM_CANCEL": "Da li želite otkazati izmjene i vratiti se nazad?"
+    }
+  },
+  "MEMBERSHIP_PLANS": {
+    "TITLE": "Članarine",
+    "SEARCH_PLACEHOLDER": "Pretraži planove",
+    "SEARCH_INPUT_PLACEHOLDER": "Unesite naziv plana...",
+    "NEW_PLAN": "Dodaj plan članarine",
+    "NO_DATA": "Nema planova članarine",
+    "NO_DATA_FILTER": "Nema rezultata za pretragu",
+    "TABLE": {
+      "NAME": "Naziv",
+      "DURATION": "Trajanje",
+      "PRICE": "Cijena (KM)",
+      "DISCOUNT": "Popust",
+      "ACTIVE": "Aktivan"
+    },
+    "ACTIONS": {
+      "EDIT_TOOLTIP": "Uredi plan",
+      "DELETE_TOOLTIP": "Obriši plan"
+    },
+    "ADD": {
+      "TITLE": "Dodaj plan članarine",
+      "SAVING": "Čuvanje plana..."
+    },
+    "EDIT": {
+      "TITLE": "Uredi plan članarine"
+    },
+    "FORM": {
+      "NAME": "Naziv plana",
+      "NAME_PLACEHOLDER": "npr. Mjesečna članarina",
+      "DURATION": "Trajanje (dana)",
+      "PRICE": "Cijena",
+      "DISCOUNT": "Popust (%)",
+      "CANCEL": "Otkaži",
+      "SAVE": "Sačuvaj",
+      "UPDATE": "Ažuriraj"
+    },
+    "DIALOGS": {
+      "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati plan \"{{name}}\"?",
+      "SUCCESS_DELETE": "Plan članarine uspješno obrisan.",
+      "ERROR_DELETE": "Greška pri brisanju plana."
     }
   },
   "ORDERS": {
@@ -418,7 +459,8 @@
     "DAYS": "dana",
     "ADD": "Dodaj",
     "BUY_NOW": "Kupi Sada",
-    "ACTIVE": "Aktivan"
+    "ACTIVE": "Aktivan",
+    "INACTIVE": "Neaktivan"
   },
   "LANDING": {
     "BRAND": "eGym",
@@ -532,7 +574,10 @@
     "SUB": "Upravljanje trenerima",
     "TAB_TRAINERS": "Treneri",
     "TAB_PRODUCTS": "Proizvodi",
+    "TAB_MEMBERSHIPS": "Članarine",
     "TAB_MEMBERS": "Polaznici",
+    "VIEW_MEMBERSHIPS": "Pregled članarina",
+    "MEMBERSHIPS_SUB": "Upravljanje planovima članarine",
     "COL_NO": "Br.",
     "COL_ID": "ID",
     "COL_NAME": "Ime",
@@ -566,6 +611,7 @@
     "NAV_HOME": "Početna",
     "NAV_PANEL": "Admin Panel",
     "NAV_PRODUCTS": "Proizvodi",
+    "NAV_MEMBERSHIPS": "Članarine",
     "NAV_ORDERS": "Narudžbe",
     "NAV_CATEGORIES": "Kategorije",
     "ROLE_ADMIN": "Admin",
@@ -590,6 +636,11 @@
     "SUMMARY_ACTIVE_PRODUCTS": "Aktivni proizvodi",
     "SUMMARY_ACTIVE_PRODUCTS_SUB": "Omogućeni u katalogu",
     "SUMMARY_LOW_STOCK": "Niska zaliha",
-    "SUMMARY_LOW_STOCK_SUB": "Manje od 5 komada"
+    "SUMMARY_LOW_STOCK_SUB": "Manje od 5 komada",
+    "SUMMARY_TOTAL_PLANS": "Ukupno planova",
+    "SUMMARY_AVG_PRICE": "Prosječna cijena",
+    "SUMMARY_AVG_PRICE_SUB": "Po planu (KM)",
+    "SUMMARY_WITH_DISCOUNT": "Sa popustom",
+    "SUMMARY_WITH_DISCOUNT_SUB": "Planovi s popustom > 0%"
   }
 }

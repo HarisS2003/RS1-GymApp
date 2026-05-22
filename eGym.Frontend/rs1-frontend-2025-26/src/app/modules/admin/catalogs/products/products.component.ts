@@ -45,6 +45,10 @@ export class ProductsComponent
     this.router.navigate(['/admin/dashboard']);
   }
 
+  goMemberships(): void {
+    this.router.navigate(['/admin/membership-plans']);
+  }
+
   protected loadPagedData(): void {
     this.startLoading();
 
@@ -68,7 +72,7 @@ export class ProductsComponent
       next: (res) => {
         const all = res.items ?? [];
         this.totalProducts = res.totalItems ?? all.length;
-        this.activeProducts = all.filter((p) => p.isEnabled).length;
+        this.activeProducts = all.length;
         this.lowStockCount = all.filter((p) => p.stockQuantity < 5).length;
       },
     });

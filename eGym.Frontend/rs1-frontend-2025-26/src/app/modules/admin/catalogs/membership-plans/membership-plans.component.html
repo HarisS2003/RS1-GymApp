@@ -1,23 +1,23 @@
 <div class="admin-dash">
   <div class="admin-dash__top">
     <div class="admin-dash__intro">
-      <h1>{{ 'PRODUCTS.TITLE' | translate }}</h1>
-      <p>{{ 'ADMIN_DASH.PRODUCTS_SUB' | translate }}</p>
+      <h1>{{ 'MEMBERSHIP_PLANS.TITLE' | translate }}</h1>
+      <p>{{ 'ADMIN_DASH.MEMBERSHIPS_SUB' | translate }}</p>
     </div>
     <div class="admin-dash__top-actions">
       <mat-form-field appearance="outline" class="admin-dash__search">
-        <mat-label>{{ 'PRODUCTS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
+        <mat-label>{{ 'MEMBERSHIP_PLANS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
         <mat-icon matPrefix>search</mat-icon>
         <input
           matInput
           [(ngModel)]="request.search"
-          [placeholder]="'PRODUCTS.SEARCH_INPUT_PLACEHOLDER' | translate"
+          [placeholder]="'MEMBERSHIP_PLANS.SEARCH_INPUT_PLACEHOLDER' | translate"
           (keyup.enter)="onSearch()"
         />
       </mat-form-field>
       <button mat-flat-button type="button" class="add-panel-btn" (click)="onCreate()">
         <mat-icon>add</mat-icon>
-        {{ 'PRODUCTS.NEW_PRODUCT' | translate }}
+        {{ 'MEMBERSHIP_PLANS.NEW_PLAN' | translate }}
       </button>
     </div>
   </div>
@@ -27,11 +27,11 @@
       <mat-icon>groups</mat-icon>
       {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
     </button>
-    <button type="button" class="active">
+    <button type="button" (click)="goProducts()">
       <mat-icon>shopping_bag</mat-icon>
       {{ 'ADMIN_DASH.TAB_PRODUCTS' | translate }}
     </button>
-    <button type="button" (click)="goMemberships()">
+    <button type="button" class="active">
       <mat-icon>card_membership</mat-icon>
       {{ 'ADMIN_DASH.TAB_MEMBERSHIPS' | translate }}
     </button>
@@ -47,32 +47,32 @@
         <thead>
           <tr>
             <th>{{ 'ADMIN_DASH.COL_NO' | translate }}</th>
-            <th>{{ 'PRODUCTS.TABLE.NAME' | translate }}</th>
-            <th>{{ 'PRODUCTS.TABLE.CATEGORY' | translate }}</th>
-            <th>{{ 'PRODUCTS.TABLE.PRICE' | translate }}</th>
-            <th>{{ 'PRODUCTS.TABLE.STOCK' | translate }}</th>
+            <th>{{ 'MEMBERSHIP_PLANS.TABLE.NAME' | translate }}</th>
+            <th>{{ 'MEMBERSHIP_PLANS.TABLE.DURATION' | translate }}</th>
+            <th>{{ 'MEMBERSHIP_PLANS.TABLE.PRICE' | translate }}</th>
+            <th>{{ 'MEMBERSHIP_PLANS.TABLE.DISCOUNT' | translate }}</th>
             <th>{{ 'ADMIN_DASH.COL_STATUS' | translate }}</th>
             <th>{{ 'ADMIN_DASH.COL_ACTIONS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (product of items; track product.id) {
+          @for (plan of items; track plan.id) {
             <tr>
-              <td><span class="row-id">#{{ product.id }}</span></td>
-              <td><strong>{{ product.name }}</strong></td>
-              <td>{{ product.categoryName || '—' }}</td>
-              <td>{{ product.price | number: '1.2-2' }} KM</td>
-              <td [class.stock-low]="product.stockQuantity < 5">{{ product.stockQuantity }}</td>
+              <td><span class="row-id">#{{ plan.id }}</span></td>
+              <td><strong>{{ plan.name }}</strong></td>
+              <td>{{ plan.durationDays }} {{ 'COMMON.DAYS' | translate }}</td>
+              <td>{{ plan.price | number: '1.2-2' }} KM</td>
+              <td>{{ plan.discountPercentage | number: '1.0-1' }}%</td>
               <td>
-                <span class="status-pill">{{ 'PRODUCTS.TABLE.ACTIVE' | translate }}</span>
+                <span class="status-pill">{{ 'MEMBERSHIP_PLANS.TABLE.ACTIVE' | translate }}</span>
               </td>
               <td class="actions">
                 <button
                   mat-icon-button
                   type="button"
                   class="action-edit"
-                  (click)="onEdit(product)"
-                  [attr.aria-label]="'PRODUCTS.ACTIONS.EDIT_TOOLTIP' | translate"
+                  (click)="onEdit(plan)"
+                  [attr.aria-label]="'MEMBERSHIP_PLANS.ACTIONS.EDIT_TOOLTIP' | translate"
                 >
                   <mat-icon>edit</mat-icon>
                 </button>
@@ -80,8 +80,8 @@
                   mat-icon-button
                   type="button"
                   class="action-delete"
-                  (click)="onDelete(product)"
-                  [attr.aria-label]="'PRODUCTS.ACTIONS.DELETE_TOOLTIP' | translate"
+                  (click)="onDelete(plan)"
+                  [attr.aria-label]="'MEMBERSHIP_PLANS.ACTIONS.DELETE_TOOLTIP' | translate"
                 >
                   <mat-icon>delete</mat-icon>
                 </button>
@@ -91,9 +91,9 @@
             <tr>
               <td colspan="7" class="empty-cell">
                 @if (request.search) {
-                  {{ 'PRODUCTS.NO_DATA_FILTER' | translate }}
+                  {{ 'MEMBERSHIP_PLANS.NO_DATA_FILTER' | translate }}
                 } @else {
-                  {{ 'PRODUCTS.NO_DATA' | translate }}
+                  {{ 'MEMBERSHIP_PLANS.NO_DATA' | translate }}
                 }
               </td>
             </tr>
@@ -108,19 +108,19 @@
 
     <section class="admin-summary">
       <article class="summary-card summary-card--blue">
-        <span>{{ 'ADMIN_DASH.SUMMARY_TOTAL_PRODUCTS' | translate }}</span>
-        <strong>{{ totalProducts | number }}</strong>
+        <span>{{ 'ADMIN_DASH.SUMMARY_TOTAL_PLANS' | translate }}</span>
+        <strong>{{ totalPlans | number }}</strong>
         <small>{{ 'ADMIN_DASH.SUMMARY_MEMBERS_TREND' | translate }}</small>
       </article>
       <article class="summary-card summary-card--orange">
-        <span>{{ 'ADMIN_DASH.SUMMARY_ACTIVE_PRODUCTS' | translate }}</span>
-        <strong>{{ activeProducts | number }}</strong>
-        <small>{{ 'ADMIN_DASH.SUMMARY_ACTIVE_PRODUCTS_SUB' | translate }}</small>
+        <span>{{ 'ADMIN_DASH.SUMMARY_AVG_PRICE' | translate }}</span>
+        <strong>{{ avgPrice | number: '1.2-2' }} KM</strong>
+        <small>{{ 'ADMIN_DASH.SUMMARY_AVG_PRICE_SUB' | translate }}</small>
       </article>
       <article class="summary-card summary-card--green">
-        <span>{{ 'ADMIN_DASH.SUMMARY_LOW_STOCK' | translate }}</span>
-        <strong>{{ lowStockCount | number }}</strong>
-        <small>{{ 'ADMIN_DASH.SUMMARY_LOW_STOCK_SUB' | translate }}</small>
+        <span>{{ 'ADMIN_DASH.SUMMARY_WITH_DISCOUNT' | translate }}</span>
+        <strong>{{ withDiscount | number }}</strong>
+        <small>{{ 'ADMIN_DASH.SUMMARY_WITH_DISCOUNT_SUB' | translate }}</small>
       </article>
     </section>
   }

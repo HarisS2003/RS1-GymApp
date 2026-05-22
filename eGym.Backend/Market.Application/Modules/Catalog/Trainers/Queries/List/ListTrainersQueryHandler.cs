@@ -1,3 +1,5 @@
+using Market.Shared.Constants;
+
 namespace Market.Application.Modules.Catalog.Trainers.Queries.List;
 
 public sealed class ListTrainersQueryHandler(IAppDbContext ctx)
@@ -5,7 +7,13 @@ public sealed class ListTrainersQueryHandler(IAppDbContext ctx)
 {
     public async Task<PageResult<ListTrainersQueryDto>> Handle(ListTrainersQuery request, CancellationToken ct)
     {
-        var q = ctx.Trainers.AsNoTracking().Where(x => !x.IsDeleted);
+        var q =
+            from trainer in ctx.Trainers.AsNoTracking()
+            join user in ctx.Users.AsNoTracking() on trainer.UserId equals user.Id
+            where !trainer.IsDeleted
+                  && !user.IsDeleted
+                  && user.RoleId == RoleIds.Trainer
+            select trainer;
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {

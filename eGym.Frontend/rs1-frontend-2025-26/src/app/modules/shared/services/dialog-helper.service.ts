@@ -290,4 +290,20 @@ export class DialogHelperService {
       );
     }
   };
+
+  membershipPlan = {
+    confirmDelete: (planName: string) => {
+      return this.confirmDelete(
+        planName,
+        'MEMBERSHIP_PLANS.DIALOGS.DELETE_MESSAGE'
+      );
+    },
+
+    showDeleteSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'MEMBERSHIP_PLANS.DIALOGS.SUCCESS_DELETE'
+      );
+    },
+  };
 }

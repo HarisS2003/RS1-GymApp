@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UsersApiService } from '../../../../api-services/users/users-api.service';
 import { ListUsersQueryDto, ListUsersRequest } from '../../../../api-services/users/users-api.models';
-import { MEMBER_ROLE_ID } from '../../../auth/constants/auth.constants';
+import { ADMIN_ROLE_ID, MEMBER_ROLE_ID, TRAINER_ROLE_ID } from '../../../auth/constants/auth.constants';
 import { catchError, of } from 'rxjs';
 
 export interface AddTrainerDialogData {
@@ -43,7 +43,6 @@ export class AddTrainerDialogComponent implements OnInit {
   ngOnInit(): void {
     const req = new ListUsersRequest();
     req.gymId = this.data.gymId;
-    req.roleId = MEMBER_ROLE_ID;
     req.paging.pageSize = 500;
 
     const existing = new Set(this.data.existingTrainerUserIds);
@@ -53,7 +52,12 @@ export class AddTrainerDialogComponent implements OnInit {
       .pipe(catchError(() => of({ items: [] })))
       .subscribe({
         next: (res) => {
-          this.users = (res.items ?? []).filter((u) => !existing.has(u.id));
+          this.users = (res.items ?? []).filter(
+            (u) =>
+              !existing.has(u.id) &&
+              u.roleId !== ADMIN_ROLE_ID &&
+              (u.roleId === MEMBER_ROLE_ID || u.roleId === TRAINER_ROLE_ID),
+          );
           this.loading = false;
         },
         error: () => (this.loading = false),

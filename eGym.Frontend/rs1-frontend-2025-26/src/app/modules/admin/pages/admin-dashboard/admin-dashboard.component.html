@@ -4,10 +4,16 @@
       <h1>{{ 'ADMIN_DASH.TITLE' | translate }}</h1>
       <p>{{ 'ADMIN_DASH.SUB' | translate }}</p>
     </div>
-    <button mat-flat-button type="button" class="add-panel-btn" (click)="openAddTrainer()">
-      <mat-icon>add</mat-icon>
-      {{ 'ADMIN_DASH.ADD_TRAINER' | translate }}
-    </button>
+    <div class="admin-dash__top-actions">
+      <button mat-stroked-button type="button" (click)="goMembershipPlans()">
+        <mat-icon>card_membership</mat-icon>
+        {{ 'ADMIN_DASH.VIEW_MEMBERSHIPS' | translate }}
+      </button>
+      <button mat-flat-button type="button" class="add-panel-btn" (click)="openAddTrainer()">
+        <mat-icon>add</mat-icon>
+        {{ 'ADMIN_DASH.ADD_TRAINER' | translate }}
+      </button>
+    </div>
   </div>
 
   <div class="admin-tabs">
@@ -18,6 +24,10 @@
     <button type="button" (click)="setTab('products')">
       <mat-icon>shopping_bag</mat-icon>
       {{ 'ADMIN_DASH.TAB_PRODUCTS' | translate }}
+    </button>
+    <button type="button" (click)="setTab('memberships')">
+      <mat-icon>card_membership</mat-icon>
+      {{ 'ADMIN_DASH.TAB_MEMBERSHIPS' | translate }}
     </button>
   </div>
 

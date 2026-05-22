@@ -1,3 +1,5 @@
+using Market.Shared.Constants;
+
 namespace Market.Application.Modules.Catalog.Trainers.Commands.Delete;
 
 public sealed class DeleteTrainerCommandHandler(IAppDbContext ctx)
@@ -10,6 +12,13 @@ public sealed class DeleteTrainerCommandHandler(IAppDbContext ctx)
 
         trainer.IsDeleted = true;
         trainer.ModifiedAtUtc = DateTime.UtcNow;
+
+        var user = await ctx.Users.FirstOrDefaultAsync(x => x.Id == trainer.UserId && !x.IsDeleted, ct);
+        if (user is not null && user.RoleId == RoleIds.Trainer)
+        {
+            user.RoleId = RoleIds.Member;
+            user.ModifiedAtUtc = DateTime.UtcNow;
+        }
 
         await ctx.SaveChangesAsync(ct);
         return Unit.Value;

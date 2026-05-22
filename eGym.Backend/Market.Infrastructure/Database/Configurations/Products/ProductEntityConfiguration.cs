@@ -13,6 +13,15 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<ProductEntity
             .HasMaxLength(150);
 
         builder
+            .Property(x => x.CategoryName)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder
+            .Property(x => x.Description)
+            .HasMaxLength(500);
+
+        builder
             .Property(x => x.Price)
             .HasPrecision(18, 2);
 

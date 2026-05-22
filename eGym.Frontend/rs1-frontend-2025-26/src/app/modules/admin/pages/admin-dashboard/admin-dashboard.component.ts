@@ -49,7 +49,7 @@ export class AdminDashboardComponent implements OnInit {
   profileService = inject(UserProfileService);
 
   addingTrainers = false;
-  activeTab: 'trainers' | 'products' = 'trainers';
+  activeTab: 'trainers' | 'products' | 'memberships' = 'trainers';
   loading = true;
 
   trainerRows: AdminTrainerRow[] = [];
@@ -65,12 +65,20 @@ export class AdminDashboardComponent implements OnInit {
     this.profileService.loadProfile().subscribe(() => this.load());
   }
 
-  setTab(tab: 'trainers' | 'products'): void {
+  setTab(tab: 'trainers' | 'products' | 'memberships'): void {
     if (tab === 'products') {
       this.router.navigate(['/admin/products']);
       return;
     }
+    if (tab === 'memberships') {
+      this.router.navigate(['/admin/membership-plans']);
+      return;
+    }
     this.activeTab = tab;
+  }
+
+  goMembershipPlans(): void {
+    this.router.navigate(['/admin/membership-plans']);
   }
 
   trainerName(row: AdminTrainerRow): string {
@@ -127,16 +135,7 @@ export class AdminDashboardComponent implements OnInit {
       return;
     }
 
-    this.usersApi
-      .update(user.id, {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        roleId: MEMBER_ROLE_ID,
-        gymId: user.gymId,
-      })
-      .pipe(switchMap(() => this.trainersApi.delete(row.trainer.id)))
-      .subscribe({
+    this.trainersApi.delete(row.trainer.id).subscribe({
         next: () => {
           this.toaster.success(this.translate.instant('ADMIN_DASH.DEGRADE_SUCCESS', { name }));
           this.load();
@@ -184,6 +183,7 @@ export class AdminDashboardComponent implements OnInit {
         error: (err) => {
           this.addingTrainers = false;
           const msg =
+            err?.error?.detail ??
             err?.error?.message ??
             err?.error?.title ??
             this.translate.instant('ADMIN_DASH.ADD_TRAINER_ERROR');
@@ -198,8 +198,12 @@ export class AdminDashboardComponent implements OnInit {
     this.loading = true;
 
     const trainersReq = new ListTrainersRequest();
-    trainersReq.paging.pageSize = 200;
-    if (gymId) trainersReq.gymId = gymId;
+    trainersReq.paging.pageSize = 500;
+
+    const trainerUsersReq = new ListUsersRequest();
+    trainerUsersReq.roleId = TRAINER_ROLE_ID;
+    trainerUsersReq.paging.pageSize = 500;
+    if (gymId) trainerUsersReq.gymId = gymId;
 
     const membersReq = new ListUsersRequest();
     membersReq.roleId = MEMBER_ROLE_ID;
@@ -214,18 +218,35 @@ export class AdminDashboardComponent implements OnInit {
 
     forkJoin({
       trainers: this.trainersApi.list(trainersReq).pipe(catchError(() => of({ items: [] } as any))),
+      trainerUsers: this.usersApi
+        .list(trainerUsersReq)
+        .pipe(catchError(() => of({ items: [] } as any))),
       members: this.usersApi.list(membersReq).pipe(catchError(() => of({ items: [], totalItems: 0 } as any))),
       trainings: this.trainingsApi.list(trainingsReq).pipe(catchError(() => of({ items: [] } as any))),
       orders: this.ordersApi.list(ordersReq).pipe(catchError(() => of({ items: [] } as any))),
     }).subscribe({
-      next: ({ trainers, members, trainings, orders }) => {
+      next: ({ trainers, trainerUsers, members, trainings, orders }) => {
         this.memberCount = members.totalItems ?? members.items?.length ?? 0;
         this.activeTrainings = trainings.items?.length ?? 0;
         this.monthlyRevenue = (orders.items ?? []).reduce(
           (sum: number, o: { totalAmount?: number }) => sum + (o.totalAmount ?? 0),
           0,
         );
-        this.mapTrainerRows(trainers.items ?? []);
+
+        const byUserId = new Map<number, ListTrainersQueryDto>();
+        for (const t of (trainers.items ?? []) as ListTrainersQueryDto[]) {
+          if (!gymId || t.gymId === gymId) {
+            byUserId.set(t.userId, t);
+          }
+        }
+
+        const matched: ListTrainersQueryDto[] = [];
+        for (const u of (trainerUsers.items ?? []) as ListUsersQueryDto[]) {
+          const t = byUserId.get(u.id);
+          if (t) matched.push(t);
+        }
+
+        this.mapTrainerRows(matched.length ? matched : [...byUserId.values()]);
       },
       error: () => (this.loading = false),
     });

@@ -1,28 +1,28 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProductFormService } from '../services/product-form.service';
+import { MembershipPlanFormService } from '../services/membership-plan-form.service';
 import {
-  CreateProductCommand,
-  GetProductByIdQueryDto,
-} from '../../../../../api-services/products/products-api.models';
+  CreateMembershipPlanCommand,
+  GetMembershipPlanByIdQueryDto,
+} from '../../../../../api-services/membership-plans/membership-plans-api.models';
+import { MembershipPlansApiService } from '../../../../../api-services/membership-plans/membership-plans-api.service';
 import { BaseFormComponent } from '../../../../../core/components/base-classes/base-form-component';
-import { ProductsApiService } from '../../../../../api-services/products/products-api.service';
 import { ToasterService } from '../../../../../core/services/toaster.service';
 import { UserProfileService } from '../../../../../core/services/user-profile.service';
 
 @Component({
-  selector: 'app-products-add',
+  selector: 'app-membership-plans-add',
   standalone: false,
-  templateUrl: './products-add.component.html',
-  styleUrl: './products-add.component.scss',
-  providers: [ProductFormService],
+  templateUrl: './membership-plans-add.component.html',
+  styleUrl: './membership-plans-add.component.scss',
+  providers: [MembershipPlanFormService],
 })
-export class ProductsAddComponent
-  extends BaseFormComponent<GetProductByIdQueryDto>
+export class MembershipPlansAddComponent
+  extends BaseFormComponent<GetMembershipPlanByIdQueryDto>
   implements OnInit
 {
-  private api = inject(ProductsApiService);
-  private formService = inject(ProductFormService);
+  private api = inject(MembershipPlansApiService);
+  private formService = inject(MembershipPlanFormService);
   private router = inject(Router);
   private toaster = inject(ToasterService);
   private profileService = inject(UserProfileService);
@@ -44,25 +44,24 @@ export class ProductsAddComponent
 
     this.startLoading();
     const v = this.form.getRawValue();
-    const command: CreateProductCommand = {
+    const command: CreateMembershipPlanCommand = {
       name: v.name,
-      categoryName: v.categoryName,
-      description: v.description || null,
+      durationDays: v.durationDays,
       price: v.price,
-      stockQuantity: v.stockQuantity ?? 0,
+      discountPercentage: v.discountPercentage ?? 0,
       gymId,
     };
 
     this.api.create(command).subscribe({
       next: () => {
         this.stopLoading();
-        this.toaster.success('Product created');
-        this.router.navigate(['/admin/products']);
+        this.toaster.success('Membership plan created');
+        this.router.navigate(['/admin/membership-plans']);
       },
       error: (err) => {
-        this.stopLoading('Failed to create product');
+        this.stopLoading('Failed to create membership plan');
         const msg =
-          err?.error?.detail ?? err?.error?.message ?? 'Could not create product';
+          err?.error?.detail ?? err?.error?.message ?? 'Could not create membership plan';
         this.toaster.error(msg);
       },
     });
@@ -70,11 +69,11 @@ export class ProductsAddComponent
 
   protected override initForm(isEdit: boolean): void {
     super.initForm(isEdit);
-    this.form = this.formService.createProductForm();
+    this.form = this.formService.createForm();
   }
 
   onCancel(): void {
-    this.router.navigate(['/admin/products']);
+    this.router.navigate(['/admin/membership-plans']);
   }
 
   getErrorMessage(controlName: string): string {

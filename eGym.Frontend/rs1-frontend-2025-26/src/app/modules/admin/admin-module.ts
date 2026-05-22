@@ -17,6 +17,9 @@ import { ChangeStatusDialogComponent } from './orders/change-status-dialog/chang
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { AddTrainerDialogComponent } from './pages/add-trainer-dialog/add-trainer-dialog.component';
 import { EditTrainerDialogComponent } from './pages/edit-trainer-dialog/edit-trainer-dialog.component';
+import { MembershipPlansComponent } from './catalogs/membership-plans/membership-plans.component';
+import { MembershipPlansAddComponent } from './catalogs/membership-plans/membership-plans-add/membership-plans-add.component';
+import { MembershipPlansEditComponent } from './catalogs/membership-plans/membership-plans-edit/membership-plans-edit.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,9 @@ import { EditTrainerDialogComponent } from './pages/edit-trainer-dialog/edit-tra
     ProductsComponent,
     ProductsAddComponent,
     ProductsEditComponent,
+    MembershipPlansComponent,
+    MembershipPlansAddComponent,
+    MembershipPlansEditComponent,
     AdminLayoutComponent,
     ProductCategoriesComponent,
     ProductCategoryUpsertComponent,

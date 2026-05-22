@@ -9,6 +9,9 @@ import { ProductCategoriesComponent } from './catalogs/product-categories/produc
 import {AdminOrdersComponent} from './orders/admin-orders.component';
 import {AdminSettingsComponent} from './admin-settings/admin-settings.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { MembershipPlansComponent } from './catalogs/membership-plans/membership-plans.component';
+import { MembershipPlansAddComponent } from './catalogs/membership-plans/membership-plans-add/membership-plans-add.component';
+import { MembershipPlansEditComponent } from './catalogs/membership-plans/membership-plans-edit/membership-plans-edit.component';
 
 const routes: Routes = [
   {
@@ -29,6 +32,20 @@ const routes: Routes = [
       {
         path: 'products/:id/edit',
         component: ProductsEditComponent,
+      },
+
+      // MEMBERSHIP PLANS
+      {
+        path: 'membership-plans',
+        component: MembershipPlansComponent,
+      },
+      {
+        path: 'membership-plans/add',
+        component: MembershipPlansAddComponent,
+      },
+      {
+        path: 'membership-plans/:id/edit',
+        component: MembershipPlansEditComponent,
       },
 
       // PRODUCT CATEGORIES

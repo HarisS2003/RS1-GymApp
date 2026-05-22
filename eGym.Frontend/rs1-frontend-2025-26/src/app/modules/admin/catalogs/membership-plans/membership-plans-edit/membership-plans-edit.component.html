@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="header-card mat-elevation-z2">
+    <h1>{{ 'MEMBERSHIP_PLANS.EDIT.TITLE' | translate }}</h1>
+    <button mat-flat-button type="button" class="add-panel-btn" routerLink="/admin/membership-plans/add">
+      <mat-icon>add</mat-icon>
+      {{ 'MEMBERSHIP_PLANS.NEW_PLAN' | translate }}
+    </button>
+  </div>
+
+  <div class="form-card mat-elevation-z2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading || form">
+      <div *ngIf="errorMessage" class="error-banner">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'MEMBERSHIP_PLANS.FORM.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="hasError('name')">{{ getErrorMessage('name') }}</mat-error>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'MEMBERSHIP_PLANS.FORM.DURATION' | translate }}</mat-label>
+          <input matInput type="number" formControlName="durationDays" min="1" />
+          <span matTextSuffix>{{ 'COMMON.DAYS' | translate }}</span>
+          <mat-error *ngIf="hasError('durationDays')">{{ getErrorMessage('durationDays') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'MEMBERSHIP_PLANS.FORM.PRICE' | translate }}</mat-label>
+          <input matInput type="number" formControlName="price" step="0.01" />
+          <span matTextPrefix>KM&nbsp;</span>
+          <mat-error *ngIf="hasError('price')">{{ getErrorMessage('price') }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'MEMBERSHIP_PLANS.FORM.DISCOUNT' | translate }}</mat-label>
+        <input matInput type="number" formControlName="discountPercentage" min="0" max="100" />
+        <span matTextSuffix>%</span>
+        <mat-error *ngIf="hasError('discountPercentage')">{{ getErrorMessage('discountPercentage') }}</mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
+          <mat-icon>close</mat-icon>
+          {{ 'MEMBERSHIP_PLANS.FORM.CANCEL' | translate }}
+        </button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="form.invalid || isLoading">
+          <mat-icon>save</mat-icon>
+          {{ 'MEMBERSHIP_PLANS.FORM.UPDATE' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

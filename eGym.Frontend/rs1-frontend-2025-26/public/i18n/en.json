@@ -171,6 +171,47 @@
       "CONFIRM_CANCEL": "Do you want to cancel changes and go back?"
     }
   },
+  "MEMBERSHIP_PLANS": {
+    "TITLE": "Membership plans",
+    "SEARCH_PLACEHOLDER": "Search plans",
+    "SEARCH_INPUT_PLACEHOLDER": "Enter plan name...",
+    "NEW_PLAN": "Add membership plan",
+    "NO_DATA": "No membership plans",
+    "NO_DATA_FILTER": "No search results",
+    "TABLE": {
+      "NAME": "Name",
+      "DURATION": "Duration",
+      "PRICE": "Price (KM)",
+      "DISCOUNT": "Discount",
+      "ACTIVE": "Active"
+    },
+    "ACTIONS": {
+      "EDIT_TOOLTIP": "Edit plan",
+      "DELETE_TOOLTIP": "Delete plan"
+    },
+    "ADD": {
+      "TITLE": "Add membership plan",
+      "SAVING": "Saving plan..."
+    },
+    "EDIT": {
+      "TITLE": "Edit membership plan"
+    },
+    "FORM": {
+      "NAME": "Plan name",
+      "NAME_PLACEHOLDER": "e.g. Monthly membership",
+      "DURATION": "Duration (days)",
+      "PRICE": "Price",
+      "DISCOUNT": "Discount (%)",
+      "CANCEL": "Cancel",
+      "SAVE": "Save",
+      "UPDATE": "Update"
+    },
+    "DIALOGS": {
+      "DELETE_MESSAGE": "Are you sure you want to delete plan \"{{name}}\"?",
+      "SUCCESS_DELETE": "Membership plan deleted successfully.",
+      "ERROR_DELETE": "Error deleting plan."
+    }
+  },
   "ORDERS": {
     "TITLE": "Orders",
     "FILTER_STATUS": "Filter by Status",
@@ -418,7 +459,8 @@
     "DAYS": "days",
     "ADD": "Add",
     "BUY_NOW": "Buy Now",
-    "ACTIVE": "Active"
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive"
   },
   "LANDING": {
     "BRAND": "eGym",
@@ -532,7 +574,10 @@
     "SUB": "Managing trainers",
     "TAB_TRAINERS": "Trainers",
     "TAB_PRODUCTS": "Products",
+    "TAB_MEMBERSHIPS": "Memberships",
     "TAB_MEMBERS": "Members",
+    "VIEW_MEMBERSHIPS": "View membership plans",
+    "MEMBERSHIPS_SUB": "Manage gym membership plans",
     "COL_NO": "No.",
     "COL_ID": "ID",
     "COL_NAME": "Name",
@@ -566,6 +611,7 @@
     "NAV_HOME": "Home",
     "NAV_PANEL": "Admin Panel",
     "NAV_PRODUCTS": "Products",
+    "NAV_MEMBERSHIPS": "Memberships",
     "NAV_ORDERS": "Orders",
     "NAV_CATEGORIES": "Categories",
     "ROLE_ADMIN": "Admin",
@@ -590,6 +636,11 @@
     "SUMMARY_ACTIVE_PRODUCTS": "Active products",
     "SUMMARY_ACTIVE_PRODUCTS_SUB": "Enabled in catalog",
     "SUMMARY_LOW_STOCK": "Low stock",
-    "SUMMARY_LOW_STOCK_SUB": "Less than 5 units"
+    "SUMMARY_LOW_STOCK_SUB": "Less than 5 units",
+    "SUMMARY_TOTAL_PLANS": "Total plans",
+    "SUMMARY_AVG_PRICE": "Average price",
+    "SUMMARY_AVG_PRICE_SUB": "Per plan (KM)",
+    "SUMMARY_WITH_DISCOUNT": "With discount",
+    "SUMMARY_WITH_DISCOUNT_SUB": "Plans with discount > 0%"
   }
 }

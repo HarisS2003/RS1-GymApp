@@ -19,8 +19,24 @@ public sealed class CreateTrainerCommandHandler(IAppDbContext ctx)
         if (!await ctx.Gyms.AnyAsync(x => x.Id == request.GymId && !x.IsDeleted, ct))
             throw new ValidationException("Invalid GymId.");
 
-        var exists = await ctx.Trainers.AnyAsync(x => x.UserId == request.UserId && !x.IsDeleted, ct);
-        if (exists) throw new MarketConflictException("Trainer for this user already exists.");
+        // Global query filter hides soft-deleted rows; must bypass to reactivate.
+        var existing = await ctx.Trainers
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.UserId == request.UserId, ct);
+        if (existing is not null)
+        {
+            if (!existing.IsDeleted)
+                throw new MarketConflictException("Trainer for this user already exists.");
+
+            existing.IsDeleted = false;
+            existing.GymId = request.GymId;
+            existing.Bio = normalizedBio;
+            existing.ExperienceYears = request.ExperienceYears;
+            existing.ModifiedAtUtc = DateTime.UtcNow;
+
+            await ctx.SaveChangesAsync(ct);
+            return existing.Id;
+        }
 
         var trainer = new TrainerEntity
         {

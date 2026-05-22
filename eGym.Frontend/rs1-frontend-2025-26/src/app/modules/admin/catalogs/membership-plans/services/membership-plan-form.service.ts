@@ -1,29 +1,28 @@
 import { Injectable, inject } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { GetProductByIdQueryDto } from '../../../../../api-services/products/products-api.models';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GetMembershipPlanByIdQueryDto } from '../../../../../api-services/membership-plans/membership-plans-api.models';
 
 @Injectable()
-export class ProductFormService {
+export class MembershipPlanFormService {
   private fb = inject(FormBuilder);
 
-  createProductForm(product?: GetProductByIdQueryDto): FormGroup {
+  createForm(plan?: GetMembershipPlanByIdQueryDto): FormGroup {
     return this.fb.group({
       name: [
-        product?.name ?? '',
-        [Validators.required, Validators.minLength(3), Validators.maxLength(150)],
+        plan?.name ?? '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(150)],
       ],
-      categoryName: [
-        product?.categoryName ?? '',
-        [Validators.required, Validators.maxLength(100)],
+      durationDays: [
+        plan?.durationDays ?? 30,
+        [Validators.required, Validators.min(1), Validators.max(3650)],
       ],
-      description: [product?.description ?? '', [Validators.maxLength(500)]],
       price: [
-        product?.price ?? 0,
+        plan?.price ?? 0,
         [Validators.required, Validators.min(0.01), Validators.max(1000000)],
       ],
-      stockQuantity: [
-        product?.stockQuantity ?? 0,
-        [Validators.required, Validators.min(0)],
+      discountPercentage: [
+        plan?.discountPercentage ?? 0,
+        [Validators.required, Validators.min(0), Validators.max(100)],
       ],
     });
   }

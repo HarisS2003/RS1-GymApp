@@ -3,4 +3,5 @@
 public sealed class ListProductsQuery : BasePagedQuery<ListProductsQueryDto>
 {
     public string? Search { get; init; }
+    public int? GymId { get; init; }
 }

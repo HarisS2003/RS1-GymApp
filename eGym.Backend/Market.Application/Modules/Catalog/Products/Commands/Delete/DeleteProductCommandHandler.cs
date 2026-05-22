@@ -1,22 +1,20 @@
 ﻿namespace Market.Application.Modules.Catalog.Products.Commands.Delete;
 
-public class DeleteProductCommandHandler(IAppDbContext context, IAppCurrentUser appCurrentUser)
-      : IRequestHandler<DeleteProductCommand, Unit>
+public class DeleteProductCommandHandler(IAppDbContext ctx)
+    : IRequestHandler<DeleteProductCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        if (!appCurrentUser.IsAdmin)
-            throw new MarketBusinessRuleException("123", "Samo admin moze brisati.");
-
-        var product = await context.Products
+        var product = await ctx.Products
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (product is null)
-            throw new MarketNotFoundException("Proizvod nije pronađena.");
+            throw new MarketNotFoundException("Proizvod nije pronađen.");
 
-        context.Products.Remove(product);
-        await context.SaveChangesAsync(cancellationToken);
+        product.IsDeleted = true;
+        product.ModifiedAtUtc = DateTime.UtcNow;
 
+        await ctx.SaveChangesAsync(cancellationToken);
         return Unit.Value;
     }
 }

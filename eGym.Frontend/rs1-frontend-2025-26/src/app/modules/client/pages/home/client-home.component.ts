@@ -79,7 +79,8 @@ export class ClientHomeComponent implements OnInit {
     plansReq.paging.pageSize = 50;
 
     const productsReq = new ListProductsRequest();
-    productsReq.paging.pageSize = 8;
+    productsReq.gymId = gymId;
+    productsReq.paging.pageSize = 50;
 
     forkJoin({
       members: this.usersApi.list(usersReq).pipe(catchError(() => of({ items: [], totalItems: 0 } as any))),
@@ -92,9 +93,7 @@ export class ClientHomeComponent implements OnInit {
         this.trainerCount = trainers.totalItems ?? trainers.items?.length ?? 0;
         this.plans = plans.items ?? [];
         this.planCount = this.plans.length;
-        this.products = (products.items ?? [])
-          .filter((p: ListProductsQueryDto) => p.isEnabled)
-          .slice(0, 4);
+        this.products = (products.items ?? []).slice(0, 4);
         this.loading = false;
       },
       error: () => (this.loading = false),

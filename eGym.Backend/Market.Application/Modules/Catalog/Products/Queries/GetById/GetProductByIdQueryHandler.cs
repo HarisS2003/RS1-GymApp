@@ -10,9 +10,12 @@ public sealed class GetProductByIdQueryHandler(IAppDbContext ctx) : IRequestHand
             {
                 Id = x.Id,
                 Name = x.Name,
+                CategoryName = x.CategoryName,
+                Description = x.Description,
                 Price = x.Price,
                 StockQuantity = x.StockQuantity,
-                GymId = x.GymId
+                GymId = x.GymId,
+                IsEnabled = true
             })
             .FirstOrDefaultAsync(ct);
 
