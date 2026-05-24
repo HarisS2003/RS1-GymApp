@@ -32,6 +32,21 @@ public sealed class PurchaseMembershipPlanCommandHandler(IAppDbContext ctx, IApp
         var startDate = now.Date;
         var endDate = startDate.AddDays(plan.DurationDays);
 
+        var currentActive = await (
+            from m in ctx.UserMemberships
+            join p in ctx.MembershipPlans on m.MembershipPlanId equals p.Id
+            where m.UserId == userId && m.EndDate >= startDate
+            orderby m.EndDate descending
+            select new { m, p }
+        ).FirstOrDefaultAsync(ct);
+
+        if (currentActive is not null && plan.DurationDays <= currentActive.p.DurationDays)
+        {
+            throw new MarketBusinessRuleException(
+                "MEMBERSHIP_ALREADY_ACTIVE",
+                $"You already have an active membership plan \"{currentActive.p.Name}\" ({currentActive.p.DurationDays} days). Choose a plan with more days to upgrade.");
+        }
+
         var activeMemberships = await ctx.UserMemberships
             .Where(x => x.UserId == userId && x.EndDate >= startDate)
             .ToListAsync(ct);

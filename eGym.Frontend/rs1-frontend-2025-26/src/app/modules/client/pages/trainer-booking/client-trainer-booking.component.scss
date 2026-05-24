@@ -1,0 +1,149 @@
+@import '../../styles/dashboard-theme';
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    color: #ff6600;
+  }
+}
+
+.page-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.booking-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.trainer-hero {
+  @include card;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 20px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 24px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
+}
+
+.trainer-hero__avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  background: #ffedd5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    color: #ff6600;
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.trainer-hero__meta {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ff6600;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) 1fr;
+  gap: 20px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booking-panel {
+  @include card;
+  padding: 20px;
+
+  h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+
+    span {
+      font-weight: 400;
+      color: #64748b;
+      font-size: 14px;
+    }
+  }
+}
+
+.slot-hint {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 10px;
+}
+
+.slot-btn {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+
+  &:hover:not(:disabled) {
+    border-color: #ff6600;
+    color: #ff6600;
+  }
+
+  &--selected {
+    background: #ff6600;
+    border-color: #ff6600;
+    color: #fff;
+  }
+
+  &--busy {
+    opacity: 0.45;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+}
+
+.book-btn {
+  margin-top: 20px;
+  width: 100%;
+  background: #ff6600 !important;
+  color: #fff !important;
+}
+
+.empty-msg {
+  color: #64748b;
+}

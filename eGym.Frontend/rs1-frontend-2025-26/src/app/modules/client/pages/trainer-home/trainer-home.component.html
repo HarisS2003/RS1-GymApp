@@ -36,6 +36,30 @@
     </div>
   </section>
 
+  @if (pendingRequests.length > 0) {
+    <section class="section-block">
+      <h2>{{ 'CLIENT.PROFILE.PENDING_BOOKINGS' | translate }}</h2>
+      <div class="training-list">
+        @for (req of pendingRequests; track req.id) {
+          <article class="training-item training-item--pending">
+            <div>
+              <strong>{{ req.memberName }}</strong>
+              <span>{{ req.date | date: 'dd.MM.yyyy' }} · {{ formatTime(req.startTime) }}</span>
+            </div>
+            <div class="pending-actions">
+              <button mat-stroked-button type="button" (click)="reject(req.id)" [disabled]="bookingActionId === req.id">
+                {{ 'CLIENT.PROFILE.DECLINE' | translate }}
+              </button>
+              <button mat-flat-button type="button" (click)="approve(req.id)" [disabled]="bookingActionId === req.id">
+                {{ 'CLIENT.PROFILE.ACCEPT' | translate }}
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  }
+
   <section class="section-block">
     <h2>{{ 'CLIENT.TRAINER_HOME.UPCOMING' | translate }}</h2>
     @if (trainings.length === 0) {

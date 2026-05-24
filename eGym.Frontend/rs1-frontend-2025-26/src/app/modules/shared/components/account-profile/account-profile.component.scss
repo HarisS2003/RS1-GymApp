@@ -68,6 +68,27 @@
   font-weight: 700;
 }
 
+.profile-user-card__plan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: $accent;
+  font-size: 13px;
+  font-weight: 700;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
 .profile-user-card__avatar {
   width: 88px;
   height: 88px;
@@ -309,6 +330,40 @@
   white-space: nowrap;
 }
 
+.training-row--pending {
+  flex-wrap: wrap;
+}
+
+.booking-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.booking-status {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+
+  &[data-status='1'] {
+    background: #fef3c7;
+    color: #b45309;
+  }
+
+  &[data-status='2'] {
+    background: #dcfce7;
+    color: #15803d;
+  }
+
+  &[data-status='3'] {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+}
+
 .purchase-table-wrap {
   overflow-x: auto;
 }
@@ -355,9 +410,19 @@
   color: #1d4ed8;
 }
 
+.tag-membership {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
 :root.theme-dark .tag-supplement {
   background: #1e3a5f;
   color: #93c5fd;
+}
+
+:root.theme-dark .tag-membership {
+  background: #431407;
+  color: #fdba74;
 }
 
 .empty-msg {

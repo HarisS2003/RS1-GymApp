@@ -29,3 +29,13 @@ export interface GetMyActiveUserMembershipQueryDto {
   startDate: string;
   endDate: string;
 }
+
+export interface ListMyMembershipPurchaseHistoryQueryDto {
+  userMembershipId: number;
+  planName: string;
+  amountPaid: number;
+  purchasedAt: string;
+  endDate: string;
+  durationDays: number;
+  isActive: boolean;
+}

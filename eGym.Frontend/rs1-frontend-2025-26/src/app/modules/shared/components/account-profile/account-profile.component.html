@@ -13,6 +13,12 @@
         <h2>{{ displayName() }}</h2>
         <p>{{ editing ? form.get('email')?.value : p.email }}</p>
         <span class="profile-role-pill">{{ roleLabel(p.roleId) }}</span>
+        @if (isMember && activeMembership; as m) {
+          <p class="profile-user-card__plan">
+            <mat-icon>card_membership</mat-icon>
+            {{ m.planName }}
+          </p>
+        }
       </div>
 
       @if (isMember && activeMembership; as m) {
@@ -135,10 +141,70 @@
         </form>
       </section>
 
+      @if (isTrainer && pendingTrainerRequests.length > 0) {
+        <section class="profile-panel">
+          <h2>{{ 'CLIENT.PROFILE.PENDING_BOOKINGS' | translate }}</h2>
+          <div class="training-rows">
+            @for (req of pendingTrainerRequests; track req.id) {
+              <article class="training-row training-row--pending">
+                <div>
+                  <strong>{{ req.memberName }}</strong>
+                  <span>{{ 'CLIENT.PROFILE.BOOKING_REQUEST' | translate }}</span>
+                </div>
+                <div class="training-row__meta">
+                  <span>{{ req.date | date: 'd.M.yyyy' }}</span>
+                  <span>{{ formatBookingTime(req.startTime) }}</span>
+                </div>
+                <div class="booking-actions">
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    (click)="rejectBooking(req.id)"
+                    [disabled]="bookingActionId === req.id"
+                  >
+                    {{ 'CLIENT.PROFILE.DECLINE' | translate }}
+                  </button>
+                  <button
+                    mat-flat-button
+                    type="button"
+                    class="apply-btn"
+                    (click)="approveBooking(req.id)"
+                    [disabled]="bookingActionId === req.id"
+                  >
+                    {{ 'CLIENT.PROFILE.ACCEPT' | translate }}
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+      }
+
       @if (isMember || isTrainer) {
         <section class="profile-panel">
           <h2>{{ 'CLIENT.PROFILE.UPCOMING_TRAININGS' | translate }}</h2>
-          @if (upcomingTrainings.length === 0) {
+          @if (isMember) {
+            @if (memberBookings.length === 0) {
+              <p class="empty-msg">{{ 'CLIENT.PROFILE.NO_TRAININGS' | translate }}</p>
+            } @else {
+              <div class="training-rows">
+                @for (b of memberBookings; track b.id) {
+                  <article class="training-row">
+                    <div>
+                      <strong>{{ b.trainerName }}</strong>
+                      <span class="booking-status" [attr.data-status]="b.status">
+                        {{ bookingStatusLabel(b.status) }}
+                      </span>
+                    </div>
+                    <div class="training-row__meta">
+                      <span>{{ b.date | date: 'd.M.yyyy' }}</span>
+                      <span>{{ formatBookingTime(b.startTime) }}</span>
+                    </div>
+                  </article>
+                }
+              </div>
+            }
+          } @else if (upcomingTrainings.length === 0) {
             <p class="empty-msg">{{ 'CLIENT.PROFILE.NO_TRAININGS' | translate }}</p>
           } @else {
             <div class="training-rows">
@@ -159,7 +225,7 @@
         </section>
       }
 
-      @if (isMember) {
+      @if (isMember || purchases.length > 0) {
         <section class="profile-panel">
           <h2>{{ 'CLIENT.PROFILE.PURCHASE_HISTORY' | translate }}</h2>
           @if (purchases.length === 0) {
@@ -176,9 +242,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (row of purchases; track row.orderId + row.itemName) {
+                  @for (row of purchases; track row.refId + row.itemName) {
                     <tr>
-                      <td>#{{ row.orderId }}</td>
+                      <td>#{{ row.refId }}</td>
                       <td><span class="purchase-tag" [ngClass]="row.typeClass">{{ row.typeLabel }}</span></td>
                       <td>{{ row.itemName }}</td>
                       <td>{{ row.price | number: '1.2-2' }} KM</td>

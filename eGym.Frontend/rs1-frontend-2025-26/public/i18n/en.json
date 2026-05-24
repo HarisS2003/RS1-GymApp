@@ -518,7 +518,21 @@
       "SUB": "Your gym's professional team",
       "NO_TRAINERS": "No trainers registered.",
       "NO_BIO": "No description",
-      "EXPERIENCE": "years experience"
+      "EXPERIENCE": "years experience",
+      "BOOK": "Book a session"
+    },
+    "TRAINER_BOOKING": {
+      "BACK": "Back to trainers",
+      "NOT_FOUND": "Trainer not found.",
+      "PICK_DATE": "Pick a day",
+      "PICK_DATE_HINT": "Select a date on the calendar first.",
+      "SLOTS_TITLE": "Available slots",
+      "SLOT_HINT": "Times shift +1h when the trainer accepts a session. Busy or conflicting slots are hidden.",
+      "NO_SLOTS": "No slots for this day.",
+      "RENT": "Request slot",
+      "BOOKING": "Sending request...",
+      "SUCCESS": "Request sent. The trainer will accept or decline.",
+      "ERROR": "Booking failed."
     },
     "SHOP": {
       "TITLE": "Shop",
@@ -538,7 +552,13 @@
       "PAY_NOW": "Confirm (cash)",
       "PURCHASE_CONFIRM": "Buy plan \"{{name}}\" for {{price}} KM with online payment?",
       "PURCHASE_SUCCESS": "Membership \"{{name}}\" is now active.",
-      "PURCHASE_ERROR": "Membership purchase failed."
+      "PURCHASE_ERROR": "Membership purchase failed.",
+      "ALREADY_HAVE_TITLE": "You already have a membership",
+      "ALREADY_HAVE_MESSAGE": "Active plan: \"{{name}}\" ({{days}} days).",
+      "ALREADY_HAVE_HINT": "Selected plan has {{days}} days — not more than your current plan. Pick a longer plan to upgrade.",
+      "UPGRADE_BADGE": "Upgrade",
+      "UPGRADE_TITLE": "Upgrade membership",
+      "UPGRADE_SUB": "Current: \"{{name}}\" ({{days}} days). New plan has more days."
     },
     "PROFILE": {
       "TITLE": "My Profile",
@@ -563,6 +583,15 @@
       "GYM": "Gym",
       "ROLE": "Role",
       "UPCOMING_TRAININGS": "Upcoming trainings",
+      "PENDING_BOOKINGS": "Booking requests",
+      "BOOKING_REQUEST": "Individual session request",
+      "BOOKING_PENDING": "Pending",
+      "BOOKING_APPROVED": "Confirmed",
+      "BOOKING_REJECTED": "Declined",
+      "ACCEPT": "Accept",
+      "DECLINE": "Decline",
+      "BOOKING_ACCEPTED": "Session scheduled. Other sessions that day were moved by 1 hour.",
+      "BOOKING_DECLINED": "Request declined.",
       "NO_TRAININGS": "No upcoming trainings.",
       "PURCHASE_HISTORY": "Purchase history",
       "COL_REF": "Order",
@@ -571,6 +600,9 @@
       "COL_PRICE": "Price",
       "NO_ORDERS": "No purchases yet.",
       "TYPE_SUPPLEMENT": "Supplement",
+      "TYPE_MEMBERSHIP": "Membership",
+      "STATUS_ACTIVE": "Active",
+      "STATUS_EXPIRED": "Expired",
       "TYPE_INDIVIDUAL": "Individual",
       "TYPE_GROUP": "Group",
       "TRAINER_FALLBACK": "Trainer #{{id}}",

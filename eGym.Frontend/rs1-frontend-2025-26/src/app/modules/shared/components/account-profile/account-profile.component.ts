@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,7 +9,10 @@ import { UserProfileService } from '../../../../core/services/user-profile.servi
 import { ToasterService } from '../../../../core/services/toaster.service';
 import { ADMIN_ROLE_ID, MEMBER_ROLE_ID, TRAINER_ROLE_ID } from '../../../auth/constants/auth.constants';
 import { UserMembershipsApiService } from '../../../../api-services/user-memberships/user-memberships-api.service';
-import { GetMyActiveUserMembershipQueryDto } from '../../../../api-services/user-memberships/user-memberships-api.models';
+import {
+  GetMyActiveUserMembershipQueryDto,
+  ListMyMembershipPurchaseHistoryQueryDto,
+} from '../../../../api-services/user-memberships/user-memberships-api.models';
 import { TrainingsApiService } from '../../../../api-services/trainings/trainings-api.service';
 import {
   ListTrainingsQueryDto,
@@ -28,6 +32,14 @@ import {
   ListProductsQueryDto,
   ListProductsRequest,
 } from '../../../../api-services/products/products-api.models';
+import { TrainingRequestsApiService } from '../../../../api-services/training-requests/training-requests-api.service';
+import {
+  ListTrainerTrainingRequestQueryDto,
+  ListTrainingRequestQueryDto,
+  TRAINING_REQUEST_APPROVED,
+  TRAINING_REQUEST_PENDING,
+  TRAINING_REQUEST_REJECTED,
+} from '../../../../api-services/training-requests/training-requests-api.models';
 
 export interface UpcomingTrainingView {
   training: ListTrainingsQueryDto;
@@ -36,7 +48,8 @@ export interface UpcomingTrainingView {
 }
 
 export interface PurchaseHistoryRow {
-  orderId: number;
+  refId: number;
+  sortAt: number;
   status: string;
   typeLabel: string;
   typeClass: string;
@@ -62,6 +75,7 @@ export class AccountProfileComponent implements OnInit {
   private trainersApi = inject(TrainersApiService);
   private ordersApi = inject(OrdersApiService);
   private productsApi = inject(ProductsApiService);
+  private trainingRequestsApi = inject(TrainingRequestsApiService);
 
   loading = true;
   saving = false;
@@ -71,6 +85,9 @@ export class AccountProfileComponent implements OnInit {
   activeMembership: GetMyActiveUserMembershipQueryDto | null = null;
   trainerRecord: ListTrainersQueryDto | null = null;
   upcomingTrainings: UpcomingTrainingView[] = [];
+  memberBookings: ListTrainingRequestQueryDto[] = [];
+  pendingTrainerRequests: ListTrainerTrainingRequestQueryDto[] = [];
+  bookingActionId: number | null = null;
   purchases: PurchaseHistoryRow[] = [];
 
   form = this.fb.group({
@@ -83,11 +100,22 @@ export class AccountProfileComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.profileService.profile()) {
-      this.loadPageData();
-      return;
-    }
-    this.profileService.loadProfile().subscribe(() => this.loadPageData());
+    const init = () => {
+      if (this.profileService.profile()) {
+        this.loadPageData();
+        return;
+      }
+      this.profileService.loadProfile().subscribe(() => this.loadPageData());
+    };
+    init();
+
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(() => {
+        if (this.router.url.includes('/profile')) {
+          this.loadPageData();
+        }
+      });
   }
 
   get isMember(): boolean {
@@ -135,6 +163,52 @@ export class AccountProfileComponent implements OnInit {
 
   renewMembership(): void {
     this.router.navigate(['/client/memberships']);
+  }
+
+  bookingStatusLabel(status: number): string {
+    if (status === TRAINING_REQUEST_PENDING)
+      return this.translate.instant('CLIENT.PROFILE.BOOKING_PENDING');
+    if (status === TRAINING_REQUEST_APPROVED)
+      return this.translate.instant('CLIENT.PROFILE.BOOKING_APPROVED');
+    if (status === TRAINING_REQUEST_REJECTED)
+      return this.translate.instant('CLIENT.PROFILE.BOOKING_REJECTED');
+    return String(status);
+  }
+
+  approveBooking(id: number): void {
+    if (this.bookingActionId != null) return;
+    this.bookingActionId = id;
+    this.trainingRequestsApi.approve(id).subscribe({
+      next: () => {
+        this.bookingActionId = null;
+        this.toaster.success(this.translate.instant('CLIENT.PROFILE.BOOKING_ACCEPTED'));
+        this.loadPageData();
+      },
+      error: (err) => {
+        this.bookingActionId = null;
+        this.toaster.error(err?.error?.message ?? err?.error?.title ?? 'Error');
+      },
+    });
+  }
+
+  rejectBooking(id: number): void {
+    if (this.bookingActionId != null) return;
+    this.bookingActionId = id;
+    this.trainingRequestsApi.reject(id).subscribe({
+      next: () => {
+        this.bookingActionId = null;
+        this.toaster.success(this.translate.instant('CLIENT.PROFILE.BOOKING_DECLINED'));
+        this.loadPageData();
+      },
+      error: (err) => {
+        this.bookingActionId = null;
+        this.toaster.error(err?.error?.message ?? err?.error?.title ?? 'Error');
+      },
+    });
+  }
+
+  formatBookingTime(startTime: string): string {
+    return (startTime ?? '').slice(0, 5);
   }
 
   startEdit(): void {
@@ -245,12 +319,17 @@ export class AccountProfileComponent implements OnInit {
       trainings: this.trainingsApi.list(trainingsReq).pipe(catchError(() => of({ items: [] }))),
       orders: this.ordersApi.listWithItems(ordersReq).pipe(catchError(() => of({ items: [] }))),
       products: this.productsApi.list(productsReq).pipe(catchError(() => of({ items: [] }))),
+      membership: this.membershipsApi.getMyActive().pipe(catchError(() => of(null))),
+      membershipHistory: this.membershipsApi.listMyHistory(),
     };
 
     if (this.isMember) {
-      loads['membership'] = this.membershipsApi
-        .getMyActive()
-        .pipe(catchError(() => of(null)));
+      loads['myBookings'] = this.trainingRequestsApi.listMy().pipe(catchError(() => of([])));
+    }
+    if (this.isTrainer) {
+      loads['trainerBookings'] = this.trainingRequestsApi
+        .listForTrainer(TRAINING_REQUEST_PENDING)
+        .pipe(catchError(() => of([])));
     }
 
     forkJoin(loads)
@@ -287,12 +366,32 @@ export class AccountProfileComponent implements OnInit {
 
           this.activeMembership = this.isMember ? (data.membership ?? null) : null;
 
+          const membershipHistory = (data.membershipHistory ??
+            []) as ListMyMembershipPurchaseHistoryQueryDto[];
+
           const trainerNames: Map<number, string> = data.trainerUsers ?? new Map();
           const today = new Date().toISOString().slice(0, 10);
           let trainings = (data.trainings.items ?? []) as ListTrainingsQueryDto[];
 
           if (this.isTrainer && this.trainerRecord) {
             trainings = trainings.filter((t) => t.trainerId === this.trainerRecord!.id);
+            this.pendingTrainerRequests = (data.trainerBookings ??
+              []) as ListTrainerTrainingRequestQueryDto[];
+          } else {
+            this.pendingTrainerRequests = [];
+          }
+
+          if (this.isMember) {
+            const allBookings = (data.myBookings ?? []) as ListTrainingRequestQueryDto[];
+            this.memberBookings = allBookings
+              .filter((b) => {
+                if (b.status === TRAINING_REQUEST_REJECTED) return false;
+                const day = (b.date ?? '').slice(0, 10);
+                return day >= today || b.status === TRAINING_REQUEST_PENDING;
+              })
+              .sort((a, b) => `${b.date}${b.startTime}`.localeCompare(`${a.date}${a.startTime}`));
+          } else {
+            this.memberBookings = [];
           }
 
           this.upcomingTrainings = trainings
@@ -312,6 +411,20 @@ export class AccountProfileComponent implements OnInit {
           );
 
           this.purchases = [];
+          for (const m of membershipHistory) {
+            this.purchases.push({
+              refId: m.userMembershipId,
+              sortAt: new Date(m.purchasedAt).getTime(),
+              status: m.isActive
+                ? this.translate.instant('CLIENT.PROFILE.STATUS_ACTIVE')
+                : this.translate.instant('CLIENT.PROFILE.STATUS_EXPIRED'),
+              typeLabel: this.translate.instant('CLIENT.PROFILE.TYPE_MEMBERSHIP'),
+              typeClass: 'tag-membership',
+              itemName: m.planName,
+              price: m.amountPaid,
+            });
+          }
+
           if (this.isMember) {
             for (const order of data.orders.items ?? []) {
               const items = order.items ?? [];
@@ -321,7 +434,8 @@ export class AccountProfileComponent implements OnInit {
                 const qty = (item as { quantity?: number }).quantity ?? 1;
                 const unitPrice = (item as { price?: number }).price ?? 0;
                 this.purchases.push({
-                  orderId: order.id,
+                  refId: order.id,
+                  sortAt: order.id,
                   status: String(order.status ?? ''),
                   typeLabel: this.translate.instant('CLIENT.PROFILE.TYPE_SUPPLEMENT'),
                   typeClass: 'tag-supplement',
@@ -335,7 +449,8 @@ export class AccountProfileComponent implements OnInit {
               }
               if (!items.length) {
                 this.purchases.push({
-                  orderId: order.id,
+                  refId: order.id,
+                  sortAt: order.id,
                   status: String(order.status ?? ''),
                   typeLabel: this.translate.instant('CLIENT.PROFILE.TYPE_SUPPLEMENT'),
                   typeClass: 'tag-supplement',
@@ -344,8 +459,10 @@ export class AccountProfileComponent implements OnInit {
                 });
               }
             }
+
           }
 
+          this.purchases.sort((a, b) => b.sortAt - a.sortAt);
           this.loading = false;
         },
         error: () => (this.loading = false),

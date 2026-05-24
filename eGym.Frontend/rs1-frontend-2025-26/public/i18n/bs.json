@@ -518,7 +518,21 @@
       "SUB": "Profesionalni tim vaše teretane",
       "NO_TRAINERS": "Nema registrovanih trenera.",
       "NO_BIO": "Bez opisa",
-      "EXPERIENCE": "god. iskustva"
+      "EXPERIENCE": "god. iskustva",
+      "BOOK": "Zakaži termin"
+    },
+    "TRAINER_BOOKING": {
+      "BACK": "Nazad na trenere",
+      "NOT_FOUND": "Trener nije pronađen.",
+      "PICK_DATE": "Izaberite dan",
+      "PICK_DATE_HINT": "Prvo izaberite datum u kalendaru.",
+      "SLOTS_TITLE": "Dostupni termini",
+      "SLOT_HINT": "Termini se automatski pomiču (+1h) kad trener prihvati trening. Zauzeti/konfliktni termini se ne prikazuju.",
+      "NO_SLOTS": "Nema dostupnih termina za ovaj dan.",
+      "RENT": "Zatraži termin",
+      "BOOKING": "Šaljem zahtjev...",
+      "SUCCESS": "Zahtjev poslan. Trener će potvrditi ili odbiti termin.",
+      "ERROR": "Rezervacija nije uspjela."
     },
     "SHOP": {
       "TITLE": "Kupovina",
@@ -538,7 +552,13 @@
       "PAY_NOW": "Potvrdi (gotovina)",
       "PURCHASE_CONFIRM": "Kupiti plan \"{{name}}\" za {{price}} KM online plaćanjem?",
       "PURCHASE_SUCCESS": "Članarina \"{{name}}\" je aktivirana.",
-      "PURCHASE_ERROR": "Kupovina članarine nije uspjela."
+      "PURCHASE_ERROR": "Kupovina članarine nije uspjela.",
+      "ALREADY_HAVE_TITLE": "Već imate članarinu",
+      "ALREADY_HAVE_MESSAGE": "Aktivna članarina: \"{{name}}\" ({{days}} dana).",
+      "ALREADY_HAVE_HINT": "Odabrani plan ima {{days}} dana — manje ili jednako trenutnom. Izaberite duži plan za nadogradnju.",
+      "UPGRADE_BADGE": "Nadogradnja",
+      "UPGRADE_TITLE": "Nadogradi članarinu",
+      "UPGRADE_SUB": "Trenutno: \"{{name}}\" ({{days}} dana). Novi plan ima više dana."
     },
     "PROFILE": {
       "TITLE": "Moj Profil",
@@ -563,6 +583,15 @@
       "GYM": "Teretana",
       "ROLE": "Uloga",
       "UPCOMING_TRAININGS": "Predstojeći Treninzi",
+      "PENDING_BOOKINGS": "Zahtjevi za termin",
+      "BOOKING_REQUEST": "Zahtjev za individualni trening",
+      "BOOKING_PENDING": "Na čekanju",
+      "BOOKING_APPROVED": "Potvrđeno",
+      "BOOKING_REJECTED": "Odbijeno",
+      "ACCEPT": "Prihvati",
+      "DECLINE": "Odbij",
+      "BOOKING_ACCEPTED": "Termin je zakazan. Ostali termini tog dana pomjereni su za 1 sat.",
+      "BOOKING_DECLINED": "Zahtjev je odbijen.",
       "NO_TRAININGS": "Nema predstojećih treninga.",
       "PURCHASE_HISTORY": "Istorija Kupovina",
       "COL_REF": "Narudžba",
@@ -571,6 +600,9 @@
       "COL_PRICE": "Cena",
       "NO_ORDERS": "Nema kupovina.",
       "TYPE_SUPPLEMENT": "Suplement",
+      "TYPE_MEMBERSHIP": "Članarina",
+      "STATUS_ACTIVE": "Aktivna",
+      "STATUS_EXPIRED": "Istekla",
       "TYPE_INDIVIDUAL": "Individualni",
       "TYPE_GROUP": "Grupni",
       "TRAINER_FALLBACK": "Trener #{{id}}",

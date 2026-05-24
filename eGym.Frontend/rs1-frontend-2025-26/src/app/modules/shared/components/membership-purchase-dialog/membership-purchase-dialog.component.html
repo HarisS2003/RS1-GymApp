@@ -3,9 +3,27 @@
     <div class="purchase-dialog__icon">
       <mat-icon>card_membership</mat-icon>
     </div>
-    <span class="purchase-dialog__badge">{{ 'CLIENT.MEMBERSHIPS.PURCHASE_BADGE' | translate }}</span>
-    <h2>{{ 'CLIENT.MEMBERSHIPS.PURCHASE_TITLE' | translate }}</h2>
-    <p>{{ 'CLIENT.MEMBERSHIPS.PURCHASE_SUB' | translate }}</p>
+    <span class="purchase-dialog__badge">
+      @if (data.isUpgrade) {
+        {{ 'CLIENT.MEMBERSHIPS.UPGRADE_BADGE' | translate }}
+      } @else {
+        {{ 'CLIENT.MEMBERSHIPS.PURCHASE_BADGE' | translate }}
+      }
+    </span>
+    <h2>
+      @if (data.isUpgrade) {
+        {{ 'CLIENT.MEMBERSHIPS.UPGRADE_TITLE' | translate }}
+      } @else {
+        {{ 'CLIENT.MEMBERSHIPS.PURCHASE_TITLE' | translate }}
+      }
+    </h2>
+    <p>
+      @if (data.isUpgrade) {
+        {{ 'CLIENT.MEMBERSHIPS.UPGRADE_SUB' | translate: { name: data.currentPlanName, days: data.currentDurationDays } }}
+      } @else {
+        {{ 'CLIENT.MEMBERSHIPS.PURCHASE_SUB' | translate }}
+      }
+    </p>
   </div>
 
   <div class="purchase-dialog__card">

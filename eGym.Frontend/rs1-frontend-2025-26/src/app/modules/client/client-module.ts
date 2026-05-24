@@ -9,6 +9,7 @@ import { ClientShopComponent } from './pages/shop/client-shop.component';
 import { ClientMembershipsComponent } from './pages/memberships/client-memberships.component';
 import { ClientProfileComponent } from './pages/profile/client-profile.component';
 import { ClientScheduleComponent } from './pages/schedule/client-schedule.component';
+import { ClientTrainerBookingComponent } from './pages/trainer-booking/client-trainer-booking.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ClientScheduleComponent } from './pages/schedule/client-schedule.compon
     ClientMembershipsComponent,
     ClientProfileComponent,
     ClientScheduleComponent,
+    ClientTrainerBookingComponent,
   ],
   imports: [SharedModule, ClientRoutingModule],
 })

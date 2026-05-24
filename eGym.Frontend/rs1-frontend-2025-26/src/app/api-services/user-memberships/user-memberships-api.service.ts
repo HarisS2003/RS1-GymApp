@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   GetMyActiveUserMembershipQueryDto,
+  ListMyMembershipPurchaseHistoryQueryDto,
   PurchaseMembershipPlanCommand,
   PurchaseMembershipPlanResultDto,
 } from './user-memberships-api.models';
@@ -17,6 +18,10 @@ export class UserMembershipsApiService {
 
   getMyActive(): Observable<GetMyActiveUserMembershipQueryDto | null> {
     return this.http.get<GetMyActiveUserMembershipQueryDto | null>(`${this.baseUrl}/my`);
+  }
+
+  listMyHistory(): Observable<ListMyMembershipPurchaseHistoryQueryDto[]> {
+    return this.http.get<ListMyMembershipPurchaseHistoryQueryDto[]>(`${this.baseUrl}/my/history`);
   }
 
   purchase(

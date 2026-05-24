@@ -11,12 +11,14 @@ import { FitTableSkeletonComponent } from './components/fit-table-skeleton/fit-t
 import { LocaleThemeToolbarComponent } from './components/locale-theme-toolbar/locale-theme-toolbar.component';
 import { AccountProfileComponent } from './components/account-profile/account-profile.component';
 import { MembershipPurchaseDialogComponent } from './components/membership-purchase-dialog/membership-purchase-dialog.component';
+import { MembershipAlreadyHaveDialogComponent } from './components/membership-already-have-dialog/membership-already-have-dialog.component';
 
 @NgModule({
   declarations: [
     FitPaginatorBarComponent,
     FitConfirmDialogComponent,
     MembershipPurchaseDialogComponent,
+    MembershipAlreadyHaveDialogComponent,
     FitLoadingBarComponent,
     FitTableSkeletonComponent,
     LocaleThemeToolbarComponent,

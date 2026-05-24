@@ -19,6 +19,11 @@ import {
   MembershipPurchaseDialogData,
   MembershipPurchaseDialogResult,
 } from '../../../shared/components/membership-purchase-dialog/membership-purchase-dialog.component';
+import {
+  MembershipAlreadyHaveDialogComponent,
+  MembershipAlreadyHaveDialogData,
+} from '../../../shared/components/membership-already-have-dialog/membership-already-have-dialog.component';
+import { GetMyActiveUserMembershipQueryDto } from '../../../../api-services/user-memberships/user-memberships-api.models';
 
 @Component({
   selector: 'app-client-memberships',
@@ -64,10 +69,51 @@ export class ClientMembershipsComponent implements OnInit {
   buyPlan(plan: ListMembershipPlansQueryDto): void {
     if (this.purchasingId !== null) return;
 
+    this.membershipsApi.getMyActive().subscribe({
+      next: (active) => {
+        if (active) {
+          if (plan.durationDays <= active.durationDays) {
+            this.showAlreadyHaveDialog(active, plan.durationDays, true);
+            return;
+          }
+          this.openPurchaseDialog(plan, active);
+          return;
+        }
+        this.openPurchaseDialog(plan, null);
+      },
+      error: () => this.openPurchaseDialog(plan, null),
+    });
+  }
+
+  private showAlreadyHaveDialog(
+    active: GetMyActiveUserMembershipQueryDto,
+    selectedDurationDays: number,
+    isUpgradeBlocked: boolean,
+  ): void {
+    const data: MembershipAlreadyHaveDialogData = {
+      active,
+      selectedDurationDays,
+      isUpgradeBlocked,
+    };
+    this.dialog.open(MembershipAlreadyHaveDialogComponent, {
+      width: '420px',
+      maxWidth: '95vw',
+      panelClass: 'membership-purchase-panel',
+      data,
+    });
+  }
+
+  private openPurchaseDialog(
+    plan: ListMembershipPlansQueryDto,
+    active: GetMyActiveUserMembershipQueryDto | null,
+  ): void {
     const data: MembershipPurchaseDialogData = {
       plan,
       finalPrice: this.finalPrice(plan),
       durationLabel: this.formatDuration(plan.durationDays),
+      isUpgrade: !!active,
+      currentPlanName: active?.planName,
+      currentDurationDays: active?.durationDays,
     };
 
     this.dialog

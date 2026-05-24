@@ -1,5 +1,6 @@
 using Market.Application.Modules.Identity.UserMemberships.Commands.Purchase;
 using Market.Application.Modules.Identity.UserMemberships.Queries.GetMyActive;
+using Market.Application.Modules.Identity.UserMemberships.Queries.ListMyHistory;
 
 namespace Market.API.Controllers;
 
@@ -21,5 +22,12 @@ public class UserMembershipsController(ISender sender) : ControllerBase
     {
         var dto = await sender.Send(new GetMyActiveUserMembershipQuery(), ct);
         return new JsonResult(dto) { StatusCode = StatusCodes.Status200OK };
+    }
+
+    [HttpGet("my/history")]
+    public async Task<IActionResult> ListMyHistory(CancellationToken ct)
+    {
+        var list = await sender.Send(new ListMyMembershipPurchaseHistoryQuery(), ct);
+        return new JsonResult(list) { StatusCode = StatusCodes.Status200OK };
     }
 }

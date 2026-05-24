@@ -6,6 +6,9 @@ export interface MembershipPurchaseDialogData {
   plan: ListMembershipPlansQueryDto;
   finalPrice: number;
   durationLabel: string;
+  isUpgrade?: boolean;
+  currentPlanName?: string;
+  currentDurationDays?: number;
 }
 
 export interface MembershipPurchaseDialogResult {

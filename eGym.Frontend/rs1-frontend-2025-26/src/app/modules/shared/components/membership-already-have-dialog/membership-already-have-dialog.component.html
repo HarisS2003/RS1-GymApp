@@ -1,0 +1,17 @@
+<div class="already-dialog">
+  <div class="already-dialog__icon">
+    <mat-icon>info</mat-icon>
+  </div>
+  <h2>{{ 'CLIENT.MEMBERSHIPS.ALREADY_HAVE_TITLE' | translate }}</h2>
+  <p>
+    {{ 'CLIENT.MEMBERSHIPS.ALREADY_HAVE_MESSAGE' | translate: { name: data.active.planName, days: data.active.durationDays } }}
+  </p>
+  @if (data.isUpgradeBlocked) {
+    <p class="already-dialog__hint">
+      {{ 'CLIENT.MEMBERSHIPS.ALREADY_HAVE_HINT' | translate: { days: data.selectedDurationDays } }}
+    </p>
+  }
+  <button mat-flat-button type="button" class="already-dialog__btn" (click)="close()">
+    {{ 'DIALOGS.BUTTONS.OK' | translate }}
+  </button>
+</div>

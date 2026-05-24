@@ -15,6 +15,14 @@
         <span class="trainer-meta">
           {{ row.trainer.experienceYears }} {{ 'CLIENT.TRAINERS_PAGE.EXPERIENCE' | translate }}
         </span>
+        <button
+          mat-flat-button
+          type="button"
+          class="trainer-card__book"
+          [routerLink]="['/client/trainers', row.trainer.id, 'book']"
+        >
+          {{ 'CLIENT.TRAINERS_PAGE.BOOK' | translate }}
+        </button>
       </article>
     }
   </div>

@@ -33,3 +33,13 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+.training-item--pending {
+  flex-wrap: wrap;
+}
+
+.pending-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

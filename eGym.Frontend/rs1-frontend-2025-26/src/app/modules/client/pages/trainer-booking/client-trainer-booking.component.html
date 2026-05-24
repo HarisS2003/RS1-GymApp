@@ -1,0 +1,79 @@
+<button type="button" class="back-link" (click)="back()">
+  <mat-icon>arrow_back</mat-icon>
+  {{ 'CLIENT.TRAINER_BOOKING.BACK' | translate }}
+</button>
+
+@if (loading) {
+  <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+} @else if (!trainer) {
+  <p class="empty-msg">{{ 'CLIENT.TRAINER_BOOKING.NOT_FOUND' | translate }}</p>
+} @else {
+  <div class="booking-layout">
+    <section class="trainer-hero">
+      <div class="trainer-hero__avatar"><mat-icon>person</mat-icon></div>
+      <div>
+        <h1>{{ trainerName() }}</h1>
+        <p>{{ trainer.bio || ('CLIENT.TRAINERS_PAGE.NO_BIO' | translate) }}</p>
+        <span class="trainer-hero__meta">
+          {{ trainer.experienceYears }} {{ 'CLIENT.TRAINERS_PAGE.EXPERIENCE' | translate }}
+        </span>
+      </div>
+    </section>
+
+    <div class="booking-grid">
+      <section class="booking-panel">
+        <h2>{{ 'CLIENT.TRAINER_BOOKING.PICK_DATE' | translate }}</h2>
+        <mat-calendar
+          [(selected)]="selectedDate"
+          (selectedChange)="onDateChange($event)"
+          [minDate]="minDate"
+        ></mat-calendar>
+      </section>
+
+      <section class="booking-panel booking-panel--slots">
+        <h2>
+          {{ 'CLIENT.TRAINER_BOOKING.SLOTS_TITLE' | translate }}
+          @if (selectedDate) {
+            <span>— {{ selectedDateLabel() }}</span>
+          }
+        </h2>
+
+        @if (!selectedDate) {
+          <p class="empty-msg">{{ 'CLIENT.TRAINER_BOOKING.PICK_DATE_HINT' | translate }}</p>
+        } @else if (slotsLoading) {
+          <div class="page-loading"><mat-spinner diameter="32"></mat-spinner></div>
+        } @else if (slots.length === 0) {
+          <p class="empty-msg">{{ 'CLIENT.TRAINER_BOOKING.NO_SLOTS' | translate }}</p>
+        } @else {
+          <p class="slot-hint">{{ 'CLIENT.TRAINER_BOOKING.SLOT_HINT' | translate }}</p>
+          <div class="slot-grid">
+            @for (slot of slots; track slot.startTime) {
+              <button
+                type="button"
+                class="slot-btn"
+                [class.slot-btn--selected]="selectedSlot === slot.startTime"
+                (click)="selectSlot(slot)"
+              >
+                {{ slot.startTime }}
+              </button>
+            }
+          </div>
+
+          <button
+            mat-flat-button
+            type="button"
+            class="book-btn"
+            [disabled]="!selectedSlot || booking"
+            (click)="submitBooking()"
+          >
+            @if (booking) {
+              {{ 'CLIENT.TRAINER_BOOKING.BOOKING' | translate }}
+            } @else {
+              {{ 'CLIENT.TRAINER_BOOKING.RENT' | translate }}
+            }
+          </button>
+        }
+      </section>
+    </div>
+  </div>
+}
