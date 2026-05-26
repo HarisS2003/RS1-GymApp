@@ -7,7 +7,10 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
 import { ToasterService } from '../../../../core/services/toaster.service';
+import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
 import { ADMIN_ROLE_ID, MEMBER_ROLE_ID, TRAINER_ROLE_ID } from '../../../auth/constants/auth.constants';
+import { DialogButton } from '../../models/dialog-config.model';
+import { DialogHelperService } from '../../services/dialog-helper.service';
 import { UserMembershipsApiService } from '../../../../api-services/user-memberships/user-memberships-api.service';
 import {
   GetMyActiveUserMembershipQueryDto,
@@ -69,6 +72,8 @@ export class AccountProfileComponent implements OnInit {
   private translate = inject(TranslateService);
   private router = inject(Router);
   private toaster = inject(ToasterService);
+  private auth = inject(AuthFacadeService);
+  private dialog = inject(DialogHelperService);
   private usersApi = inject(UsersApiService);
   private membershipsApi = inject(UserMembershipsApiService);
   private trainingsApi = inject(TrainingsApiService);
@@ -79,6 +84,7 @@ export class AccountProfileComponent implements OnInit {
 
   loading = true;
   saving = false;
+  deletingProfile = false;
   editing = false;
   saveError: string | null = null;
 
@@ -128,6 +134,10 @@ export class AccountProfileComponent implements OnInit {
 
   get isAdmin(): boolean {
     return this.profileService.profile()?.roleId === ADMIN_ROLE_ID;
+  }
+
+  get canDeleteProfile(): boolean {
+    return this.isMember || this.isTrainer;
   }
 
   displayName(): string {
@@ -230,6 +240,35 @@ export class AccountProfileComponent implements OnInit {
     this.editing = false;
     this.saveError = null;
     this.form.markAsPristine();
+  }
+
+  deleteProfile(): void {
+    const p = this.profileService.profile();
+    if (!p || !this.canDeleteProfile || this.deletingProfile) return;
+
+    this.dialog
+      .confirmDelete(p.fullName, 'CLIENT.PROFILE.DELETE_CONFIRM')
+      .subscribe((result) => {
+        if (result?.button !== DialogButton.DELETE) return;
+
+        this.deletingProfile = true;
+        this.usersApi.delete(p.id).subscribe({
+          next: () => {
+            this.profileService.clear();
+            this.auth.logout().subscribe(() => {
+              this.router.navigate(['/auth/login']);
+            });
+          },
+          error: (err) => {
+            this.deletingProfile = false;
+            this.toaster.error(
+              err?.error?.message ??
+                err?.error?.title ??
+                this.translate.instant('CLIENT.PROFILE.DELETE_ERROR'),
+            );
+          },
+        });
+      });
   }
 
   applyChanges(): void {

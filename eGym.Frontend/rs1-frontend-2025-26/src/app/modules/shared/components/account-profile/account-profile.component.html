@@ -61,6 +61,23 @@
       } @else if (isMember) {
         <p class="empty-msg">{{ 'CLIENT.PROFILE.NO_PLAN' | translate }}</p>
       }
+
+      @if (canDeleteProfile) {
+        <button
+          mat-stroked-button
+          type="button"
+          class="delete-profile-btn"
+          (click)="deleteProfile()"
+          [disabled]="deletingProfile"
+        >
+          <mat-icon>delete_forever</mat-icon>
+          @if (deletingProfile) {
+            {{ 'CLIENT.PROFILE.DELETING_PROFILE' | translate }}
+          } @else {
+            {{ 'CLIENT.PROFILE.DELETE_PROFILE' | translate }}
+          }
+        </button>
+      }
     </aside>
 
     <div class="profile-main">

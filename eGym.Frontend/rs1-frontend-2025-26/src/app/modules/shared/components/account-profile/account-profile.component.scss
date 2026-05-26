@@ -163,6 +163,23 @@
   border-radius: 10px !important;
 }
 
+.delete-profile-btn {
+  width: 100%;
+  height: 46px !important;
+  border-color: #dc2626 !important;
+  color: #dc2626 !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+
+  mat-icon {
+    margin-right: 6px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
 .profile-main {
   display: flex;
   flex-direction: column;
