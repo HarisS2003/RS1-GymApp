@@ -12,6 +12,10 @@ public class TrainingEntityConfiguration : IEntityTypeConfiguration<TrainingEnti
             .HasConversion<int>();
 
         builder
+            .Property(x => x.Description)
+            .HasMaxLength(1000);
+
+        builder
             .HasOne(x => x.Trainer)
             .WithMany(x => x.Trainings)
             .HasForeignKey(x => x.TrainerId)

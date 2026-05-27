@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 import { TrainersApiService } from '../../../../api-services/trainers/trainers-api.service';
 import { UsersApiService } from '../../../../api-services/users/users-api.service';
 import { ListTrainersRequest } from '../../../../api-services/trainers/trainers-api.models';
@@ -10,6 +12,8 @@ import {
   ListUsersQueryDto,
 } from '../../../../api-services/users/users-api.models';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
+import { UserMembershipsApiService } from '../../../../api-services/user-memberships/user-memberships-api.service';
+import { ToasterService } from '../../../../core/services/toaster.service';
 
 export interface TrainerRow {
   trainer: ListTrainersQueryDto;
@@ -25,13 +29,30 @@ export interface TrainerRow {
 export class ClientTrainersComponent implements OnInit {
   private trainersApi = inject(TrainersApiService);
   private usersApi = inject(UsersApiService);
+  private membershipsApi = inject(UserMembershipsApiService);
+  private router = inject(Router);
+  private translate = inject(TranslateService);
+  private toaster = inject(ToasterService);
   profileService = inject(UserProfileService);
 
   loading = true;
   rows: TrainerRow[] = [];
+  hasActiveMembership = false;
 
   ngOnInit(): void {
+    this.membershipsApi.getMyActive().subscribe({
+      next: (active) => (this.hasActiveMembership = !!active),
+      error: () => (this.hasActiveMembership = false),
+    });
     this.load();
+  }
+
+  bookTrainer(trainerId: number): void {
+    if (!this.hasActiveMembership) {
+      this.toaster.error(this.translate.instant('CLIENT.TRAINER_BOOKING.MEMBERSHIP_REQUIRED'));
+      return;
+    }
+    this.router.navigate(['/client/trainers', trainerId, 'book']);
   }
 
   displayName(row: TrainerRow): string {

@@ -1,104 +1,112 @@
-@if (profileService.isTrainer()) {
-  <app-trainer-home></app-trainer-home>
+@if (loading) {
+  <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
 } @else {
-  @if (loading) {
-    <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
-  } @else {
-    <section class="hero-banner">
-      <div class="hero-banner__overlay"></div>
-      <div class="hero-banner__text">
-        <h1>{{ 'CLIENT.HOME.WELCOME' | translate }}</h1>
-        <p>{{ 'CLIENT.HOME.HERO_TEXT' | translate }}</p>
-        <button mat-flat-button type="button" routerLink="/client/shop">
-          {{ 'CLIENT.HOME.START_NOW' | translate }}
-        </button>
-      </div>
-    </section>
+  <section class="hero-banner">
+    <div class="hero-banner__overlay"></div>
+    <div class="hero-banner__text">
+      <h1>{{ 'CLIENT.HOME.WELCOME' | translate }}</h1>
+      <p>{{ 'CLIENT.HOME.HERO_TEXT' | translate }}</p>
+      <button mat-flat-button type="button" routerLink="/client/shop">
+        {{ 'CLIENT.HOME.START_NOW' | translate }}
+      </button>
+    </div>
+  </section>
 
-    <section class="stats-row">
-      <div class="stat-card stat-card--blue">
-        <mat-icon>groups</mat-icon>
+  <section class="stats-row">
+    <div class="stat-card stat-card--blue">
+      <mat-icon>groups</mat-icon>
+      <div>
+        <strong>{{ memberCount }}+</strong>
+        <span>{{ 'CLIENT.HOME.STAT_MEMBERS' | translate }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-card--orange">
+      <mat-icon>fitness_center</mat-icon>
+      <div>
+        <strong>{{ trainerCount }}</strong>
+        <span>{{ 'CLIENT.HOME.STAT_TRAINERS' | translate }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-card--green">
+      @if (profileService.isTrainer()) {
+        <mat-icon>inventory_2</mat-icon>
         <div>
-          <strong>{{ memberCount }}+</strong>
-          <span>{{ 'CLIENT.HOME.STAT_MEMBERS' | translate }}</span>
+          <strong>{{ products.length }}</strong>
+          <span>{{ 'CLIENT.HOME.PRODUCTS_TITLE' | translate }}</span>
         </div>
-      </div>
-      <div class="stat-card stat-card--orange">
-        <mat-icon>fitness_center</mat-icon>
-        <div>
-          <strong>{{ trainerCount }}</strong>
-          <span>{{ 'CLIENT.HOME.STAT_TRAINERS' | translate }}</span>
-        </div>
-      </div>
-      <div class="stat-card stat-card--green">
-        <mat-icon>trending_up</mat-icon>
-        <div>
-          <strong>{{ planCount }}</strong>
-          <span>{{ 'CLIENT.HOME.STAT_PLANS' | translate }}</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-block">
-      <div class="section-block__head">
-        <h2>{{ 'CLIENT.HOME.MEMBERSHIPS' | translate }}</h2>
-        <a mat-stroked-button routerLink="/client/memberships" class="section-link-btn">
-          {{ 'CLIENT.MEMBERSHIPS.VIEW_ALL' | translate }}
-        </a>
-      </div>
-      @if (plans.length === 0) {
-        <p class="empty-msg">{{ 'CLIENT.HOME.NO_PLANS' | translate }}</p>
       } @else {
-        <div class="plans-row">
-          @for (plan of plans; track plan.id; let i = $index) {
-            <article class="plan-card" [class]="'plan-card--' + (i % 4)" [class.plan-card--featured]="isRecommended(plan)">
-              @if (isRecommended(plan)) {
-                <span class="plan-badge">{{ 'CLIENT.HOME.RECOMMENDED' | translate }}</span>
-              }
-              <div class="plan-card__head">
-                <h3>{{ plan.name }}</h3>
-                <span>{{ formatDuration(plan.durationDays) }}</span>
-              </div>
-              <div class="plan-card__price">
-                {{ finalPrice(plan) }} KM
-                @if (plan.discountPercentage > 0) {
-                  <small>-{{ plan.discountPercentage }}%</small>
-                }
-              </div>
-              <a mat-flat-button class="plan-card__btn plan-card__btn--buy" routerLink="/client/memberships">
-                {{ 'COMMON.BUY_NOW' | translate }}
-              </a>
-            </article>
-          }
+        <mat-icon>event_available</mat-icon>
+        <div>
+          <strong>{{ groupTrainingCount }}</strong>
+          <span>{{ 'CLIENT.HOME.STAT_GROUPS' | translate }}</span>
         </div>
       }
-    </section>
+    </div>
+  </section>
 
+  @if (!profileService.isTrainer()) {
     <section class="section-block">
-      <h2>{{ 'CLIENT.HOME.PRODUCTS_TITLE' | translate }}</h2>
-      <p class="section-sub">{{ 'CLIENT.HOME.PRODUCTS_SUB' | translate }}</p>
-      @if (products.length === 0) {
-        <p class="empty-msg">{{ 'CLIENT.HOME.NO_PRODUCTS' | translate }}</p>
+      <div class="section-block__head">
+        <h2>{{ 'CLIENT.HOME.GROUP_TRAININGS' | translate }}</h2>
+      </div>
+      @if (groupTrainings.length === 0) {
+        <p class="empty-msg">{{ 'CLIENT.HOME.NO_GROUP_TRAININGS' | translate }}</p>
       } @else {
-        <div class="products-grid">
-          @for (product of products; track product.id) {
-            <article class="product-card">
-              <span class="product-badge">{{ product.categoryName }}</span>
-              <div class="product-card__img">
-                <mat-icon>inventory_2</mat-icon>
+        <div class="group-events-grid">
+          @for (training of groupTrainings; track training.id) {
+            <article class="group-event-card">
+              <div class="group-event-card__head">
+                <span>{{ formatTrainingTime(training) }}</span>
+                <strong>{{ freePlaces(training) }}/{{ training.capacity }} {{ 'CLIENT.HOME.FREE_PLACES' | translate }}</strong>
               </div>
-              <h3>{{ product.name }}</h3>
-              @if (product.description) {
-                <p>{{ product.description }}</p>
-              }
-              <div class="product-card__footer">
-                <strong>{{ product.price }} KM</strong>
-                <button mat-flat-button type="button">{{ 'COMMON.ADD' | translate }}</button>
-              </div>
+              <h3>{{ 'CLIENT.HOME.GROUP_EVENT_TITLE' | translate }}</h3>
+              <p>{{ training.description || ('CLIENT.HOME.NO_GROUP_DESCRIPTION' | translate) }}</p>
+              <span class="group-event-card__trainer">
+                {{ 'CLIENT.HOME.CREATED_BY' | translate }} {{ training.trainerName }}
+              </span>
+              <button
+                mat-flat-button
+                type="button"
+                [disabled]="freePlaces(training) <= 0 || joiningId === training.id"
+                (click)="joinGroupTraining(training)"
+              >
+                @if (freePlaces(training) <= 0) {
+                  {{ 'CLIENT.HOME.GROUP_FULL' | translate }}
+                } @else {
+                  {{ 'CLIENT.HOME.JOIN_GROUP' | translate }}
+                }
+              </button>
             </article>
           }
         </div>
       }
     </section>
   }
+
+  <section class="section-block">
+    <h2>{{ 'CLIENT.HOME.PRODUCTS_TITLE' | translate }}</h2>
+    <p class="section-sub">{{ 'CLIENT.HOME.PRODUCTS_SUB' | translate }}</p>
+    @if (products.length === 0) {
+      <p class="empty-msg">{{ 'CLIENT.HOME.NO_PRODUCTS' | translate }}</p>
+    } @else {
+      <div class="products-grid">
+        @for (product of products; track product.id) {
+          <article class="product-card">
+            <span class="product-badge">{{ product.categoryName }}</span>
+            <div class="product-card__img">
+              <mat-icon>inventory_2</mat-icon>
+            </div>
+            <h3>{{ product.name }}</h3>
+            @if (product.description) {
+              <p>{{ product.description }}</p>
+            }
+            <div class="product-card__footer">
+              <strong>{{ product.price }} KM</strong>
+              <button mat-flat-button type="button">{{ 'COMMON.ADD' | translate }}</button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
 }

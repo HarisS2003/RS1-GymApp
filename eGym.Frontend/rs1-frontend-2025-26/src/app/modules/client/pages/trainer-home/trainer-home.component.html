@@ -1,37 +1,38 @@
 @if (loading) {
   <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
 } @else {
-  <section class="hero-banner">
-    <div class="hero-banner__overlay"></div>
-    <div class="hero-banner__text">
-      <h1>{{ 'CLIENT.TRAINER_HOME.TITLE' | translate }}</h1>
-      <p>{{ 'CLIENT.TRAINER_HOME.HERO_TEXT' | translate }}</p>
-      <button mat-flat-button type="button" routerLink="/client/schedule">
-        {{ 'CLIENT.TRAINER_HOME.START_TRAINING' | translate }}
-      </button>
-    </div>
-  </section>
+  <header class="schedule-head">
+    <h1>{{ 'CLIENT.TRAINER_HOME.SCHEDULE_TITLE' | translate }}</h1>
+    <p>{{ 'CLIENT.TRAINER_HOME.SCHEDULE_SUB' | translate }}</p>
+  </header>
 
   <section class="stats-row">
     <div class="stat-card stat-card--blue">
-      <mat-icon>groups</mat-icon>
-      <div>
-        <strong>{{ clientCount }}</strong>
-        <span>{{ 'CLIENT.TRAINER_HOME.STAT_CLIENTS' | translate }}</span>
-      </div>
-    </div>
-    <div class="stat-card stat-card--orange">
-      <mat-icon>event</mat-icon>
-      <div>
-        <strong>{{ sessionsToday }}</strong>
-        <span>{{ 'CLIENT.TRAINER_HOME.STAT_TODAY' | translate }}</span>
-      </div>
-    </div>
-    <div class="stat-card stat-card--green">
       <mat-icon>fitness_center</mat-icon>
       <div>
         <strong>{{ trainings.length }}</strong>
         <span>{{ 'CLIENT.TRAINER_HOME.STAT_TOTAL' | translate }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-card--orange">
+      <mat-icon>person</mat-icon>
+      <div>
+        <strong>{{ individualCount }}</strong>
+        <span>{{ 'CLIENT.TRAINER_HOME.TYPE_INDIVIDUAL' | translate }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-card--green">
+      <mat-icon>groups</mat-icon>
+      <div>
+        <strong>{{ groupCount }}</strong>
+        <span>{{ 'CLIENT.TRAINER_HOME.TYPE_GROUP' | translate }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-card--purple">
+      <mat-icon>group_add</mat-icon>
+      <div>
+        <strong>{{ clientCount }}</strong>
+        <span>{{ 'CLIENT.TRAINER_HOME.STAT_CLIENTS' | translate }}</span>
       </div>
     </div>
   </section>
@@ -60,27 +61,80 @@
     </section>
   }
 
-  <section class="section-block">
-    <h2>{{ 'CLIENT.TRAINER_HOME.UPCOMING' | translate }}</h2>
-    @if (trainings.length === 0) {
-      <p class="empty-msg">{{ 'CLIENT.TRAINER_HOME.NO_TRAININGS' | translate }}</p>
-    } @else {
-      <div class="training-list">
-        @for (t of trainings; track t.id) {
-          <article class="training-item">
-            <div>
-              <strong>{{ t.date | date: 'dd.MM.yyyy' }}</strong>
-              <span>
-                {{ t.startTime }} · {{ t.participantsCount }}/{{ t.capacity }}
+  <div class="schedule-layout">
+    <section class="schedule-panel">
+      <div class="schedule-panel__head">
+        <div>
+          <h2>{{ 'CLIENT.TRAINER_HOME.TODAY_SCHEDULE' | translate }}</h2>
+          <span>{{ 'CLIENT.TRAINER_HOME.TODAY' | translate }}</span>
+        </div>
+      </div>
+
+      @if (todayTrainings.length === 0) {
+        <p class="empty-msg">{{ 'CLIENT.TRAINER_HOME.NO_TRAININGS' | translate }}</p>
+      } @else {
+        <div class="daily-list">
+          @for (t of todayTrainings; track t.id) {
+            <article class="daily-item" [class.daily-item--group]="t.type === 2">
+              <div class="daily-item__icon">
+                <mat-icon>{{ t.type === 2 ? 'groups' : 'person' }}</mat-icon>
+              </div>
+              <div class="daily-item__main">
+                <strong>{{ formatTime(t.startTime) }}</strong>
+                <span>
+                  @if (t.type === 2) {
+                    {{ 'CLIENT.TRAINER_HOME.GROUP_TRAINING' | translate }}
+                  } @else {
+                    {{ 'CLIENT.TRAINER_HOME.INDIVIDUAL_TRAINING' | translate }}
+                  }
+                </span>
+              </div>
+              <span class="daily-item__count">
+                {{ t.participantsCount }}/{{ t.capacity }}
                 {{ 'CLIENT.TRAINER_HOME.PARTICIPANTS' | translate }}
               </span>
-            </div>
-            <span class="training-type">
-              {{ 'CLIENT.TRAINER_HOME.TYPE' | translate }} {{ t.type }}
-            </span>
-          </article>
+              <span class="training-type">
+                {{ typeLabel(t.type) }}
+              </span>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <aside class="schedule-side">
+      <section class="side-card">
+        <h2>{{ 'CLIENT.TRAINER_HOME.UPCOMING_GROUPS' | translate }}</h2>
+        @if (upcomingGroupTrainings.length === 0) {
+          <p class="empty-msg">{{ 'CLIENT.TRAINER_HOME.NO_GROUPS' | translate }}</p>
+        } @else {
+          <div class="group-list">
+            @for (t of upcomingGroupTrainings; track t.id) {
+              <article class="group-mini-card">
+                <div>
+                  <strong>{{ t.description || ('CLIENT.TRAINER_HOME.GROUP_TRAINING' | translate) }}</strong>
+                  <span>{{ t.date | date: 'dd.MM.yyyy' }} · {{ formatTime(t.startTime) }}</span>
+                </div>
+                <small>{{ t.participantsCount }}/{{ t.capacity }}</small>
+                <div class="group-progress">
+                  <span [style.width.%]="groupProgress(t)"></span>
+                </div>
+              </article>
+            }
+          </div>
         }
-      </div>
-    }
-  </section>
+      </section>
+
+      <section class="group-create-card">
+        <div>
+          <mat-icon>event_available</mat-icon>
+          <h2>{{ 'CLIENT.TRAINER_HOME.CREATE_GROUP_TITLE' | translate }}</h2>
+          <p>{{ 'CLIENT.TRAINER_HOME.CREATE_GROUP_SUB' | translate }}</p>
+        </div>
+        <button mat-flat-button type="button" (click)="openGroupTrainingDialog()">
+          {{ 'CLIENT.TRAINER_HOME.CREATE_GROUP_BUTTON' | translate }}
+        </button>
+      </section>
+    </aside>
+  </div>
 }

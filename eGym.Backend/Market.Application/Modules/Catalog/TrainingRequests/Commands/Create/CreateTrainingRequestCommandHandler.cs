@@ -35,6 +35,15 @@ public sealed class CreateTrainingRequestCommandHandler(IAppDbContext ctx, IAppC
         if (user.GymId != trainer.GymId)
             throw new ValidationException("Trainer does not belong to your gym.");
 
+        var today = DateTime.UtcNow.Date;
+        var hasActiveMembership = await ctx.UserMemberships.AsNoTracking()
+            .AnyAsync(m => m.UserId == userId && m.EndDate >= today, ct);
+
+        if (!hasActiveMembership)
+            throw new MarketBusinessRuleException(
+                "MEMBERSHIP_REQUIRED",
+                "Active membership plan is required to book a trainer.");
+
         var sessions = await GetTrainerAvailableSlotsQueryHandler.LoadSessionsAsync(
             ctx,
             request.TrainerId,

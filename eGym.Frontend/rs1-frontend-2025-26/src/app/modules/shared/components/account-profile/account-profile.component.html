@@ -201,7 +201,7 @@
         <section class="profile-panel">
           <h2>{{ 'CLIENT.PROFILE.UPCOMING_TRAININGS' | translate }}</h2>
           @if (isMember) {
-            @if (memberBookings.length === 0) {
+            @if (memberBookings.length === 0 && upcomingTrainings.length === 0) {
               <p class="empty-msg">{{ 'CLIENT.PROFILE.NO_TRAININGS' | translate }}</p>
             } @else {
               <div class="training-rows">
@@ -216,6 +216,18 @@
                     <div class="training-row__meta">
                       <span>{{ b.date | date: 'd.M.yyyy' }}</span>
                       <span>{{ formatBookingTime(b.startTime) }}</span>
+                    </div>
+                  </article>
+                }
+                @for (row of upcomingTrainings; track row.training.id) {
+                  <article class="training-row">
+                    <div>
+                      <strong>{{ row.trainerName }}</strong>
+                      <span>{{ row.typeLabel }}</span>
+                    </div>
+                    <div class="training-row__meta">
+                      <span>{{ row.training.date | date: 'd.M.yyyy' }}</span>
+                      <span>{{ formatBookingTime(row.training.startTime) }}</span>
                     </div>
                   </article>
                 }

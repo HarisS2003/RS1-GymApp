@@ -3,6 +3,8 @@ using Market.Application.Modules.Catalog.Trainings.Commands.Delete;
 using Market.Application.Modules.Catalog.Trainings.Commands.Update;
 using Market.Application.Modules.Catalog.Trainings.Queries.GetById;
 using Market.Application.Modules.Catalog.Trainings.Queries.List;
+using Market.Application.Modules.Catalog.Trainings.Queries.ListMy;
+using Market.Application.Modules.Catalog.TrainingParticipants.Commands.Join;
 
 namespace Market.API.Controllers;
 
@@ -41,5 +43,18 @@ public class TrainingsController(ISender sender) : ControllerBase
     public async Task<PageResult<ListTrainingsQueryDto>> List([FromQuery] ListTrainingsQuery query, CancellationToken ct)
     {
         return await sender.Send(query, ct);
+    }
+
+    [HttpGet("my")]
+    public async Task<List<ListMyTrainingsQueryDto>> ListMy(CancellationToken ct)
+    {
+        return await sender.Send(new ListMyTrainingsQuery(), ct);
+    }
+
+    [HttpPost("{id:int}/join")]
+    public async Task<IActionResult> Join(int id, CancellationToken ct)
+    {
+        await sender.Send(new JoinTrainingCommand { TrainingId = id }, ct);
+        return NoContent();
     }
 }

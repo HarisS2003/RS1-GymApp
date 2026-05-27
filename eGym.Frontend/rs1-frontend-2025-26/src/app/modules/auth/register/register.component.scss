@@ -1,1 +1,79 @@
 @import '../auth-form.shared';
+
+.password-control {
+  position: relative;
+}
+
+.password-strength {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: -2px;
+}
+
+.password-strength__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: $text-muted;
+
+  strong {
+    font-weight: 800;
+  }
+}
+
+.password-strength__bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--app-border, #e2e8f0);
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.2s ease, background 0.2s ease;
+  }
+}
+
+.password-strength--weak {
+  strong {
+    color: #dc2626;
+  }
+
+  .password-strength__bar span {
+    background: #dc2626;
+  }
+}
+
+.password-strength--fair {
+  strong {
+    color: #d97706;
+  }
+
+  .password-strength__bar span {
+    background: #d97706;
+  }
+}
+
+.password-strength--good {
+  strong {
+    color: #2563eb;
+  }
+
+  .password-strength__bar span {
+    background: #2563eb;
+  }
+}
+
+.password-strength--strong {
+  strong {
+    color: #16a34a;
+  }
+
+  .password-strength__bar span {
+    background: #16a34a;
+  }
+}

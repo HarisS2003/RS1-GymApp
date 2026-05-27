@@ -1,0 +1,37 @@
+<div class="group-dialog">
+  <h2>{{ 'CLIENT.GROUP_TRAINING_DIALOG.TITLE' | translate }}</h2>
+  <p>{{ 'CLIENT.GROUP_TRAINING_DIALOG.SUB' | translate }}</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.DESCRIPTION' | translate }}</span>
+      <textarea formControlName="description" rows="4"></textarea>
+    </label>
+
+    <div class="group-dialog__row">
+      <label>
+        <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.DATE' | translate }}</span>
+        <input type="date" formControlName="date" [min]="minDate" />
+      </label>
+
+      <label>
+        <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.TIME' | translate }}</span>
+        <input type="time" formControlName="startTime" step="1800" />
+      </label>
+    </div>
+
+    <label>
+      <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.CAPACITY' | translate }}</span>
+      <input type="number" formControlName="capacity" min="2" max="100" />
+    </label>
+
+    <div class="group-dialog__actions">
+      <button mat-stroked-button type="button" (click)="close()">
+        {{ 'CLIENT.PROFILE.CANCEL' | translate }}
+      </button>
+      <button mat-flat-button type="submit">
+        {{ 'CLIENT.GROUP_TRAINING_DIALOG.CREATE' | translate }}
+      </button>
+    </div>
+  </form>
+</div>

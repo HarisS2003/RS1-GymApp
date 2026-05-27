@@ -1,0 +1,58 @@
+.group-dialog {
+  width: min(520px, 90vw);
+  padding: 22px;
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 22px;
+  }
+
+  p {
+    margin: 0 0 18px;
+    color: #64748b;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    span {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+    }
+  }
+
+  input,
+  textarea {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 11px 12px;
+    font: inherit;
+  }
+}
+
+.group-dialog__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.group-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+
+  button:last-child {
+    background: #ff6600 !important;
+    color: #fff !important;
+  }
+}

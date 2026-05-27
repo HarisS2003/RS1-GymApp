@@ -10,6 +10,7 @@ import { ClientMembershipsComponent } from './pages/memberships/client-membershi
 import { ClientProfileComponent } from './pages/profile/client-profile.component';
 import { ClientScheduleComponent } from './pages/schedule/client-schedule.component';
 import { ClientTrainerBookingComponent } from './pages/trainer-booking/client-trainer-booking.component';
+import { GroupTrainingDialogComponent } from './pages/trainer-home/group-training-dialog.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ClientTrainerBookingComponent } from './pages/trainer-booking/client-tr
     ClientProfileComponent,
     ClientScheduleComponent,
     ClientTrainerBookingComponent,
+    GroupTrainingDialogComponent,
   ],
   imports: [SharedModule, ClientRoutingModule],
 })

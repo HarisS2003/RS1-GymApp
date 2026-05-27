@@ -11,7 +11,9 @@ public sealed class GetTrainingByIdQueryHandler(IAppDbContext ctx)
             {
                 Id = x.Id,
                 TrainerId = x.TrainerId,
+                TrainerName = x.Trainer!.User!.FirstName + " " + x.Trainer.User.LastName,
                 Type = x.Type,
+                Description = x.Description,
                 Date = x.Date,
                 StartTime = x.StartTime,
                 Capacity = x.Capacity,

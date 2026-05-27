@@ -215,6 +215,64 @@
   width: calc(100% - 32px);
 }
 
+.group-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.group-event-card {
+  @include card;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    color: $text-dark;
+  }
+
+  p {
+    margin: 0;
+    color: $text-muted;
+    line-height: 1.5;
+    min-height: 42px;
+  }
+
+  button {
+    margin-top: auto;
+    background: $accent !important;
+    color: #fff !important;
+    font-weight: 800 !important;
+  }
+}
+
+.group-event-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: $text-muted;
+  font-size: 13px;
+
+  strong {
+    color: #16a34a;
+    white-space: nowrap;
+  }
+}
+
+.group-event-card__trainer {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff7ed;
+  color: $accent;
+  font-size: 12px;
+  font-weight: 800;
+  width: fit-content;
+}
+
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

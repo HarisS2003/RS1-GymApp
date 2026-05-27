@@ -1,0 +1,49 @@
+<div class="admin-shop">
+  <div class="admin-shop__top">
+    <div>
+      <h1>{{ 'ADMIN_SHOP.TITLE' | translate }}</h1>
+      <p>{{ 'ADMIN_SHOP.SUB' | translate }}</p>
+    </div>
+    <div class="admin-shop__actions">
+      <a mat-stroked-button routerLink="/admin/products">
+        <mat-icon>settings</mat-icon>
+        {{ 'ADMIN_SHOP.MANAGE_PRODUCTS' | translate }}
+      </a>
+      <a mat-flat-button routerLink="/admin/products/add">
+        <mat-icon>add</mat-icon>
+        {{ 'PRODUCTS.NEW_PRODUCT' | translate }}
+      </a>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (products.length === 0) {
+    <p class="empty-msg">{{ 'CLIENT.HOME.NO_PRODUCTS' | translate }}</p>
+  } @else {
+    <div class="admin-shop-grid">
+      @for (product of products; track product.id) {
+        <article class="admin-shop-card">
+          <span class="admin-shop-card__category">{{ product.categoryName || ('COMMON.ACTIVE' | translate) }}</span>
+          <div class="admin-shop-card__image">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <h3>{{ product.name }}</h3>
+          @if (product.description) {
+            <p>{{ product.description }}</p>
+          }
+          <div class="admin-shop-card__stock">
+            <span>{{ 'CLIENT.SHOP.STOCK' | translate }}</span>
+            <strong [class.low]="product.stockQuantity < 5">{{ product.stockQuantity }}</strong>
+          </div>
+          <div class="admin-shop-card__footer">
+            <strong>{{ product.price | number: '1.2-2' }} KM</strong>
+            <a mat-stroked-button [routerLink]="['/admin/products', product.id, 'edit']">
+              {{ 'CLIENT.PROFILE.EDIT' | translate }}
+            </a>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>

@@ -1,6 +1,6 @@
-namespace Market.Application.Modules.Catalog.Trainings.Queries.GetById;
+namespace Market.Application.Modules.Catalog.Trainings.Queries.ListMy;
 
-public sealed class GetTrainingByIdQueryDto
+public sealed class ListMyTrainingsQueryDto
 {
     public required int Id { get; init; }
     public required int TrainerId { get; init; }

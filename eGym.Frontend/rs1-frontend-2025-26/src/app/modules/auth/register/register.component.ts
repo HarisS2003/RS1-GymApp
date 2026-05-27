@@ -59,6 +59,27 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     }
   }
 
+  passwordStrength(): { key: string; className: string; percent: number } {
+    const password = this.form.get('password')?.value ?? '';
+    if (!password) return { key: 'AUTH.PASSWORD_STRENGTH.EMPTY', className: 'empty', percent: 0 };
+
+    let score = 0;
+    if (password.length >= 6) score++;
+    if (password.length >= 10) score++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    if (score <= 2) return { key: 'AUTH.PASSWORD_STRENGTH.WEAK', className: 'weak', percent: 25 };
+    if (score === 3) return { key: 'AUTH.PASSWORD_STRENGTH.FAIR', className: 'fair', percent: 50 };
+    if (score === 4) return { key: 'AUTH.PASSWORD_STRENGTH.GOOD', className: 'good', percent: 75 };
+    return { key: 'AUTH.PASSWORD_STRENGTH.STRONG', className: 'strong', percent: 100 };
+  }
+
+  hasPasswordValue(): boolean {
+    return !!this.form.get('password')?.value;
+  }
+
   onSubmit(): void {
     if (this.form.invalid || this.isLoading) return;
 

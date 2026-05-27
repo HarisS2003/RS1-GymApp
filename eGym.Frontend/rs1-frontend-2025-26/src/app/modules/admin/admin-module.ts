@@ -20,6 +20,7 @@ import { EditTrainerDialogComponent } from './pages/edit-trainer-dialog/edit-tra
 import { MembershipPlansComponent } from './catalogs/membership-plans/membership-plans.component';
 import { MembershipPlansAddComponent } from './catalogs/membership-plans/membership-plans-add/membership-plans-add.component';
 import { MembershipPlansEditComponent } from './catalogs/membership-plans/membership-plans-edit/membership-plans-edit.component';
+import { AdminShopComponent } from './shop/admin-shop.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { MembershipPlansEditComponent } from './catalogs/membership-plans/member
     AdminSettingsComponent,
     OrderDetailsDialogComponent,
     ChangeStatusDialogComponent,
+    AdminShopComponent,
   ],
   imports: [
     AdminRoutingModule,

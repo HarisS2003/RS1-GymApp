@@ -19,7 +19,7 @@
           mat-flat-button
           type="button"
           class="trainer-card__book"
-          [routerLink]="['/client/trainers', row.trainer.id, 'book']"
+          (click)="bookTrainer(row.trainer.id)"
         >
           {{ 'CLIENT.TRAINERS_PAGE.BOOK' | translate }}
         </button>

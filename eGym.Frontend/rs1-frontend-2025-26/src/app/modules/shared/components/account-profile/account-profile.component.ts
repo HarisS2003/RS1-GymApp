@@ -224,14 +224,7 @@ export class AccountProfileComponent implements OnInit {
   startEdit(): void {
     const p = this.profileService.profile();
     if (!p) return;
-    this.form.patchValue({
-      firstName: p.firstName,
-      lastName: p.lastName,
-      email: p.email,
-      password: '',
-      bio: this.trainerRecord?.bio ?? '',
-      experienceYears: this.trainerRecord?.experienceYears ?? 0,
-    });
+    this.patchProfileForm(p);
     this.saveError = null;
     this.editing = true;
   }
@@ -364,6 +357,7 @@ export class AccountProfileComponent implements OnInit {
 
     if (this.isMember) {
       loads['myBookings'] = this.trainingRequestsApi.listMy().pipe(catchError(() => of([])));
+      loads['myTrainings'] = this.trainingsApi.listMy().pipe(catchError(() => of([])));
     }
     if (this.isTrainer) {
       loads['trainerBookings'] = this.trainingRequestsApi
@@ -402,6 +396,7 @@ export class AccountProfileComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           this.trainerRecord = data.myTrainer?.items?.[0] ?? null;
+          this.patchProfileForm(profile);
 
           this.activeMembership = this.isMember ? (data.membership ?? null) : null;
 
@@ -409,7 +404,7 @@ export class AccountProfileComponent implements OnInit {
             []) as ListMyMembershipPurchaseHistoryQueryDto[];
 
           const trainerNames: Map<number, string> = data.trainerUsers ?? new Map();
-          const today = new Date().toISOString().slice(0, 10);
+          const now = new Date();
           let trainings = (data.trainings.items ?? []) as ListTrainingsQueryDto[];
 
           if (this.isTrainer && this.trainerRecord) {
@@ -424,18 +419,17 @@ export class AccountProfileComponent implements OnInit {
             const allBookings = (data.myBookings ?? []) as ListTrainingRequestQueryDto[];
             this.memberBookings = allBookings
               .filter((b) => {
-                if (b.status === TRAINING_REQUEST_REJECTED) return false;
-                const day = (b.date ?? '').slice(0, 10);
-                return day >= today || b.status === TRAINING_REQUEST_PENDING;
+                return b.status === TRAINING_REQUEST_PENDING && this.bookingStartsAt(b) >= now;
               })
-              .sort((a, b) => `${b.date}${b.startTime}`.localeCompare(`${a.date}${a.startTime}`));
+              .sort((a, b) => this.bookingStartsAt(a).getTime() - this.bookingStartsAt(b).getTime());
+            trainings = (data.myTrainings ?? []) as ListTrainingsQueryDto[];
           } else {
             this.memberBookings = [];
           }
 
           this.upcomingTrainings = trainings
-            .filter((t) => (t.date ?? '').slice(0, 10) >= today)
-            .sort((a, b) => `${a.date}${a.startTime}`.localeCompare(`${b.date}${b.startTime}`))
+            .filter((t) => this.trainingStartsAt(t) >= now)
+            .sort((a, b) => this.trainingStartsAt(a).getTime() - this.trainingStartsAt(b).getTime())
             .slice(0, 6)
             .map((t) => ({
               training: t,
@@ -512,5 +506,30 @@ export class AccountProfileComponent implements OnInit {
     if (type === 1) return this.translate.instant('CLIENT.PROFILE.TYPE_INDIVIDUAL');
     if (type === 2) return this.translate.instant('CLIENT.PROFILE.TYPE_GROUP');
     return `${this.translate.instant('CLIENT.TRAINER_HOME.TYPE')} ${type}`;
+  }
+
+  private trainingStartsAt(training: ListTrainingsQueryDto): Date {
+    return this.dateTimeFromParts(training.date, training.startTime);
+  }
+
+  private bookingStartsAt(booking: ListTrainingRequestQueryDto): Date {
+    return this.dateTimeFromParts(booking.date, booking.startTime);
+  }
+
+  private dateTimeFromParts(dateValue: string, timeValue: string): Date {
+    const date = (dateValue ?? '').slice(0, 10);
+    const time = (timeValue ?? '00:00:00').slice(0, 8);
+    return new Date(`${date}T${time}`);
+  }
+
+  private patchProfileForm(profile: NonNullable<ReturnType<UserProfileService['profile']>>): void {
+    this.form.patchValue({
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      password: '',
+      bio: this.trainerRecord?.bio ?? '',
+      experienceYears: this.trainerRecord?.experienceYears ?? 0,
+    });
   }
 }

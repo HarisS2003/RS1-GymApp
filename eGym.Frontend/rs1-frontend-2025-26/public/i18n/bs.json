@@ -30,6 +30,14 @@
     "PASSWORD_MISMATCH": "Lozinke se ne poklapaju",
     "NAME_REQUIRED": "Obavezno polje",
     "SHOW_PASSWORD": "Prikaži lozinku",
+    "PASSWORD_STRENGTH": {
+      "LABEL": "Jačina lozinke",
+      "EMPTY": "Prazno",
+      "WEAK": "Slaba",
+      "FAIR": "Srednja",
+      "GOOD": "Dobra",
+      "STRONG": "Jaka"
+    },
     "LOGIN": {
       "TITLE": "Prijava",
       "EMAIL_LABEL": "Email Adresa",
@@ -493,9 +501,18 @@
       "START_NOW": "Započni Odmah",
       "STAT_MEMBERS": "Ukupno članova",
       "STAT_TRAINERS": "Aktivnih trenera",
-      "STAT_PLANS": "Članarina u ponudi",
-      "MEMBERSHIPS": "Članarine",
-      "NO_PLANS": "Nema članarina za ovu teretanu.",
+      "STAT_GROUPS": "Grupni treninzi",
+      "GROUP_TRAININGS": "Grupni treninzi",
+      "NO_GROUP_TRAININGS": "Nema grupnih treninga.",
+      "GROUP_EVENT_TITLE": "Grupni trening",
+      "NO_GROUP_DESCRIPTION": "Bez opisa.",
+      "CREATED_BY": "Kreirao",
+      "FREE_PLACES": "slobodnih mjesta",
+      "JOIN_GROUP": "Pridruži se",
+      "GROUP_FULL": "Popunjeno",
+      "GROUP_JOIN_SUCCESS": "Pridružili ste se grupnom treningu.",
+      "GROUP_JOIN_ERROR": "Pridruživanje grupnom treningu nije uspjelo.",
+      "JOIN_GROUP_TOO_LATE": "Grupnom treningu možete se pridružiti najmanje 1 sat prije početka.",
       "PRODUCTS_TITLE": "Preporučeni Suplementi",
       "PRODUCTS_SUB": "Proizvodi iz naše ponude",
       "NO_PRODUCTS": "Nema proizvoda.",
@@ -505,13 +522,37 @@
       "TITLE": "Pregled vaših treninga",
       "HERO_TEXT": "Pratite raspored i članove vaše teretane.",
       "START_TRAINING": "Započni trening",
+      "SCHEDULE_TITLE": "Moj Raspored",
+      "SCHEDULE_SUB": "Pregled treninga i klijenata",
       "STAT_CLIENTS": "Članova u teretani",
       "STAT_TODAY": "Treninzi danas",
       "STAT_TOTAL": "Ukupno treninga",
       "UPCOMING": "Nadolazeći treninzi",
+      "TODAY_SCHEDULE": "Današnji Raspored",
+      "TODAY": "Danas",
+      "UPCOMING_GROUPS": "Predstojeći Grupni Treninzi",
+      "NO_GROUPS": "Nema predstojećih grupnih treninga.",
+      "INDIVIDUAL_TRAINING": "Individualni trening",
+      "GROUP_TRAINING": "Grupni trening",
       "NO_TRAININGS": "Nema zakazanih treninga.",
       "PARTICIPANTS": "učesnika",
-      "TYPE": "Tip"
+      "TYPE": "Tip",
+      "TYPE_INDIVIDUAL": "Individualni",
+      "TYPE_GROUP": "Grupni",
+      "CREATE_GROUP_TITLE": "Kreiraj grupni trening",
+      "CREATE_GROUP_SUB": "Dodaj grupni trening i mjesta za članove.",
+      "CREATE_GROUP_BUTTON": "Novi grupni trening",
+      "GROUP_CREATED": "Grupni trening je kreiran.",
+      "GROUP_CREATE_ERROR": "Grupni trening nije kreiran."
+    },
+    "GROUP_TRAINING_DIALOG": {
+      "TITLE": "Novi grupni trening",
+      "SUB": "Unesite detalje treninga i broj mjesta.",
+      "DESCRIPTION": "Opis",
+      "DATE": "Datum",
+      "TIME": "Vrijeme",
+      "CAPACITY": "Broj mjesta",
+      "CREATE": "Kreiraj trening"
     },
     "TRAINERS_PAGE": {
       "TITLE": "Treneri",
@@ -532,7 +573,9 @@
       "RENT": "Zatraži termin",
       "BOOKING": "Šaljem zahtjev...",
       "SUCCESS": "Zahtjev poslan. Trener će potvrditi ili odbiti termin.",
-      "ERROR": "Rezervacija nije uspjela."
+      "ERROR": "Rezervacija nije uspjela.",
+      "MEMBERSHIP_REQUIRED": "Za rezervaciju trenera potrebna je aktivna članarina.",
+      "GO_MEMBERSHIPS": "Pregled članarina"
     },
     "SHOP": {
       "TITLE": "Kupovina",
@@ -664,6 +707,7 @@
     "NAV_HOME": "Početna",
     "NAV_PANEL": "Admin Panel",
     "NAV_PRODUCTS": "Proizvodi",
+    "NAV_SHOP": "Prodavnica",
     "NAV_MEMBERSHIPS": "Članarine",
     "NAV_ORDERS": "Narudžbe",
     "NAV_CATEGORIES": "Kategorije",
@@ -695,5 +739,10 @@
     "SUMMARY_AVG_PRICE_SUB": "Po planu (KM)",
     "SUMMARY_WITH_DISCOUNT": "Sa popustom",
     "SUMMARY_WITH_DISCOUNT_SUB": "Planovi s popustom > 0%"
+  },
+  "ADMIN_SHOP": {
+    "TITLE": "Prodavnica",
+    "SUB": "Pregled proizvoda vaše teretane",
+    "MANAGE_PRODUCTS": "Upravljaj proizvodima"
   }
 }

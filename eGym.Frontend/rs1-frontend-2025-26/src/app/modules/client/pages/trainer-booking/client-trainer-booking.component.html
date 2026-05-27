@@ -7,6 +7,16 @@
   <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
 } @else if (!trainer) {
   <p class="empty-msg">{{ 'CLIENT.TRAINER_BOOKING.NOT_FOUND' | translate }}</p>
+} @else if (!membershipChecked) {
+  <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+} @else if (!hasActiveMembership) {
+  <section class="membership-required">
+    <mat-icon>card_membership</mat-icon>
+    <p>{{ 'CLIENT.TRAINER_BOOKING.MEMBERSHIP_REQUIRED' | translate }}</p>
+    <a mat-flat-button routerLink="/client/memberships">
+      {{ 'CLIENT.TRAINER_BOOKING.GO_MEMBERSHIPS' | translate }}
+    </a>
+  </section>
 } @else {
   <div class="booking-layout">
     <section class="trainer-hero">

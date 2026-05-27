@@ -64,21 +64,34 @@
 
     <div class="auth-field auth-field--password">
       <label for="reg-password">{{ 'AUTH.LOGIN.PASSWORD_LABEL' | translate }}</label>
-      <input
-        id="reg-password"
-        [type]="hidePassword ? 'password' : 'text'"
-        formControlName="password"
-        [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
-        autocomplete="new-password"
-        [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched"
-      />
-      <button
-        type="button"
-        (click)="hidePassword = !hidePassword"
-        [attr.aria-label]="'AUTH.SHOW_PASSWORD' | translate"
-      >
-        <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
-      </button>
+      <div class="password-control">
+        <input
+          id="reg-password"
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
+          autocomplete="new-password"
+          [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+        />
+        <button
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'AUTH.SHOW_PASSWORD' | translate"
+        >
+          <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+      </div>
+      @if (hasPasswordValue()) {
+        <div class="password-strength" [ngClass]="'password-strength--' + passwordStrength().className">
+          <div class="password-strength__top">
+            <span>{{ 'AUTH.PASSWORD_STRENGTH.LABEL' | translate }}</span>
+            <strong>{{ passwordStrength().key | translate }}</strong>
+          </div>
+          <div class="password-strength__bar">
+            <span [style.width.%]="passwordStrength().percent"></span>
+          </div>
+        </div>
+      }
       @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
         <span class="auth-field-error">{{ 'AUTH.PASSWORD_REQUIRED' | translate }}</span>
       }
@@ -89,24 +102,26 @@
 
     <div class="auth-field auth-field--password">
       <label for="confirmPassword">{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label>
-      <input
-        id="confirmPassword"
-        [type]="hideConfirmPassword ? 'password' : 'text'"
-        formControlName="confirmPassword"
-        [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
-        autocomplete="new-password"
-        [class.invalid]="
-          (form.get('confirmPassword')?.invalid || form.hasError('passwordMismatch')) &&
-          form.get('confirmPassword')?.touched
-        "
-      />
-      <button
-        type="button"
-        (click)="hideConfirmPassword = !hideConfirmPassword"
-        [attr.aria-label]="'AUTH.SHOW_PASSWORD' | translate"
-      >
-        <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
-      </button>
+      <div class="password-control">
+        <input
+          id="confirmPassword"
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          formControlName="confirmPassword"
+          [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
+          autocomplete="new-password"
+          [class.invalid]="
+            (form.get('confirmPassword')?.invalid || form.hasError('passwordMismatch')) &&
+            form.get('confirmPassword')?.touched
+          "
+        />
+        <button
+          type="button"
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          [attr.aria-label]="'AUTH.SHOW_PASSWORD' | translate"
+        >
+          <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+      </div>
       @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
         <span class="auth-field-error">{{ 'AUTH.PASSWORD_MISMATCH' | translate }}</span>
       }

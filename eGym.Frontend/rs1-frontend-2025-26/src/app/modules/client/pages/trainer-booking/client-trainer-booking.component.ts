@@ -11,6 +11,7 @@ import { ListTrainersQueryDto } from '../../../../api-services/trainers/trainers
 import { GetUserByIdQueryDto } from '../../../../api-services/users/users-api.models';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
 import { ToasterService } from '../../../../core/services/toaster.service';
+import { UserMembershipsApiService } from '../../../../api-services/user-memberships/user-memberships-api.service';
 
 @Component({
   selector: 'app-client-trainer-booking',
@@ -26,9 +27,12 @@ export class ClientTrainerBookingComponent implements OnInit {
   private requestsApi = inject(TrainingRequestsApiService);
   private translate = inject(TranslateService);
   private toaster = inject(ToasterService);
+  private membershipsApi = inject(UserMembershipsApiService);
   profileService = inject(UserProfileService);
 
   loading = true;
+  membershipChecked = false;
+  hasActiveMembership = false;
   slotsLoading = false;
   booking = false;
   trainerId = 0;
@@ -45,7 +49,18 @@ export class ClientTrainerBookingComponent implements OnInit {
       this.router.navigate(['/client/trainers']);
       return;
     }
-    this.loadTrainer();
+    this.membershipsApi.getMyActive().subscribe({
+      next: (active) => {
+        this.hasActiveMembership = !!active;
+        this.membershipChecked = true;
+        this.loadTrainer();
+      },
+      error: () => {
+        this.hasActiveMembership = false;
+        this.membershipChecked = true;
+        this.loadTrainer();
+      },
+    });
   }
 
   trainerName(): string {
@@ -68,6 +83,10 @@ export class ClientTrainerBookingComponent implements OnInit {
 
   submitBooking(): void {
     if (!this.selectedDate || !this.selectedSlot || this.booking) return;
+    if (!this.hasActiveMembership) {
+      this.toaster.error(this.translate.instant('CLIENT.TRAINER_BOOKING.MEMBERSHIP_REQUIRED'));
+      return;
+    }
 
     this.booking = true;
     const dateIso = this.toDateOnly(this.selectedDate);

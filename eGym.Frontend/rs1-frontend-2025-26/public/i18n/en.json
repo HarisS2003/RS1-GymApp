@@ -30,6 +30,14 @@
     "PASSWORD_MISMATCH": "Passwords do not match",
     "NAME_REQUIRED": "Required field",
     "SHOW_PASSWORD": "Show password",
+    "PASSWORD_STRENGTH": {
+      "LABEL": "Password strength",
+      "EMPTY": "Empty",
+      "WEAK": "Weak",
+      "FAIR": "Fair",
+      "GOOD": "Good",
+      "STRONG": "Strong"
+    },
     "LOGIN": {
       "TITLE": "Login",
       "EMAIL_LABEL": "Email Address",
@@ -493,9 +501,18 @@
       "START_NOW": "Start Now",
       "STAT_MEMBERS": "Total members",
       "STAT_TRAINERS": "Active trainers",
-      "STAT_PLANS": "Membership plans",
-      "MEMBERSHIPS": "Memberships",
-      "NO_PLANS": "No membership plans for this gym.",
+      "STAT_GROUPS": "Group trainings",
+      "GROUP_TRAININGS": "Group training events",
+      "NO_GROUP_TRAININGS": "No group training events yet.",
+      "GROUP_EVENT_TITLE": "Group training",
+      "NO_GROUP_DESCRIPTION": "No description.",
+      "CREATED_BY": "Created by",
+      "FREE_PLACES": "free",
+      "JOIN_GROUP": "Join training",
+      "GROUP_FULL": "Full",
+      "GROUP_JOIN_SUCCESS": "You joined the group training.",
+      "GROUP_JOIN_ERROR": "Could not join group training.",
+      "JOIN_GROUP_TOO_LATE": "You can join a group training only at least 1 hour before it starts.",
       "PRODUCTS_TITLE": "Recommended Supplements",
       "PRODUCTS_SUB": "Products from our catalog",
       "NO_PRODUCTS": "No products.",
@@ -505,13 +522,37 @@
       "TITLE": "Your training overview",
       "HERO_TEXT": "Track your schedule and gym members.",
       "START_TRAINING": "Start training",
+      "SCHEDULE_TITLE": "My Schedule",
+      "SCHEDULE_SUB": "Overview of trainings and clients",
       "STAT_CLIENTS": "Members at gym",
       "STAT_TODAY": "Sessions today",
       "STAT_TOTAL": "Total trainings",
       "UPCOMING": "Upcoming trainings",
+      "TODAY_SCHEDULE": "Today schedule",
+      "TODAY": "Today",
+      "UPCOMING_GROUPS": "Upcoming group trainings",
+      "NO_GROUPS": "No upcoming group trainings.",
+      "INDIVIDUAL_TRAINING": "Individual training",
+      "GROUP_TRAINING": "Group training",
       "NO_TRAININGS": "No scheduled trainings.",
       "PARTICIPANTS": "participants",
-      "TYPE": "Type"
+      "TYPE": "Type",
+      "TYPE_INDIVIDUAL": "Individual",
+      "TYPE_GROUP": "Group",
+      "CREATE_GROUP_TITLE": "Create group training",
+      "CREATE_GROUP_SUB": "Add a group session and open places for members.",
+      "CREATE_GROUP_BUTTON": "New group training",
+      "GROUP_CREATED": "Group training created.",
+      "GROUP_CREATE_ERROR": "Could not create group training."
+    },
+    "GROUP_TRAINING_DIALOG": {
+      "TITLE": "New group training",
+      "SUB": "Enter session details and capacity.",
+      "DESCRIPTION": "Description",
+      "DATE": "Date",
+      "TIME": "Time",
+      "CAPACITY": "Capacity",
+      "CREATE": "Create training"
     },
     "TRAINERS_PAGE": {
       "TITLE": "Trainers",
@@ -532,7 +573,9 @@
       "RENT": "Request slot",
       "BOOKING": "Sending request...",
       "SUCCESS": "Request sent. The trainer will accept or decline.",
-      "ERROR": "Booking failed."
+      "ERROR": "Booking failed.",
+      "MEMBERSHIP_REQUIRED": "You need an active membership plan to book a trainer.",
+      "GO_MEMBERSHIPS": "View memberships"
     },
     "SHOP": {
       "TITLE": "Shop",
@@ -664,6 +707,7 @@
     "NAV_HOME": "Home",
     "NAV_PANEL": "Admin Panel",
     "NAV_PRODUCTS": "Products",
+    "NAV_SHOP": "Shop",
     "NAV_MEMBERSHIPS": "Memberships",
     "NAV_ORDERS": "Orders",
     "NAV_CATEGORIES": "Categories",
@@ -695,5 +739,10 @@
     "SUMMARY_AVG_PRICE_SUB": "Per plan (KM)",
     "SUMMARY_WITH_DISCOUNT": "With discount",
     "SUMMARY_WITH_DISCOUNT_SUB": "Plans with discount > 0%"
+  },
+  "ADMIN_SHOP": {
+    "TITLE": "Shop",
+    "SUB": "Storefront preview for your gym products",
+    "MANAGE_PRODUCTS": "Manage products"
   }
 }

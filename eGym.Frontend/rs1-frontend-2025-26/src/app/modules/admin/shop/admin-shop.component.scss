@@ -1,0 +1,140 @@
+@import '../styles/admin-panel';
+
+.admin-shop {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.admin-shop__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--app-text, #0f1724);
+  }
+
+  p {
+    margin: 0;
+    color: var(--app-text-muted, #64748b);
+  }
+}
+
+.admin-shop__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  a[mat-flat-button] {
+    background: $accent !important;
+    color: #fff !important;
+  }
+}
+
+.admin-shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.admin-shop-card {
+  background: var(--app-surface, #fff);
+  border: 1px solid var(--app-border, #e2e8f0);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(15, 23, 36, 0.05);
+  padding: 18px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--app-text, #0f1724);
+  }
+
+  p {
+    margin: 0;
+    min-height: 40px;
+    color: var(--app-text-muted, #64748b);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.admin-shop-card__category {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: $accent;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.admin-shop-card__image {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--app-surface-muted, #f8fafc);
+
+  mat-icon {
+    font-size: 52px;
+    width: 52px;
+    height: 52px;
+    color: #cbd5e1;
+  }
+}
+
+.admin-shop-card__stock,
+.admin-shop-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-shop-card__stock {
+  color: var(--app-text-muted, #64748b);
+  font-size: 13px;
+
+  strong {
+    color: #16a34a;
+
+    &.low {
+      color: #dc2626;
+    }
+  }
+}
+
+.admin-shop-card__footer {
+  margin-top: auto;
+
+  strong {
+    font-size: 20px;
+    color: var(--app-text, #0f1724);
+  }
+
+  a {
+    border-color: $accent !important;
+    color: $accent !important;
+  }
+}
+
+.empty-msg {
+  color: var(--app-text-muted, #64748b);
+}

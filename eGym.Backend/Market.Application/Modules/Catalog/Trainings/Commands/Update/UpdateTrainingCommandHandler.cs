@@ -24,6 +24,7 @@ public sealed class UpdateTrainingCommandHandler(IAppDbContext ctx)
 
         entity.TrainerId = request.TrainerId;
         entity.Type = request.Type;
+        entity.Description = request.Description?.Trim();
         entity.Date = request.Date.Date;
         entity.StartTime = request.StartTime;
         entity.Capacity = request.Capacity;

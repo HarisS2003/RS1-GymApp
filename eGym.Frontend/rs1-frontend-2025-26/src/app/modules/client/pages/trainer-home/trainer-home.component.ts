@@ -17,6 +17,11 @@ import { UserProfileService } from '../../../../core/services/user-profile.servi
 import { MEMBER_ROLE_ID } from '../../../auth/constants/auth.constants';
 import { TranslateService } from '@ngx-translate/core';
 import { ToasterService } from '../../../../core/services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  GroupTrainingDialogComponent,
+  GroupTrainingDialogResult,
+} from './group-training-dialog.component';
 
 @Component({
   selector: 'app-trainer-home',
@@ -31,14 +36,20 @@ export class TrainerHomeComponent implements OnInit {
   private requestsApi = inject(TrainingRequestsApiService);
   private translate = inject(TranslateService);
   private toaster = inject(ToasterService);
+  private dialog = inject(MatDialog);
   profileService = inject(UserProfileService);
 
   loading = true;
   clientCount = 0;
   sessionsToday = 0;
   trainings: ListTrainingsQueryDto[] = [];
+  todayTrainings: ListTrainingsQueryDto[] = [];
+  upcomingGroupTrainings: ListTrainingsQueryDto[] = [];
+  individualCount = 0;
+  groupCount = 0;
   pendingRequests: ListTrainerTrainingRequestQueryDto[] = [];
   bookingActionId: number | null = null;
+  private trainerId: number | null = null;
 
   ngOnInit(): void {
     this.load();
@@ -46,6 +57,16 @@ export class TrainerHomeComponent implements OnInit {
 
   formatTime(startTime: string): string {
     return (startTime ?? '').slice(0, 5);
+  }
+
+  typeLabel(type: number): string {
+    if (type === 2) return this.translate.instant('CLIENT.TRAINER_HOME.TYPE_GROUP');
+    return this.translate.instant('CLIENT.TRAINER_HOME.TYPE_INDIVIDUAL');
+  }
+
+  groupProgress(training: ListTrainingsQueryDto): number {
+    if (!training.capacity) return 0;
+    return Math.min((training.participantsCount / training.capacity) * 100, 100);
   }
 
   approve(id: number): void {
@@ -79,6 +100,42 @@ export class TrainerHomeComponent implements OnInit {
     });
   }
 
+  openGroupTrainingDialog(): void {
+    if (!this.trainerId) return;
+
+    this.dialog
+      .open<GroupTrainingDialogComponent, void, GroupTrainingDialogResult>(
+        GroupTrainingDialogComponent,
+        { width: '560px' },
+      )
+      .afterClosed()
+      .subscribe((result) => {
+        if (!result || !this.trainerId) return;
+
+        this.trainingsApi
+          .create({
+            trainerId: this.trainerId,
+            type: 2,
+            description: result.description,
+            date: result.date,
+            startTime: result.startTime,
+            capacity: result.capacity,
+          })
+          .subscribe({
+            next: () => {
+              this.toaster.success(this.translate.instant('CLIENT.TRAINER_HOME.GROUP_CREATED'));
+              this.load();
+            },
+            error: (err) =>
+              this.toaster.error(
+                err?.error?.message ??
+                  err?.error?.title ??
+                  this.translate.instant('CLIENT.TRAINER_HOME.GROUP_CREATE_ERROR'),
+              ),
+          });
+      });
+  }
+
   private load(): void {
     const profile = this.profileService.profile();
     if (!profile) {
@@ -102,12 +159,14 @@ export class TrainerHomeComponent implements OnInit {
         switchMap((res) => {
           const trainer = res.items?.[0];
           if (!trainer) {
+            this.trainerId = null;
             return of({
               trainings: { items: [] },
               members: { totalItems: 0 },
               pending: [] as ListTrainerTrainingRequestQueryDto[],
             });
           }
+          this.trainerId = trainer.id;
           const tReq = new ListTrainingsRequest();
           tReq.trainerId = trainer.id;
           tReq.paging.pageSize = 50;
@@ -125,14 +184,28 @@ export class TrainerHomeComponent implements OnInit {
       )
       .subscribe({
         next: (data: any) => {
-          this.trainings = data.trainings?.items ?? [];
+          const allTrainings = (data.trainings?.items ?? []) as ListTrainingsQueryDto[];
+          const now = new Date();
+          this.trainings = allTrainings
+            .filter((t) => this.trainingStartsAt(t) >= now)
+            .sort((a, b) => this.trainingStartsAt(a).getTime() - this.trainingStartsAt(b).getTime());
+          this.individualCount = allTrainings.filter((t) => t.type === 1).length;
+          this.groupCount = allTrainings.filter((t) => t.type === 2).length;
           this.pendingRequests = data.pending ?? [];
           this.clientCount = data.members?.totalItems ?? 0;
           const today = new Date().toISOString().slice(0, 10);
-          this.sessionsToday = this.trainings.filter((t) => t.date?.startsWith(today)).length;
+          this.todayTrainings = this.trainings.filter((t) => t.date?.startsWith(today));
+          this.upcomingGroupTrainings = this.trainings.filter((t) => t.type === 2).slice(0, 3);
+          this.sessionsToday = this.todayTrainings.length;
           this.loading = false;
         },
         error: () => (this.loading = false),
       });
+  }
+
+  private trainingStartsAt(training: ListTrainingsQueryDto): Date {
+    const date = (training.date ?? '').slice(0, 10);
+    const time = (training.startTime ?? '00:00:00').slice(0, 8);
+    return new Date(`${date}T${time}`);
   }
 }
