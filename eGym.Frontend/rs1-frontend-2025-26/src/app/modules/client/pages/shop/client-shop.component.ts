@@ -1,9 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { catchError, of } from 'rxjs';
 import { ProductsApiService } from '../../../../api-services/products/products-api.service';
 import { ListProductsRequest } from '../../../../api-services/products/products-api.models';
 import { ListProductsQueryDto } from '../../../../api-services/products/products-api.models';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
+import { ProductShopDialogComponent } from './product-shop-dialog.component';
+import { ToasterService } from '../../../../core/services/toaster.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-client-shop',
@@ -14,9 +18,15 @@ import { UserProfileService } from '../../../../core/services/user-profile.servi
 export class ClientShopComponent implements OnInit {
   private productsApi = inject(ProductsApiService);
   private profileService = inject(UserProfileService);
+  private dialog = inject(MatDialog);
+  private toaster = inject(ToasterService);
+  private translate = inject(TranslateService);
 
   loading = true;
+  detailLoading = false;
   products: ListProductsQueryDto[] = [];
+  categories: string[] = [];
+  selectedCategory: string | null = null;
 
   ngOnInit(): void {
     const load = () => {
@@ -31,6 +41,9 @@ export class ClientShopComponent implements OnInit {
         .subscribe({
           next: (res) => {
             this.products = res.items ?? [];
+            this.categories = [
+              ...new Set(this.products.map((p) => p.categoryName).filter(Boolean)),
+            ].sort((a, b) => a.localeCompare(b));
             this.loading = false;
           },
           error: () => (this.loading = false),
@@ -42,5 +55,39 @@ export class ClientShopComponent implements OnInit {
     } else {
       this.profileService.loadProfile().subscribe(() => load());
     }
+  }
+
+  get filteredProducts(): ListProductsQueryDto[] {
+    if (!this.selectedCategory) return this.products;
+    return this.products.filter((p) => p.categoryName === this.selectedCategory);
+  }
+
+  selectCategory(category: string | null): void {
+    this.selectedCategory = category;
+  }
+
+  openProduct(product: ListProductsQueryDto): void {
+    if (this.detailLoading) return;
+
+    this.detailLoading = true;
+    this.productsApi.getById(product.id).subscribe({
+      next: (detail) => {
+        this.detailLoading = false;
+        this.dialog.open(ProductShopDialogComponent, {
+          data: detail,
+          width: '520px',
+          maxWidth: '95vw',
+          panelClass: 'product-shop-dialog-panel',
+        });
+      },
+      error: () => {
+        this.detailLoading = false;
+        this.toaster.error(this.translate.instant('CLIENT.SHOP.LOAD_ERROR'));
+      },
+    });
+  }
+
+  displayPrice(product: ListProductsQueryDto): number {
+    return product.price;
   }
 }

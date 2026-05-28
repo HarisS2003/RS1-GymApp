@@ -54,6 +54,12 @@ export class ProductsEditComponent
   protected save(): void {
     if (this.form.invalid || this.isLoading) return;
 
+    const variantError = this.formService.validateVariants(this.form);
+    if (variantError) {
+      this.toaster.error(variantError);
+      return;
+    }
+
     const gymId = this.model?.gymId ?? this.profileService.profile()?.gymId;
     if (!gymId) {
       this.toaster.error('No gym on profile');
@@ -62,13 +68,17 @@ export class ProductsEditComponent
 
     this.startLoading();
     const v = this.form.getRawValue();
+    const variants = this.formService.mapVariants(this.form);
+    const totals = this.formService.aggregateFromVariants(variants);
+
     const command: UpdateProductCommand = {
       name: v.name,
       categoryName: v.categoryName,
       description: v.description || null,
-      price: v.price,
-      stockQuantity: v.stockQuantity ?? 0,
+      price: totals.price,
+      stockQuantity: totals.stockQuantity,
       gymId,
+      variants,
     };
 
     this.api.update(this.productId, command).subscribe({

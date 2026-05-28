@@ -16,6 +16,7 @@ public class GymDatabaseContext : DbContext
     public DbSet<UserMembershipEntity> UserMemberships => Set<UserMembershipEntity>();
     public DbSet<PaymentEntity> Payments => Set<PaymentEntity>();
     public DbSet<ProductEntity> Products => Set<ProductEntity>();
+    public DbSet<ProductVariantEntity> ProductVariants => Set<ProductVariantEntity>();
     public DbSet<BasketEntity> Baskets => Set<BasketEntity>();
     public DbSet<BasketItemEntity> BasketItems => Set<BasketItemEntity>();
     public DbSet<OrderEntity> Orders => Set<OrderEntity>();

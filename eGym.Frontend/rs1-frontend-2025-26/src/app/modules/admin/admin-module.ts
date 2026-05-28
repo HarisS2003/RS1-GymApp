@@ -21,6 +21,7 @@ import { MembershipPlansComponent } from './catalogs/membership-plans/membership
 import { MembershipPlansAddComponent } from './catalogs/membership-plans/membership-plans-add/membership-plans-add.component';
 import { MembershipPlansEditComponent } from './catalogs/membership-plans/membership-plans-edit/membership-plans-edit.component';
 import { AdminShopComponent } from './shop/admin-shop.component';
+import { ProductVariantsEditorComponent } from './catalogs/products/product-variants-editor/product-variants-editor.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AdminShopComponent } from './shop/admin-shop.component';
     ProductsComponent,
     ProductsAddComponent,
     ProductsEditComponent,
+    ProductVariantsEditorComponent,
     MembershipPlansComponent,
     MembershipPlansAddComponent,
     MembershipPlansEditComponent,

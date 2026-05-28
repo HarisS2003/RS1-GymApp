@@ -18,6 +18,18 @@ public sealed class ListProductsQueryHandler(IAppDbContext ctx)
                 x.CategoryName.ToLower().Contains(searchTerm));
         }
 
+        if (!string.IsNullOrWhiteSpace(request.Size))
+        {
+            var size = request.Size.Trim();
+            q = q.Where(x => x.ProductVariants.Any(v => v.Size == size));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.CategoryName))
+        {
+            var category = request.CategoryName.Trim();
+            q = q.Where(x => x.CategoryName == category);
+        }
+
         var projectedQuery = q.Select(x => new ListProductsQueryDto
         {
             Id = x.Id,

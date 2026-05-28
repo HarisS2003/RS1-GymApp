@@ -36,6 +36,12 @@ export class ProductsAddComponent
   protected save(): void {
     if (this.form.invalid || this.isLoading) return;
 
+    const variantError = this.formService.validateVariants(this.form);
+    if (variantError) {
+      this.toaster.error(variantError);
+      return;
+    }
+
     const gymId = this.profileService.profile()?.gymId;
     if (!gymId) {
       this.toaster.error('No gym on admin profile');
@@ -44,13 +50,17 @@ export class ProductsAddComponent
 
     this.startLoading();
     const v = this.form.getRawValue();
+    const variants = this.formService.mapVariants(this.form);
+    const totals = this.formService.aggregateFromVariants(variants);
+
     const command: CreateProductCommand = {
       name: v.name,
       categoryName: v.categoryName,
       description: v.description || null,
-      price: v.price,
-      stockQuantity: v.stockQuantity ?? 0,
+      price: totals.price,
+      stockQuantity: totals.stockQuantity,
       gymId,
+      variants,
     };
 
     this.api.create(command).subscribe({

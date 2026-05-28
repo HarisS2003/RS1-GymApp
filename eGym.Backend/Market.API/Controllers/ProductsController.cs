@@ -34,6 +34,7 @@ public class ProductsController(ISender sender) : ControllerBase
         // no return -> 204 No Content
     }
 
+    /// <summary>Returns product with all variants (size / color-or-flavor) in ProductVariants.</summary>
     [HttpGet("{id:int}")]
     public async Task<GetProductByIdQueryDto> GetById(int id, CancellationToken ct)
     {
@@ -41,6 +42,7 @@ public class ProductsController(ISender sender) : ControllerBase
         return category; // if NotFoundException -> 404 via middleware
     }
 
+    /// <summary>Optional query: size (e.g. 1kg, XL) filters products that have a matching variant.</summary>
     [HttpGet]
     public async Task<PageResult<ListProductsQueryDto>> List([FromQuery] ListProductsQuery query, CancellationToken ct)
     {

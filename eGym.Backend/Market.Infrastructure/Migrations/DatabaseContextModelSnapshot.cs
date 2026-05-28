@@ -407,6 +407,53 @@ namespace Market.Infrastructure.Migrations
                     b.ToTable("Products", (string)null);
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.ProductVariantEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductId", "Size", "Color")
+                        .IsUnique();
+
+                    b.ToTable("ProductVariants", (string)null);
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.ReviewEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -857,6 +904,17 @@ namespace Market.Infrastructure.Migrations
                     b.Navigation("Gym");
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.ProductVariantEntity", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.ProductEntity", "Product")
+                        .WithMany("ProductVariants")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.ReviewEntity", b =>
                 {
                     b.HasOne("Market.Domain.Entities.TrainerEntity", "Trainer")
@@ -1018,6 +1076,8 @@ namespace Market.Infrastructure.Migrations
                     b.Navigation("BasketItems");
 
                     b.Navigation("OrderItems");
+
+                    b.Navigation("ProductVariants");
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.RoleEntity", b =>

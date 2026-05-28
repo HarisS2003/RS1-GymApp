@@ -12,6 +12,7 @@ public class ProductEntity : BaseEntity
     public int StockQuantity { get; set; }
 
     public GymEntity? Gym { get; set; }
+    public ICollection<ProductVariantEntity> ProductVariants { get; set; } = new List<ProductVariantEntity>();
     public ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
     public ICollection<BasketItemEntity> BasketItems { get; set; } = new List<BasketItemEntity>();
 }

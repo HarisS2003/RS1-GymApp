@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.Products.Queries.GetById;
+﻿using Market.Application.Modules.Catalog.Products;
+
+namespace Market.Application.Modules.Catalog.Products.Queries.GetById;
 
 public sealed class GetProductByIdQueryHandler(IAppDbContext ctx) : IRequestHandler<GetProductByIdQuery, GetProductByIdQueryDto>
 {
@@ -15,7 +17,20 @@ public sealed class GetProductByIdQueryHandler(IAppDbContext ctx) : IRequestHand
                 Price = x.Price,
                 StockQuantity = x.StockQuantity,
                 GymId = x.GymId,
-                IsEnabled = true
+                IsEnabled = true,
+                ProductVariants = x.ProductVariants
+                    .OrderBy(v => v.Size)
+                    .ThenBy(v => v.Color)
+                    .Select(v => new ProductVariantQueryDto
+                    {
+                        Id = v.Id,
+                        ProductId = v.ProductId,
+                        Size = v.Size,
+                        Color = v.Color,
+                        Price = v.Price,
+                        StockQuantity = v.StockQuantity,
+                    })
+                    .ToList(),
             })
             .FirstOrDefaultAsync(ct);
 

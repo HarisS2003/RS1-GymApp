@@ -166,6 +166,18 @@
       "SAVE": "Save",
       "UPDATE": "Update"
     },
+    "VARIANTS": {
+      "TITLE": "Product variants",
+      "HINT": "Add size and color/flavor combinations with their own price and stock.",
+      "ADD": "Add variant",
+      "REMOVE": "Remove variant",
+      "ITEM": "Variant {{index}}",
+      "SIZE": "Size",
+      "SIZE_PLACEHOLDER": "e.g. 450g, 1kg, XL",
+      "SIZE_NORMALIZE_HINT": "Use full size with unit (450g). 450 and 450g are the same size.",
+      "COLOR": "Color / Flavor",
+      "COLOR_PLACEHOLDER": "e.g. Chocolate, Black"
+    },
     "DIALOGS": {
       "DELETE_TITLE": "Delete Product",
       "DELETE_MESSAGE": "Are you sure you want to delete product \"{{name}}\"?",
@@ -580,7 +592,21 @@
     "SHOP": {
       "TITLE": "Shop",
       "SUB": "Supplements and equipment",
-      "STOCK": "Stock"
+      "STOCK": "Stock",
+      "ALL_CATEGORIES": "All",
+      "NO_CATEGORY": "No products in this category.",
+      "VIEW": "View",
+      "SIZE": "Size",
+      "SIZE_HINT": "Choose package size / weight",
+      "PICK_SIZE_FIRST": "Select size first",
+      "FLAVOR_HINT": "Available options for selected size",
+      "PICK_FLAVOR": "Select a flavor to see price and stock",
+      "COLOR": "Color",
+      "FLAVOR": "Flavor",
+      "ADD_TO_BASKET": "Add to basket",
+      "OUT_OF_STOCK": "Out of stock",
+      "LOAD_ERROR": "Could not load product details.",
+      "BASKET_NOT_READY": "Basket checkout is not available yet."
     },
     "MEMBERSHIPS": {
       "TITLE": "Memberships",

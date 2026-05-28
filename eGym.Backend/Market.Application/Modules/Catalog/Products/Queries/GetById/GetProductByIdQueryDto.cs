@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.Products.Queries.GetById;
+﻿using Market.Application.Modules.Catalog.Products;
+
+namespace Market.Application.Modules.Catalog.Products.Queries.GetById;
 
 public class GetProductByIdQueryDto
 {
@@ -10,4 +12,5 @@ public class GetProductByIdQueryDto
     public required int StockQuantity { get; set; }
     public required int GymId { get; set; }
     public bool IsEnabled { get; init; } = true;
+    public IReadOnlyList<ProductVariantQueryDto> ProductVariants { get; init; } = [];
 }

@@ -1,0 +1,119 @@
+<div class="product-dialog">
+  <button type="button" class="product-dialog__close" (click)="close()" aria-label="Close">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <div class="product-dialog__hero">
+    <div class="product-dialog__image">
+      <mat-icon>inventory_2</mat-icon>
+    </div>
+    <div>
+      <span class="product-dialog__badge">{{ product.categoryName }}</span>
+      <h2>{{ product.name }}</h2>
+      @if (product.description) {
+        <p>{{ product.description }}</p>
+      }
+    </div>
+  </div>
+
+  @if (showSizeGroup) {
+    <section class="product-dialog__group">
+      <header class="product-dialog__group-head">
+        <span class="product-dialog__group-label">{{ 'CLIENT.SHOP.SIZE' | translate }}</span>
+        <span class="product-dialog__group-hint">{{ 'CLIENT.SHOP.SIZE_HINT' | translate }}</span>
+      </header>
+      <div class="option-grid" role="listbox" [attr.aria-label]="'CLIENT.SHOP.SIZE' | translate">
+        @for (size of sizeOptions; track size.key) {
+          <button
+            type="button"
+            class="option-btn"
+            role="option"
+            [attr.aria-selected]="selectedSizeKey === size.key"
+            [class.option-btn--active]="selectedSizeKey === size.key"
+            [class.option-btn--disabled]="isSizeDisabled(size)"
+            [disabled]="isSizeDisabled(size)"
+            (click)="onSizeSelect(size.key)"
+          >
+            {{ size.label }}
+          </button>
+        }
+      </div>
+    </section>
+  }
+
+  @if (showFlavorGroup) {
+    <section class="product-dialog__group">
+      <header class="product-dialog__group-head">
+        <span class="product-dialog__group-label">{{ flavorLabelKey | translate }}</span>
+        @if (!selectedSizeKey) {
+          <span class="product-dialog__group-hint">{{ 'CLIENT.SHOP.PICK_SIZE_FIRST' | translate }}</span>
+        } @else {
+          <span class="product-dialog__group-hint">{{ 'CLIENT.SHOP.FLAVOR_HINT' | translate }}</span>
+        }
+      </header>
+      <div
+        class="option-grid"
+        role="listbox"
+        [attr.aria-label]="flavorLabelKey | translate"
+        [class.option-grid--muted]="!selectedSizeKey"
+      >
+        @for (flavor of flavorOptions; track flavor.value) {
+          <button
+            type="button"
+            class="option-btn"
+            role="option"
+            [attr.aria-selected]="selectedFlavor === flavor.value"
+            [attr.aria-disabled]="isFlavorDisabled(flavor)"
+            [class.option-btn--active]="selectedFlavor === flavor.value && flavor.availableForSize"
+            [class.option-btn--disabled]="isFlavorDisabled(flavor)"
+            [disabled]="isFlavorDisabled(flavor)"
+            (click)="onFlavorSelect(flavor.value)"
+          >
+            {{ flavor.value }}
+          </button>
+        }
+      </div>
+    </section>
+  }
+
+  <div class="product-dialog__card">
+    <div class="product-dialog__row">
+      <span>{{ 'CLIENT.SHOP.STOCK' | translate }}</span>
+      @if (selectionComplete) {
+        <strong [class.low]="outOfStock">{{ displayStock }}</strong>
+      } @else {
+        <strong class="product-dialog__pending">—</strong>
+      }
+    </div>
+    <div class="product-dialog__row product-dialog__row--price">
+      <span>{{ 'PRODUCTS.FORM.PRICE' | translate }}</span>
+      @if (selectionComplete && displayPrice !== null) {
+        <strong>{{ displayPrice | number: '1.2-2' }} KM</strong>
+      } @else {
+        <strong class="product-dialog__pending">—</strong>
+      }
+    </div>
+  </div>
+
+  @if (selectionComplete && outOfStock) {
+    <p class="product-dialog__out">{{ 'CLIENT.SHOP.OUT_OF_STOCK' | translate }}</p>
+  } @else if (selectedSizeKey && !selectedFlavor) {
+    <p class="product-dialog__hint">{{ 'CLIENT.SHOP.PICK_FLAVOR' | translate }}</p>
+  }
+
+  <div class="product-dialog__actions">
+    <button type="button" mat-stroked-button (click)="close()">
+      {{ 'PRODUCTS.FORM.CANCEL' | translate }}
+    </button>
+    <button
+      mat-flat-button
+      type="button"
+      class="product-dialog__add"
+      [disabled]="!selectionComplete || outOfStock"
+      (click)="addToBasket()"
+    >
+      <mat-icon>add_shopping_cart</mat-icon>
+      {{ 'CLIENT.SHOP.ADD_TO_BASKET' | translate }}
+    </button>
+  </div>
+</div>

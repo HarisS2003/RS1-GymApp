@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.Products.Commands.Update;
+﻿using Market.Application.Modules.Catalog.Products;
+
+namespace Market.Application.Modules.Catalog.Products.Commands.Update;
 
 public sealed class UpdateProductCommand : IRequest<Unit>
 {
@@ -10,4 +12,5 @@ public sealed class UpdateProductCommand : IRequest<Unit>
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
     public int GymId { get; set; }
+    public List<ProductVariantCommandDto> Variants { get; set; } = new();
 }

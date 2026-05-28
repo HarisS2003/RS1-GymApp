@@ -12,6 +12,7 @@ public interface IAppDbContext
     DbSet<UserMembershipEntity> UserMemberships { get; }
     DbSet<PaymentEntity> Payments { get; }
     DbSet<ProductEntity> Products { get; }
+    DbSet<ProductVariantEntity> ProductVariants { get; }
     DbSet<BasketEntity> Baskets { get; }
     DbSet<BasketItemEntity> BasketItems { get; }
     DbSet<OrderEntity> Orders { get; }

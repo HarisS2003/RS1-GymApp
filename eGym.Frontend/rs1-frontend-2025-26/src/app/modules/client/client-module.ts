@@ -11,6 +11,7 @@ import { ClientProfileComponent } from './pages/profile/client-profile.component
 import { ClientScheduleComponent } from './pages/schedule/client-schedule.component';
 import { ClientTrainerBookingComponent } from './pages/trainer-booking/client-trainer-booking.component';
 import { GroupTrainingDialogComponent } from './pages/trainer-home/group-training-dialog.component';
+import { ProductShopDialogComponent } from './pages/shop/product-shop-dialog.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { GroupTrainingDialogComponent } from './pages/trainer-home/group-trainin
     TrainerHomeComponent,
     ClientTrainersComponent,
     ClientShopComponent,
+    ProductShopDialogComponent,
     ClientMembershipsComponent,
     ClientProfileComponent,
     ClientScheduleComponent,

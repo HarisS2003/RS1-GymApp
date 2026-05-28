@@ -1,0 +1,69 @@
+<section class="variants-section" [formGroup]="form">
+  <div class="variants-section__head">
+    <div>
+      <h3>{{ 'PRODUCTS.VARIANTS.TITLE' | translate }}</h3>
+      <p>{{ 'PRODUCTS.VARIANTS.HINT' | translate }}</p>
+      <p class="variants-section__normalize">{{ 'PRODUCTS.VARIANTS.SIZE_NORMALIZE_HINT' | translate }}</p>
+    </div>
+    <button type="button" mat-stroked-button (click)="addVariant()">
+      <mat-icon>add</mat-icon>
+      {{ 'PRODUCTS.VARIANTS.ADD' | translate }}
+    </button>
+  </div>
+
+  <div class="variants-list" formArrayName="variants">
+    @for (variant of variants.controls; track $index; let i = $index) {
+      <article class="variant-card" [formGroupName]="i">
+        <div class="variant-card__head">
+          <strong>{{ 'PRODUCTS.VARIANTS.ITEM' | translate: { index: i + 1 } }}</strong>
+          <button
+            type="button"
+            mat-icon-button
+            (click)="removeVariant(i)"
+            [disabled]="variants.length <= 1"
+            [attr.aria-label]="'PRODUCTS.VARIANTS.REMOVE' | translate"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>{{ 'PRODUCTS.VARIANTS.SIZE' | translate }}</mat-label>
+            <input matInput formControlName="size" [placeholder]="'PRODUCTS.VARIANTS.SIZE_PLACEHOLDER' | translate" />
+            <mat-error *ngIf="hasVariantError(variant, 'size')">
+              {{ variantError(variant, 'size') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>{{ 'PRODUCTS.VARIANTS.COLOR' | translate }}</mat-label>
+            <input matInput formControlName="color" [placeholder]="'PRODUCTS.VARIANTS.COLOR_PLACEHOLDER' | translate" />
+            <mat-error *ngIf="hasVariantError(variant, 'color')">
+              {{ variantError(variant, 'color') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>{{ 'PRODUCTS.FORM.PRICE' | translate }}</mat-label>
+            <input matInput type="number" formControlName="price" step="0.01" min="0.01" />
+            <span matTextPrefix>KM&nbsp;</span>
+            <mat-error *ngIf="hasVariantError(variant, 'price')">
+              {{ variantError(variant, 'price') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>{{ 'PRODUCTS.TABLE.STOCK' | translate }}</mat-label>
+            <input matInput type="number" formControlName="stockQuantity" min="0" />
+            <mat-error *ngIf="hasVariantError(variant, 'stockQuantity')">
+              {{ variantError(variant, 'stockQuantity') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </article>
+    }
+  </div>
+</section>

@@ -166,6 +166,18 @@
       "SAVE": "Sačuvaj",
       "UPDATE": "Ažuriraj"
     },
+    "VARIANTS": {
+      "TITLE": "Varijante proizvoda",
+      "HINT": "Dodajte kombinacije veličine i boje/okusa sa cijenom i zalihom.",
+      "ADD": "Dodaj varijantu",
+      "REMOVE": "Ukloni varijantu",
+      "ITEM": "Varijanta {{index}}",
+      "SIZE": "Veličina",
+      "SIZE_PLACEHOLDER": "npr. 450g, 1kg, XL",
+      "SIZE_NORMALIZE_HINT": "Upišite veličinu s jedinicom (450g). 450 i 450g = ista veličina.",
+      "COLOR": "Boja / Okus",
+      "COLOR_PLACEHOLDER": "npr. Čokolada, Crna"
+    },
     "DIALOGS": {
       "DELETE_TITLE": "Brisanje proizvoda",
       "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati proizvod \"{{name}}\"?",
@@ -580,7 +592,21 @@
     "SHOP": {
       "TITLE": "Kupovina",
       "SUB": "Suplementi i oprema iz ponude",
-      "STOCK": "Zaliha"
+      "STOCK": "Zaliha",
+      "ALL_CATEGORIES": "Sve",
+      "NO_CATEGORY": "Nema proizvoda u ovoj kategoriji.",
+      "VIEW": "Pogledaj",
+      "SIZE": "Veličina",
+      "SIZE_HINT": "Izaberite težinu / veličinu",
+      "PICK_SIZE_FIRST": "Prvo izaberite veličinu",
+      "FLAVOR_HINT": "Dostupno za izabranu veličinu",
+      "PICK_FLAVOR": "Izaberite okus za cijenu i zalihu",
+      "COLOR": "Boja",
+      "FLAVOR": "Okus",
+      "ADD_TO_BASKET": "Dodaj u korpu",
+      "OUT_OF_STOCK": "Nema na stanju",
+      "LOAD_ERROR": "Detalji proizvoda nisu učitani.",
+      "BASKET_NOT_READY": "Korpa još nije dostupna."
     },
     "MEMBERSHIPS": {
       "TITLE": "Članarine",
