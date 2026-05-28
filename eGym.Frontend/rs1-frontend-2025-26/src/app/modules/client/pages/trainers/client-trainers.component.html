@@ -8,7 +8,8 @@
 } @else {
   <div class="trainer-grid">
     @for (row of rows; track row.trainer.id) {
-      <article class="trainer-card">
+      <mat-card class="trainer-card" appearance="outlined">
+        <mat-card-content>
         <div class="trainer-card__avatar"><mat-icon>person</mat-icon></div>
         <h3>{{ displayName(row) }}</h3>
         <p>{{ row.trainer.bio || ('CLIENT.TRAINERS_PAGE.NO_BIO' | translate) }}</p>
@@ -23,7 +24,8 @@
         >
           {{ 'CLIENT.TRAINERS_PAGE.BOOK' | translate }}
         </button>
-      </article>
+        </mat-card-content>
+      </mat-card>
     }
   </div>
 }

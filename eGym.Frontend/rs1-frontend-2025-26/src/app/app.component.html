@@ -1,4 +1,5 @@
-<!-- Global Loading Bar (shown during HTTP requests) -->
 <app-fit-loading-bar></app-fit-loading-bar>
 
-<router-outlet></router-outlet>
+<div class="route-outlet-host" [@routeAnimations]="prepareRoute(outlet)">
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>

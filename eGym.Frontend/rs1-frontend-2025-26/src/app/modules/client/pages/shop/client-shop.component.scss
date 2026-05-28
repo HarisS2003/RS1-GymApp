@@ -3,16 +3,17 @@
 .page-title {
   margin: 0 0 6px;
   font-size: 28px;
+  color: $text-dark;
 }
 
 .page-sub {
   margin: 0 0 24px;
-  color: #64748b;
+  color: $text-muted;
 }
 
 .stock {
   font-size: 12px;
-  color: #64748b;
+  color: $text-muted;
 }
 
 .shop-filters {
@@ -20,28 +21,20 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 20px;
-}
 
-.filter-chip {
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #64748b;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
-
-  &:hover {
-    border-color: #ff6600;
-    color: #ff6600;
+  .mat-mdc-chip-option {
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-muted;
   }
 
-  &--active {
-    background: #ff6600;
-    border-color: #ff6600;
-    color: #fff;
+  .mat-mdc-chip-selected {
+    background: #ff6600 !important;
+    border-color: #ff6600 !important;
+    color: #fff !important;
   }
 }
 

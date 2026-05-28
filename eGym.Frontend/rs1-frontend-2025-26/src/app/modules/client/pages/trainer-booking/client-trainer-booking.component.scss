@@ -7,7 +7,7 @@
   margin-bottom: 16px;
   border: none;
   background: transparent;
-  color: #64748b;
+  color: $text-muted;
   cursor: pointer;
   font-size: 14px;
 
@@ -38,11 +38,12 @@
   h1 {
     margin: 0 0 6px;
     font-size: 24px;
+    color: $text-dark;
   }
 
   p {
     margin: 0;
-    color: #64748b;
+    color: $text-muted;
   }
 }
 
@@ -89,10 +90,11 @@
   h2 {
     margin: 0 0 16px;
     font-size: 18px;
+    color: $text-dark;
 
     span {
       font-weight: 400;
-      color: #64748b;
+      color: $text-muted;
       font-size: 14px;
     }
   }
@@ -101,7 +103,7 @@
 .slot-hint {
   margin: 0 0 12px;
   font-size: 13px;
-  color: #64748b;
+  color: $text-muted;
 }
 
 .slot-grid {
@@ -111,8 +113,9 @@
 }
 
 .slot-btn {
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  border: 1px solid $border;
+  background: $surface;
+  color: $text-dark;
   border-radius: 10px;
   padding: 10px 8px;
   font-weight: 600;
@@ -120,13 +123,13 @@
   transition: border-color 0.15s, background 0.15s, color 0.15s;
 
   &:hover:not(:disabled) {
-    border-color: #ff6600;
-    color: #ff6600;
+    border-color: $accent;
+    color: $accent;
   }
 
   &--selected {
-    background: #ff6600;
-    border-color: #ff6600;
+    background: $accent;
+    border-color: $accent;
     color: #fff;
   }
 
@@ -134,6 +137,7 @@
     opacity: 0.45;
     cursor: not-allowed;
     text-decoration: line-through;
+    color: $text-muted;
   }
 }
 
@@ -145,7 +149,7 @@
 }
 
 .empty-msg {
-  color: #64748b;
+  color: $text-muted;
 }
 
 .membership-required {
@@ -166,7 +170,7 @@
 
   p {
     margin: 0;
-    color: #64748b;
+    color: $text-muted;
     max-width: 420px;
   }
 

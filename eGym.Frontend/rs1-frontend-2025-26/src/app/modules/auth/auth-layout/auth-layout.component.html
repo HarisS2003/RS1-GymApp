@@ -13,7 +13,9 @@
       <app-locale-theme-toolbar></app-locale-theme-toolbar>
     </div>
     <div class="auth-panel__body">
-      <router-outlet></router-outlet>
+      <div class="route-outlet-host route-outlet-host--auth">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </div>
     </div>
   </main>
 </div>

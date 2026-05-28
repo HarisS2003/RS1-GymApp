@@ -1,19 +1,22 @@
+@import '../../../client/styles/dashboard-theme';
+
 $accent: var(--app-accent, #ff6600);
 
 .already-dialog {
   padding: 12px 8px 8px;
   text-align: center;
   min-width: 340px;
+  color: $text-dark;
 
   h2 {
     margin: 12px 0 8px;
     font-size: 20px;
-    color: #1e293b;
+    color: $text-dark;
   }
 
   p {
     margin: 0 0 10px;
-    color: #64748b;
+    color: $text-muted;
     font-size: 14px;
     line-height: 1.5;
   }
@@ -27,8 +30,8 @@ $accent: var(--app-accent, #ff6600);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff7ed;
-  border: 2px solid #fed7aa;
+  background: color-mix(in srgb, $accent 12%, $surface);
+  border: 2px solid color-mix(in srgb, $accent 35%, $border);
 
   mat-icon {
     color: $accent;
@@ -41,6 +44,10 @@ $accent: var(--app-accent, #ff6600);
 .already-dialog__hint {
   font-size: 13px !important;
   color: #9a3412 !important;
+}
+
+:root.theme-dark .already-dialog__hint {
+  color: #fdba74 !important;
 }
 
 .already-dialog__btn {

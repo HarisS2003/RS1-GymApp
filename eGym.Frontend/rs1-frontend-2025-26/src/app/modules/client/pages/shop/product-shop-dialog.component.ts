@@ -12,6 +12,7 @@ import {
   findVariantBySelection,
   uniqueFlavorLabels,
 } from '../../../catalog/products/product-variant.utils';
+import { dialogPopIn } from '../../../../core/animations/ui.animations';
 
 export interface SizeOption {
   key: string;
@@ -30,6 +31,7 @@ export interface FlavorOption {
   standalone: false,
   templateUrl: './product-shop-dialog.component.html',
   styleUrl: './product-shop-dialog.component.scss',
+  animations: [dialogPopIn],
 })
 export class ProductShopDialogComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<ProductShopDialogComponent>);

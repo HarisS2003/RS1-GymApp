@@ -1,11 +1,13 @@
 using Market.Application.Modules.Identity.UserMemberships.Commands.Purchase;
 using Market.Application.Modules.Identity.UserMemberships.Queries.GetMyActive;
 using Market.Application.Modules.Identity.UserMemberships.Queries.ListMyHistory;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class UserMembershipsController(ISender sender) : ControllerBase
 {
     [HttpPost("purchase")]

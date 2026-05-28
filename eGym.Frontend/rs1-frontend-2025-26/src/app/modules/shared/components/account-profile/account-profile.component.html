@@ -1,6 +1,86 @@
-@if (loading) {
-  <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
+<ng-template #loadingSkeleton>
+  <div class="profile-skeleton" aria-busy="true" aria-live="polite">
+    <header class="profile-head">
+      <div class="skeleton-shimmer skeleton-line skeleton-line--title"></div>
+      <div class="skeleton-shimmer skeleton-line skeleton-line--subtitle"></div>
+    </header>
+
+    <div class="profile-layout">
+      <aside class="profile-aside">
+        <mat-card class="profile-skeleton-card profile-skeleton-user" appearance="outlined">
+          <mat-card-content>
+            <div class="skeleton-shimmer skeleton-avatar"></div>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--name"></div>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--email"></div>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--pill"></div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="profile-skeleton-card profile-skeleton-membership" appearance="outlined">
+          <mat-card-content>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--badge"></div>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--plan"></div>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--row"></div>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--row"></div>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--row"></div>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="skeleton-shimmer skeleton-btn skeleton-btn--aside"></div>
+      </aside>
+
+      <div class="profile-main">
+        <mat-card class="profile-panel profile-skeleton-card" appearance="outlined">
+          <mat-card-content>
+            <div class="profile-skeleton-panel-head">
+              <div class="skeleton-shimmer skeleton-line skeleton-line--panel-title"></div>
+              <div class="skeleton-shimmer skeleton-line skeleton-line--edit"></div>
+            </div>
+            <div class="profile-skeleton-fields">
+              <div class="skeleton-shimmer skeleton-field"></div>
+              <div class="skeleton-shimmer skeleton-field"></div>
+              <div class="skeleton-shimmer skeleton-field"></div>
+              <div class="skeleton-shimmer skeleton-field"></div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="profile-panel profile-skeleton-card" appearance="outlined">
+          <mat-card-content>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--panel-title"></div>
+            <mat-nav-list class="profile-skeleton-list" disableRipple>
+              <a mat-list-item disabled>
+                <div class="skeleton-shimmer skeleton-line skeleton-line--list-primary"></div>
+                <div class="skeleton-shimmer skeleton-line skeleton-line--list-secondary"></div>
+              </a>
+              <a mat-list-item disabled>
+                <div class="skeleton-shimmer skeleton-line skeleton-line--list-primary"></div>
+                <div class="skeleton-shimmer skeleton-line skeleton-line--list-secondary"></div>
+              </a>
+            </mat-nav-list>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="profile-panel profile-skeleton-card" appearance="outlined">
+          <mat-card-content>
+            <div class="skeleton-shimmer skeleton-line skeleton-line--panel-title"></div>
+            <div class="profile-skeleton-table">
+              <div class="skeleton-shimmer skeleton-line skeleton-line--table-head"></div>
+              <div class="skeleton-shimmer skeleton-line skeleton-line--table-row"></div>
+              <div class="skeleton-shimmer skeleton-line skeleton-line--table-row"></div>
+              <div class="skeleton-shimmer skeleton-line skeleton-line--table-row"></div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+@if (isLoading) {
+  <ng-container *ngTemplateOutlet="loadingSkeleton"></ng-container>
 } @else if (profileService.profile(); as p) {
+  <div class="profile-content" @fadeIn>
   <header class="profile-head">
     <h1>{{ 'CLIENT.PROFILE.TITLE' | translate }}</h1>
     <p>{{ 'CLIENT.PROFILE.SUBTITLE' | translate }}</p>
@@ -131,10 +211,10 @@
           }
 
           @if (isTrainer && editing) {
-            <label class="profile-fields__full">
-              <span>{{ 'CLIENT.PROFILE.BIO' | translate }}</span>
-              <textarea formControlName="bio" rows="3"></textarea>
-            </label>
+            <mat-form-field appearance="outline" class="profile-fields__full">
+              <mat-label>{{ 'CLIENT.PROFILE.BIO' | translate }}</mat-label>
+              <textarea matInput formControlName="bio" rows="3"></textarea>
+            </mat-form-field>
             <label>
               <span>{{ 'CLIENT.PROFILE.TRAINER_EXP' | translate }}</span>
               <input type="number" formControlName="experienceYears" min="0" />
@@ -163,7 +243,8 @@
           <h2>{{ 'CLIENT.PROFILE.PENDING_BOOKINGS' | translate }}</h2>
           <div class="training-rows">
             @for (req of pendingTrainerRequests; track req.id) {
-              <article class="training-row training-row--pending">
+              <mat-card class="training-row training-row--pending" appearance="outlined">
+                <mat-card-content>
                 <div>
                   <strong>{{ req.memberName }}</strong>
                   <span>{{ 'CLIENT.PROFILE.BOOKING_REQUEST' | translate }}</span>
@@ -191,7 +272,7 @@
                     {{ 'CLIENT.PROFILE.ACCEPT' | translate }}
                   </button>
                 </div>
-              </article>
+              </mat-card-content></mat-card>
             }
           </div>
         </section>
@@ -206,7 +287,8 @@
             } @else {
               <div class="training-rows">
                 @for (b of memberBookings; track b.id) {
-                  <article class="training-row">
+                  <mat-card class="training-row" appearance="outlined">
+                    <mat-card-content>
                     <div>
                       <strong>{{ b.trainerName }}</strong>
                       <span class="booking-status" [attr.data-status]="b.status">
@@ -217,10 +299,11 @@
                       <span>{{ b.date | date: 'd.M.yyyy' }}</span>
                       <span>{{ formatBookingTime(b.startTime) }}</span>
                     </div>
-                  </article>
+                  </mat-card-content></mat-card>
                 }
                 @for (row of upcomingTrainings; track row.training.id) {
-                  <article class="training-row">
+                  <mat-card class="training-row" appearance="outlined">
+                    <mat-card-content>
                     <div>
                       <strong>{{ row.trainerName }}</strong>
                       <span>{{ row.typeLabel }}</span>
@@ -229,7 +312,7 @@
                       <span>{{ row.training.date | date: 'd.M.yyyy' }}</span>
                       <span>{{ formatBookingTime(row.training.startTime) }}</span>
                     </div>
-                  </article>
+                  </mat-card-content></mat-card>
                 }
               </div>
             }
@@ -238,7 +321,8 @@
           } @else {
             <div class="training-rows">
               @for (row of upcomingTrainings; track row.training.id) {
-                <article class="training-row">
+                <mat-card class="training-row" appearance="outlined">
+                  <mat-card-content>
                   <div>
                     <strong>{{ row.trainerName }}</strong>
                     <span>{{ row.typeLabel }}</span>
@@ -247,7 +331,7 @@
                     <span>{{ row.training.date | date: 'd.M.yyyy' }}</span>
                     <span>{{ row.training.startTime }}</span>
                   </div>
-                </article>
+                </mat-card-content></mat-card>
               }
             </div>
           }
@@ -261,31 +345,34 @@
             <p class="empty-msg">{{ 'CLIENT.PROFILE.NO_ORDERS' | translate }}</p>
           } @else {
             <div class="purchase-table-wrap">
-              <table class="purchase-table">
-                <thead>
-                  <tr>
-                    <th>{{ 'CLIENT.PROFILE.COL_REF' | translate }}</th>
-                    <th>{{ 'CLIENT.PROFILE.COL_TYPE' | translate }}</th>
-                    <th>{{ 'CLIENT.PROFILE.COL_ITEM' | translate }}</th>
-                    <th>{{ 'CLIENT.PROFILE.COL_PRICE' | translate }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (row of purchases; track row.refId + row.itemName) {
-                    <tr>
-                      <td>#{{ row.refId }}</td>
-                      <td><span class="purchase-tag" [ngClass]="row.typeClass">{{ row.typeLabel }}</span></td>
-                      <td>{{ row.itemName }}</td>
-                      <td>{{ row.price | number: '1.2-2' }} KM</td>
-                    </tr>
-                  }
-                </tbody>
+              <table mat-table [dataSource]="purchases" class="purchase-table">
+                <ng-container matColumnDef="ref">
+                  <th mat-header-cell *matHeaderCellDef>{{ 'CLIENT.PROFILE.COL_REF' | translate }}</th>
+                  <td mat-cell *matCellDef="let row">#{{ row.refId }}</td>
+                </ng-container>
+                <ng-container matColumnDef="type">
+                  <th mat-header-cell *matHeaderCellDef>{{ 'CLIENT.PROFILE.COL_TYPE' | translate }}</th>
+                  <td mat-cell *matCellDef="let row">
+                    <span class="purchase-tag" [ngClass]="row.typeClass">{{ row.typeLabel }}</span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="item">
+                  <th mat-header-cell *matHeaderCellDef>{{ 'CLIENT.PROFILE.COL_ITEM' | translate }}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.itemName }}</td>
+                </ng-container>
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef>{{ 'CLIENT.PROFILE.COL_PRICE' | translate }}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.price | number: '1.2-2' }} KM</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="purchaseTableColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: purchaseTableColumns"></tr>
               </table>
             </div>
           }
         </section>
       }
     </div>
+  </div>
   </div>
 } @else {
   <p class="empty-msg">{{ 'CLIENT.PROFILE.LOADING' | translate }}</p>

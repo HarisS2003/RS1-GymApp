@@ -28,10 +28,27 @@ export class ThemeService {
     localStorage.setItem(this.storageKey, theme);
 
     const root = document.documentElement;
-    root.classList.remove('theme-light', 'theme-dark');
-    root.classList.add(`theme-${theme}`);
-    document.body.classList.remove('theme-light', 'theme-dark');
-    document.body.classList.add(`theme-${theme}`);
-    document.body.style.colorScheme = theme;
+    const body = document.body;
+    const allThemeClasses = [
+      'theme-light',
+      'theme-dark',
+      'light',
+      'dark',
+      'light-theme',
+      'dark-theme',
+    ];
+
+    root.classList.remove(...allThemeClasses);
+    body.classList.remove(...allThemeClasses);
+
+    if (theme === 'dark') {
+      root.classList.add('theme-dark', 'dark', 'dark-theme');
+      body.classList.add('theme-dark', 'dark', 'dark-theme');
+    } else {
+      root.classList.add('theme-light', 'light', 'light-theme');
+      body.classList.add('theme-light', 'light', 'light-theme');
+    }
+
+    body.style.colorScheme = theme;
   }
 }

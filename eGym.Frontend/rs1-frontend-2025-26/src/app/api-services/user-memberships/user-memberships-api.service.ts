@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   GetMyActiveUserMembershipQueryDto,
@@ -17,7 +17,9 @@ export class UserMembershipsApiService {
   private http = inject(HttpClient);
 
   getMyActive(): Observable<GetMyActiveUserMembershipQueryDto | null> {
-    return this.http.get<GetMyActiveUserMembershipQueryDto | null>(`${this.baseUrl}/my`);
+    return this.http.get<GetMyActiveUserMembershipQueryDto | null>(`${this.baseUrl}/my`).pipe(
+      map((dto) => (dto && dto.userMembershipId > 0 ? dto : null)),
+    );
   }
 
   listMyHistory(): Observable<ListMyMembershipPurchaseHistoryQueryDto[]> {

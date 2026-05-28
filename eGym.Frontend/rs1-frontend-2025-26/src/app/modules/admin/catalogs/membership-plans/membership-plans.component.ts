@@ -29,6 +29,8 @@ export class MembershipPlansComponent
   avgPrice = 0;
   withDiscount = 0;
 
+  readonly tableColumns = ['id', 'name', 'duration', 'price', 'discount', 'status', 'actions'];
+
   constructor() {
     super();
     this.request = new ListMembershipPlansRequest();

@@ -3,12 +3,12 @@
 .page-title {
   margin: 0 0 6px;
   font-size: 28px;
-  color: #0f1724;
+  color: $text-dark;
 }
 
 .page-sub {
   margin: 0 0 24px;
-  color: #64748b;
+  color: $text-muted;
 }
 
 .page-loading {
@@ -35,7 +35,7 @@
   p {
     margin: 0;
     font-size: 14px;
-    color: #64748b;
+    color: $text-muted;
     line-height: 1.5;
   }
 }
@@ -74,5 +74,11 @@
 }
 
 .empty-msg {
-  color: #64748b;
+  color: $text-muted;
+}
+
+.trainer-card {
+  h3 {
+    color: $text-dark;
+  }
 }

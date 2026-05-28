@@ -6,12 +6,12 @@
   h1 {
     margin: 0 0 4px;
     font-size: 28px;
-    color: #0f1724;
+    color: $text-dark;
   }
 
   p {
     margin: 0;
-    color: #64748b;
+    color: $text-muted;
   }
 }
 
@@ -44,12 +44,12 @@
 
   strong {
     display: block;
-    color: #0f1724;
+    color: $text-dark;
   }
 
   span {
     font-size: 13px;
-    color: #64748b;
+    color: $text-muted;
   }
 }
 
@@ -97,11 +97,11 @@
   h2 {
     margin: 0 0 4px;
     font-size: 18px;
-    color: #0f1724;
+    color: $text-dark;
   }
 
   span {
-    color: #64748b;
+    color: $text-muted;
     font-size: 13px;
   }
 }
@@ -147,17 +147,17 @@
   strong {
     display: block;
     margin-bottom: 3px;
-    color: #0f1724;
+    color: $text-dark;
   }
 
   span {
-    color: #64748b;
+    color: $text-muted;
     font-size: 13px;
   }
 }
 
 .daily-item__count {
-  color: #64748b;
+  color: $text-muted;
   font-size: 13px;
   white-space: nowrap;
 }
@@ -172,7 +172,7 @@
   h2 {
     margin: 0 0 14px;
     font-size: 18px;
-    color: #0f1724;
+    color: $text-dark;
   }
 }
 
@@ -189,13 +189,13 @@
 
   strong {
     display: block;
-    color: #0f1724;
+    color: $text-dark;
     margin-bottom: 4px;
   }
 
   span,
   small {
-    color: #64748b;
+    color: $text-muted;
     font-size: 12px;
   }
 

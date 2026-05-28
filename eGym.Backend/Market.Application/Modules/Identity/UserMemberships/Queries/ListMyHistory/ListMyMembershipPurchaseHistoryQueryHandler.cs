@@ -34,7 +34,7 @@ public sealed class ListMyMembershipPurchaseHistoryQueryHandler(IAppDbContext ct
                 PurchasedAt = row.m.StartDate,
                 EndDate = row.m.EndDate,
                 DurationDays = row.p.DurationDays,
-                IsActive = row.m.EndDate.Date >= today,
+                IsActive = row.m.EndDate.Date >= today && row.m.StartDate.Date <= today,
             };
         }).ToList();
     }

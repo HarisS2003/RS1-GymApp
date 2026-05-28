@@ -42,7 +42,8 @@
       <h2>{{ 'CLIENT.PROFILE.PENDING_BOOKINGS' | translate }}</h2>
       <div class="training-list">
         @for (req of pendingRequests; track req.id) {
-          <article class="training-item training-item--pending">
+          <mat-card class="training-item training-item--pending" appearance="outlined">
+            <mat-card-content>
             <div>
               <strong>{{ req.memberName }}</strong>
               <span>{{ req.date | date: 'dd.MM.yyyy' }} · {{ formatTime(req.startTime) }}</span>
@@ -55,7 +56,8 @@
                 {{ 'CLIENT.PROFILE.ACCEPT' | translate }}
               </button>
             </div>
-          </article>
+            </mat-card-content>
+          </mat-card>
         }
       </div>
     </section>
@@ -75,7 +77,8 @@
       } @else {
         <div class="daily-list">
           @for (t of todayTrainings; track t.id) {
-            <article class="daily-item" [class.daily-item--group]="t.type === 2">
+            <mat-card class="daily-item" appearance="outlined" [class.daily-item--group]="t.type === 2">
+              <mat-card-content>
               <div class="daily-item__icon">
                 <mat-icon>{{ t.type === 2 ? 'groups' : 'person' }}</mat-icon>
               </div>
@@ -96,7 +99,8 @@
               <span class="training-type">
                 {{ typeLabel(t.type) }}
               </span>
-            </article>
+              </mat-card-content>
+            </mat-card>
           }
         </div>
       }
@@ -110,7 +114,8 @@
         } @else {
           <div class="group-list">
             @for (t of upcomingGroupTrainings; track t.id) {
-              <article class="group-mini-card">
+              <mat-card class="group-mini-card" appearance="outlined">
+                <mat-card-content>
                 <div>
                   <strong>{{ t.description || ('CLIENT.TRAINER_HOME.GROUP_TRAINING' | translate) }}</strong>
                   <span>{{ t.date | date: 'dd.MM.yyyy' }} · {{ formatTime(t.startTime) }}</span>
@@ -119,7 +124,8 @@
                 <div class="group-progress">
                   <span [style.width.%]="groupProgress(t)"></span>
                 </div>
-              </article>
+                </mat-card-content>
+              </mat-card>
             }
           </div>
         }

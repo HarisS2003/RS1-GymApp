@@ -57,6 +57,8 @@ export class AdminDashboardComponent implements OnInit {
   monthlyRevenue = 0;
   activeTrainings = 0;
 
+  readonly trainerTableColumns = ['id', 'name', 'spec', 'exp', 'status', 'actions'];
+
   ngOnInit(): void {
     if (this.profileService.profile()) {
       this.load();

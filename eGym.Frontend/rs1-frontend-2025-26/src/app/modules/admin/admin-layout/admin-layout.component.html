@@ -1,44 +1,49 @@
-<div class="dash">
-  <aside class="dash-sidebar">
+<mat-sidenav-container class="dash">
+  <mat-sidenav
+    class="dash-sidebar"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset() || sidenavOpen"
+    (closedStart)="sidenavOpen = false"
+  >
     <div class="dash-brand">
       <mat-icon>fitness_center</mat-icon>
       <span>eGym</span>
     </div>
 
-    <nav class="dash-nav">
-      <a routerLink="/admin/dashboard" routerLinkActive="active">
-        <mat-icon>home</mat-icon>
-        {{ 'ADMIN_DASH.NAV_HOME' | translate }}
+    <mat-nav-list class="dash-nav">
+      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_DASH.NAV_HOME' | translate }}</span>
       </a>
-      <a routerLink="/admin/dashboard" routerLinkActive="active">
-        <mat-icon>admin_panel_settings</mat-icon>
-        {{ 'ADMIN_DASH.NAV_PANEL' | translate }}
+      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_DASH.NAV_PANEL' | translate }}</span>
       </a>
-      <a routerLink="/admin/products" routerLinkActive="active">
-        <mat-icon>inventory_2</mat-icon>
-        {{ 'ADMIN_DASH.NAV_PRODUCTS' | translate }}
+      <a mat-list-item routerLink="/admin/products" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_DASH.NAV_PRODUCTS' | translate }}</span>
       </a>
-      <a routerLink="/admin/shop" routerLinkActive="active">
-        <mat-icon>storefront</mat-icon>
-        {{ 'ADMIN_DASH.NAV_SHOP' | translate }}
+      <a mat-list-item routerLink="/admin/shop" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>storefront</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_DASH.NAV_SHOP' | translate }}</span>
       </a>
-      <a routerLink="/admin/membership-plans" routerLinkActive="active">
-        <mat-icon>card_membership</mat-icon>
-        {{ 'ADMIN_DASH.NAV_MEMBERSHIPS' | translate }}
+      <a mat-list-item routerLink="/admin/membership-plans" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>card_membership</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_DASH.NAV_MEMBERSHIPS' | translate }}</span>
       </a>
-      <a routerLink="/admin/orders" routerLinkActive="active">
-        <mat-icon>shopping_cart</mat-icon>
-        {{ 'ADMIN_DASH.NAV_ORDERS' | translate }}
+      <a mat-list-item routerLink="/admin/orders" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>shopping_cart</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_DASH.NAV_ORDERS' | translate }}</span>
       </a>
-      <a routerLink="/admin/product-categories" routerLinkActive="active">
-        <mat-icon>category</mat-icon>
-        {{ 'ADMIN_DASH.NAV_CATEGORIES' | translate }}
+      <a mat-list-item routerLink="/admin/product-categories" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>category</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_DASH.NAV_CATEGORIES' | translate }}</span>
       </a>
-      <a routerLink="/admin/settings" routerLinkActive="active">
-        <mat-icon>person</mat-icon>
-        {{ 'CLIENT.NAV.PROFILE' | translate }}
+      <a mat-list-item routerLink="/admin/settings" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>{{ 'CLIENT.NAV.PROFILE' | translate }}</span>
       </a>
-    </nav>
+    </mat-nav-list>
 
     @if (profileService.profile(); as p) {
       <div class="dash-sidebar-user">
@@ -46,10 +51,15 @@
         <span>{{ p.gymName || ('ADMIN_DASH.ROLE_ADMIN' | translate) }}</span>
       </div>
     }
-  </aside>
+  </mat-sidenav>
 
-  <div class="dash-main">
-    <header class="dash-header">
+  <mat-sidenav-content class="dash-main" #dashMain>
+    <mat-toolbar class="dash-header">
+      @if (isHandset()) {
+        <button mat-icon-button type="button" class="dash-menu-btn" (click)="toggleSidenav()" [attr.aria-label]="'COMMON.MENU' | translate">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
       <div class="dash-header__user">
         <div class="dash-avatar">{{ (profileService.profile()?.firstName || 'A')[0] }}</div>
         <div>
@@ -57,16 +67,19 @@
           <span>{{ profileService.profile()?.email || '' }}</span>
         </div>
       </div>
+      <span class="dash-header__spacer"></span>
       <div class="dash-header__actions">
         <app-locale-theme-toolbar [compact]="true"></app-locale-theme-toolbar>
         <button mat-flat-button type="button" class="dash-logout" (click)="logout()">
           {{ 'COMMON.LOGOUT' | translate }}
         </button>
       </div>
-    </header>
+    </mat-toolbar>
 
     <div class="dash-content">
-      <router-outlet></router-outlet>
+      <div class="route-outlet-host" [@routeAnimations]="prepareRoute(outlet)">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </div>
     </div>
-  </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

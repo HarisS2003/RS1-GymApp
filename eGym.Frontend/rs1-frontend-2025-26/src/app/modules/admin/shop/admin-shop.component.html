@@ -23,7 +23,8 @@
   } @else {
     <div class="admin-shop-grid">
       @for (product of products; track product.id) {
-        <article class="admin-shop-card">
+        <mat-card class="admin-shop-card" appearance="outlined">
+          <mat-card-content>
           <span class="admin-shop-card__category">{{ product.categoryName || ('COMMON.ACTIVE' | translate) }}</span>
           <div class="admin-shop-card__image">
             <mat-icon>inventory_2</mat-icon>
@@ -42,7 +43,8 @@
               {{ 'CLIENT.PROFILE.EDIT' | translate }}
             </a>
           </div>
-        </article>
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   }

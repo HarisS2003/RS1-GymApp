@@ -1,39 +1,51 @@
-<div class="dash">
-  <aside class="dash-sidebar">
+<mat-sidenav-container class="dash">
+  <mat-sidenav
+    #sidenav
+    class="dash-sidebar"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset() || sidenavOpen"
+    (closedStart)="sidenavOpen = false"
+  >
     <div class="dash-brand">
       <mat-icon>fitness_center</mat-icon>
       <span>eGym</span>
     </div>
 
-    <nav class="dash-nav">
-      <a routerLink="/client" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>home</mat-icon>
-        {{ 'CLIENT.NAV.HOME' | translate }}
+    <mat-nav-list class="dash-nav">
+      <a
+        mat-list-item
+        routerLink="/client"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeSidenavIfHandset()"
+      >
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>{{ 'CLIENT.NAV.HOME' | translate }}</span>
       </a>
       @if (!isTrainer()) {
-        <a routerLink="/client/trainers" routerLinkActive="active">
-          <mat-icon>groups</mat-icon>
-          {{ 'CLIENT.NAV.TRAINERS' | translate }}
+        <a mat-list-item routerLink="/client/trainers" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+          <mat-icon matListItemIcon>groups</mat-icon>
+          <span matListItemTitle>{{ 'CLIENT.NAV.TRAINERS' | translate }}</span>
         </a>
-        <a routerLink="/client/memberships" routerLinkActive="active">
-          <mat-icon>card_membership</mat-icon>
-          {{ 'CLIENT.NAV.MEMBERSHIPS' | translate }}
+        <a mat-list-item routerLink="/client/memberships" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+          <mat-icon matListItemIcon>card_membership</mat-icon>
+          <span matListItemTitle>{{ 'CLIENT.NAV.MEMBERSHIPS' | translate }}</span>
         </a>
-        <a routerLink="/client/shop" routerLinkActive="active">
-          <mat-icon>shopping_bag</mat-icon>
-          {{ 'CLIENT.NAV.SHOP' | translate }}
+        <a mat-list-item routerLink="/client/shop" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+          <mat-icon matListItemIcon>shopping_bag</mat-icon>
+          <span matListItemTitle>{{ 'CLIENT.NAV.SHOP' | translate }}</span>
         </a>
       } @else {
-        <a routerLink="/client/schedule" routerLinkActive="active">
-          <mat-icon>event</mat-icon>
-          {{ 'CLIENT.NAV.SCHEDULE' | translate }}
+        <a mat-list-item routerLink="/client/schedule" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+          <mat-icon matListItemIcon>event</mat-icon>
+          <span matListItemTitle>{{ 'CLIENT.NAV.SCHEDULE' | translate }}</span>
         </a>
       }
-      <a routerLink="/client/profile" routerLinkActive="active">
-        <mat-icon>person</mat-icon>
-        {{ 'CLIENT.NAV.PROFILE' | translate }}
+      <a mat-list-item routerLink="/client/profile" routerLinkActive="active" (click)="closeSidenavIfHandset()">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>{{ 'CLIENT.NAV.PROFILE' | translate }}</span>
       </a>
-    </nav>
+    </mat-nav-list>
 
     @if (profile(); as p) {
       <div class="dash-sidebar-user">
@@ -41,10 +53,15 @@
         <span>{{ p.gymName || ('COMMON.GYM' | translate) }}</span>
       </div>
     }
-  </aside>
+  </mat-sidenav>
 
-  <div class="dash-main">
-    <header class="dash-header">
+  <mat-sidenav-content class="dash-main" #dashMain>
+    <mat-toolbar class="dash-header">
+      @if (isHandset()) {
+        <button mat-icon-button type="button" class="dash-menu-btn" (click)="toggleSidenav()" [attr.aria-label]="'COMMON.MENU' | translate">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
       <div class="dash-header__user">
         <div class="dash-avatar">{{ (profile()?.firstName || 'U')[0] }}</div>
         <div>
@@ -52,6 +69,7 @@
           <span>{{ profile()?.email || '' }}</span>
         </div>
       </div>
+      <span class="dash-header__spacer"></span>
       <div class="dash-header__actions">
         <span class="dash-points"><mat-icon>stars</mat-icon> 500</span>
         <button mat-icon-button type="button"><mat-icon>notifications</mat-icon></button>
@@ -60,10 +78,12 @@
           {{ 'COMMON.LOGOUT' | translate }}
         </button>
       </div>
-    </header>
+    </mat-toolbar>
 
     <div class="dash-content">
-      <router-outlet></router-outlet>
+      <div class="route-outlet-host" [@routeAnimations]="prepareRoute(outlet)">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </div>
     </div>
-  </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

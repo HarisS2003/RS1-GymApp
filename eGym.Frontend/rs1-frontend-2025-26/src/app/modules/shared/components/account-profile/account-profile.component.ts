@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
@@ -60,11 +61,19 @@ export interface PurchaseHistoryRow {
   price: number;
 }
 
+const fadeIn = trigger('fadeIn', [
+  transition(':enter', [
+    style({ opacity: 0 }),
+    animate('400ms ease-out', style({ opacity: 1 })),
+  ]),
+]);
+
 @Component({
   selector: 'app-account-profile',
   standalone: false,
   templateUrl: './account-profile.component.html',
   styleUrl: './account-profile.component.scss',
+  animations: [fadeIn],
 })
 export class AccountProfileComponent implements OnInit {
   profileService = inject(UserProfileService);
@@ -82,7 +91,7 @@ export class AccountProfileComponent implements OnInit {
   private productsApi = inject(ProductsApiService);
   private trainingRequestsApi = inject(TrainingRequestsApiService);
 
-  loading = true;
+  isLoading = true;
   saving = false;
   deletingProfile = false;
   editing = false;
@@ -95,6 +104,7 @@ export class AccountProfileComponent implements OnInit {
   pendingTrainerRequests: ListTrainerTrainingRequestQueryDto[] = [];
   bookingActionId: number | null = null;
   purchases: PurchaseHistoryRow[] = [];
+  readonly purchaseTableColumns = ['ref', 'type', 'item', 'price'];
 
   form = this.fb.group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -111,7 +121,10 @@ export class AccountProfileComponent implements OnInit {
         this.loadPageData();
         return;
       }
-      this.profileService.loadProfile().subscribe(() => this.loadPageData());
+      this.profileService.loadProfile().subscribe({
+        next: () => this.loadPageData(),
+        error: () => (this.isLoading = false),
+      });
     };
     init();
 
@@ -321,11 +334,11 @@ export class AccountProfileComponent implements OnInit {
   private loadPageData(): void {
     const profile = this.profileService.profile();
     if (!profile) {
-      this.loading = false;
+      this.isLoading = false;
       return;
     }
 
-    this.loading = true;
+    this.isLoading = true;
 
     const gymTrainersReq = new ListTrainersRequest();
     gymTrainersReq.gymId = profile.gymId;
@@ -398,10 +411,12 @@ export class AccountProfileComponent implements OnInit {
           this.trainerRecord = data.myTrainer?.items?.[0] ?? null;
           this.patchProfileForm(profile);
 
-          this.activeMembership = this.isMember ? (data.membership ?? null) : null;
-
           const membershipHistory = (data.membershipHistory ??
             []) as ListMyMembershipPurchaseHistoryQueryDto[];
+
+          this.activeMembership = this.isMember
+            ? this.resolveActiveMembership(data.membership, membershipHistory)
+            : null;
 
           const trainerNames: Map<number, string> = data.trainerUsers ?? new Map();
           const now = new Date();
@@ -496,9 +511,9 @@ export class AccountProfileComponent implements OnInit {
           }
 
           this.purchases.sort((a, b) => b.sortAt - a.sortAt);
-          this.loading = false;
+          this.isLoading = false;
         },
-        error: () => (this.loading = false),
+        error: () => (this.isLoading = false),
       });
   }
 
@@ -520,6 +535,32 @@ export class AccountProfileComponent implements OnInit {
     const date = (dateValue ?? '').slice(0, 10);
     const time = (timeValue ?? '00:00:00').slice(0, 8);
     return new Date(`${date}T${time}`);
+  }
+
+  private resolveActiveMembership(
+    fromApi: GetMyActiveUserMembershipQueryDto | null | undefined,
+    history: ListMyMembershipPurchaseHistoryQueryDto[],
+  ): GetMyActiveUserMembershipQueryDto | null {
+    if (fromApi?.userMembershipId) {
+      return fromApi;
+    }
+
+    const activeRow = history.find((row) => row.isActive);
+    if (!activeRow) {
+      return null;
+    }
+
+    return {
+      userMembershipId: activeRow.userMembershipId,
+      membershipPlanId: 0,
+      planName: activeRow.planName,
+      durationDays: activeRow.durationDays,
+      price: activeRow.amountPaid,
+      discountPercentage: 0,
+      finalPrice: activeRow.amountPaid,
+      startDate: activeRow.purchasedAt,
+      endDate: activeRow.endDate,
+    };
   }
 
   private patchProfileForm(profile: NonNullable<ReturnType<UserProfileService['profile']>>): void {

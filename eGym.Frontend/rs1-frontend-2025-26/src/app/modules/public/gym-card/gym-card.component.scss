@@ -1,9 +1,11 @@
-$accent: #ff5722;
-$text-dark: #1e293b;
-$text-muted: #64748b;
+$accent: var(--app-accent, #ff5722);
+$text-dark: var(--app-text, #1e293b);
+$text-muted: var(--app-text-muted, #64748b);
+$surface: var(--app-surface, #ffffff);
+$border: var(--app-border, #e2e8f0);
 
 .gym-card {
-  background: #fff;
+  background: $surface;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
@@ -11,6 +13,7 @@ $text-muted: #64748b;
   flex-direction: column;
   height: 100%;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid $border;
 
   &:hover {
     transform: translateY(-4px);
@@ -53,6 +56,7 @@ $text-muted: #64748b;
     margin: 0 0 6px;
     font-size: 22px;
     font-weight: 700;
+    color: #fff;
   }
 
   p {
@@ -61,11 +65,13 @@ $text-muted: #64748b;
     align-items: center;
     gap: 4px;
     font-size: 14px;
+    color: rgba(255, 255, 255, 0.92);
 
     mat-icon {
       font-size: 16px;
       width: 16px;
       height: 16px;
+      color: inherit;
     }
   }
 }
@@ -76,6 +82,8 @@ $text-muted: #64748b;
   flex-direction: column;
   gap: 14px;
   flex: 1;
+  background: $surface !important;
+  color: $text-dark !important;
 }
 
 .gym-card__info-row {
@@ -101,12 +109,13 @@ $text-muted: #64748b;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: $text-muted;
+  color: $accent;
 }
 
 .gym-card__info-value {
   font-size: 14px;
-  color: $text-dark;
+  font-weight: 500;
+  color: $text-dark !important;
   line-height: 1.5;
 }
 
@@ -121,5 +130,6 @@ $text-muted: #64748b;
 
   mat-icon {
     margin-left: 8px;
+    color: #fff !important;
   }
 }

@@ -17,15 +17,15 @@
   </div>
 
   <div class="admin-tabs">
-    <button type="button" class="active" (click)="setTab('trainers')">
+    <button mat-button type="button" class="active" (click)="setTab('trainers')">
       <mat-icon>groups</mat-icon>
       {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
     </button>
-    <button type="button" (click)="setTab('products')">
+    <button mat-button type="button" (click)="setTab('products')">
       <mat-icon>shopping_bag</mat-icon>
       {{ 'ADMIN_DASH.TAB_PRODUCTS' | translate }}
     </button>
-    <button type="button" (click)="setTab('memberships')">
+    <button mat-button type="button" (click)="setTab('memberships')">
       <mat-icon>card_membership</mat-icon>
       {{ 'ADMIN_DASH.TAB_MEMBERSHIPS' | translate }}
     </button>
@@ -35,71 +35,87 @@
     <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
   } @else {
     <div class="admin-table-wrap">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>{{ 'ADMIN_DASH.COL_NO' | translate }}</th>
-            <th>{{ 'ADMIN_DASH.COL_NAME' | translate }}</th>
-            <th>{{ 'ADMIN_DASH.COL_SPEC' | translate }}</th>
-            <th>{{ 'ADMIN_DASH.COL_EXP' | translate }}</th>
-            <th>{{ 'ADMIN_DASH.COL_STATUS' | translate }}</th>
-            <th>{{ 'ADMIN_DASH.COL_ACTIONS' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of trainerRows; track row.trainer.id) {
-            <tr>
-              <td><span class="row-id">#{{ row.trainer.id }}</span></td>
-              <td><strong>{{ trainerName(row) }}</strong></td>
-              <td>{{ row.trainer.bio || '—' }}</td>
-              <td>{{ row.trainer.experienceYears }} {{ 'ADMIN_DASH.YEARS' | translate }}</td>
-              <td><span class="status-pill">{{ 'COMMON.ACTIVE' | translate }}</span></td>
-              <td class="actions">
-                <button
-                  mat-icon-button
-                  type="button"
-                  class="action-edit"
-                  (click)="editTrainer(row)"
-                  [attr.aria-label]="'ADMIN_DASH.EDIT_TRAINER' | translate"
-                >
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  type="button"
-                  class="action-delete"
-                  (click)="degradeTrainer(row)"
-                  [attr.aria-label]="'ADMIN_DASH.DEGRADE_TRAINER' | translate"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="6" class="empty-cell">{{ 'ADMIN_DASH.NO_TRAINERS' | translate }}</td>
-            </tr>
-          }
-        </tbody>
+      <table mat-table [dataSource]="trainerRows" class="admin-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_NO' | translate }}</th>
+          <td mat-cell *matCellDef="let row"><span class="row-id">#{{ row.trainer.id }}</span></td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_NAME' | translate }}</th>
+          <td mat-cell *matCellDef="let row"><strong>{{ trainerName(row) }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="spec">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_SPEC' | translate }}</th>
+          <td mat-cell *matCellDef="let row">{{ row.trainer.bio || '—' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="exp">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_EXP' | translate }}</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.trainer.experienceYears }} {{ 'ADMIN_DASH.YEARS' | translate }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_STATUS' | translate }}</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="status-pill">{{ 'COMMON.ACTIVE' | translate }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_ACTIONS' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="actions">
+            <button
+              mat-icon-button
+              type="button"
+              class="action-edit"
+              (click)="editTrainer(row)"
+              [attr.aria-label]="'ADMIN_DASH.EDIT_TRAINER' | translate"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              type="button"
+              class="action-delete"
+              (click)="degradeTrainer(row)"
+              [attr.aria-label]="'ADMIN_DASH.DEGRADE_TRAINER' | translate"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="trainerTableColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: trainerTableColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-cell" [attr.colspan]="trainerTableColumns.length">
+            {{ 'ADMIN_DASH.NO_TRAINERS' | translate }}
+          </td>
+        </tr>
       </table>
     </div>
 
     <section class="admin-summary">
-      <article class="summary-card summary-card--blue">
-        <span>{{ 'ADMIN_DASH.SUMMARY_MEMBERS' | translate }}</span>
-        <strong>{{ memberCount | number }}</strong>
-        <small>{{ 'ADMIN_DASH.SUMMARY_MEMBERS_TREND' | translate }}</small>
-      </article>
-      <article class="summary-card summary-card--orange">
-        <span>{{ 'ADMIN_DASH.SUMMARY_REVENUE' | translate }}</span>
-        <strong>{{ monthlyRevenue | number: '1.0-0' }} KM</strong>
-        <small>{{ 'ADMIN_DASH.SUMMARY_REVENUE_TREND' | translate }}</small>
-      </article>
-      <article class="summary-card summary-card--green">
-        <span>{{ 'ADMIN_DASH.SUMMARY_TRAININGS' | translate }}</span>
-        <strong>{{ activeTrainings | number }}</strong>
-        <small>{{ 'ADMIN_DASH.SUMMARY_TRAININGS_TREND' | translate }}</small>
-      </article>
+      <mat-card class="summary-card summary-card--blue">
+        <mat-card-content>
+          <span>{{ 'ADMIN_DASH.SUMMARY_MEMBERS' | translate }}</span>
+          <strong>{{ memberCount | number }}</strong>
+          <small>{{ 'ADMIN_DASH.SUMMARY_MEMBERS_TREND' | translate }}</small>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="summary-card summary-card--orange">
+        <mat-card-content>
+          <span>{{ 'ADMIN_DASH.SUMMARY_REVENUE' | translate }}</span>
+          <strong>{{ monthlyRevenue | number: '1.0-0' }} KM</strong>
+          <small>{{ 'ADMIN_DASH.SUMMARY_REVENUE_TREND' | translate }}</small>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="summary-card summary-card--green">
+        <mat-card-content>
+          <span>{{ 'ADMIN_DASH.SUMMARY_TRAININGS' | translate }}</span>
+          <strong>{{ activeTrainings | number }}</strong>
+          <small>{{ 'ADMIN_DASH.SUMMARY_TRAININGS_TREND' | translate }}</small>
+        </mat-card-content>
+      </mat-card>
     </section>
   }
 </div>

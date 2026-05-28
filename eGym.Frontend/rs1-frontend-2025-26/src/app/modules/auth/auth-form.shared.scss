@@ -5,20 +5,30 @@ $error: #ef4444;
 
 .auth-form-wrap {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
+  margin: 0 auto;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  color: $text-dark;
+  -webkit-font-smoothing: antialiased;
 }
 
 .auth-form__title {
   margin: 0 0 8px;
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
   color: $text-dark;
+  font-family: inherit;
 }
 
 .auth-form__subtitle {
   margin: 0 0 24px;
   color: $text-muted;
   font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-family: inherit;
 }
 
 .auth-form {
@@ -35,7 +45,8 @@ $error: #ef4444;
   label {
     font-size: 13px;
     font-weight: 600;
-    color: $text-muted;
+    color: $text-dark;
+    font-family: inherit;
   }
 
   input {
@@ -46,18 +57,62 @@ $error: #ef4444;
     border-radius: 10px;
     padding: 0 14px;
     font-size: 15px;
+    font-weight: 400;
+    font-family: inherit;
+    letter-spacing: normal;
     color: $text-dark;
     background: var(--app-input-bg, #fff);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
+    &::placeholder {
+      color: var(--app-text-muted, #94a3b8);
+      opacity: 1;
+    }
+
     &:focus {
       outline: none;
       border-color: $accent;
-      box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.15);
+      box-shadow: var(--app-focus-ring, 0 0 0 3px rgba(255, 102, 0, 0.22));
     }
 
     &.invalid {
       border-color: $error;
+      background: var(--app-input-bg, #fff);
+      box-shadow: none;
+
+      &:focus {
+        border-color: $error;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.22);
+      }
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+      -webkit-text-fill-color: var(--app-text, #0f1724) !important;
+      caret-color: var(--app-text, #0f1724);
+      border: 1px solid var(--app-border, #e2e8f0);
+      -webkit-box-shadow: 0 0 0 1000px var(--app-input-bg, #fff) inset !important;
+      box-shadow: 0 0 0 1000px var(--app-input-bg, #fff) inset !important;
+      transition: background-color 600000s ease-in-out 0s;
+    }
+
+    &:focus:-webkit-autofill {
+      border-color: $accent;
+      -webkit-box-shadow:
+        0 0 0 1000px var(--app-input-bg, #fff) inset,
+        var(--app-focus-ring, 0 0 0 3px rgba(255, 102, 0, 0.22)) !important;
+      box-shadow:
+        0 0 0 1000px var(--app-input-bg, #fff) inset,
+        var(--app-focus-ring, 0 0 0 3px rgba(255, 102, 0, 0.22)) !important;
+    }
+
+    &.invalid:-webkit-autofill,
+    &.invalid:-webkit-autofill:focus {
+      border-color: $error;
+      -webkit-box-shadow: 0 0 0 1000px var(--app-input-bg, #fff) inset !important;
+      box-shadow: 0 0 0 1000px var(--app-input-bg, #fff) inset !important;
     }
   }
 }

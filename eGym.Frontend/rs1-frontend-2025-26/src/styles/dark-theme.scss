@@ -1,0 +1,382 @@
+// Hardcoded premium dark palette — exact hex values only.
+// Active: .theme-dark | .dark | .dark-theme (html + body via ThemeService)
+
+$dark-root: ':root.theme-dark, :root.dark, :root.dark-theme';
+$dark-body: 'body.theme-dark, body.dark, body.dark-theme';
+
+#{$dark-root} {
+  color-scheme: dark;
+
+  // 1) Main background (lowest layer)
+  --app-bg: #0b0f19;
+
+  // 2) Surface elevation (cards, tables, dialogs, inputs)
+  --app-surface: #1e293b;
+  --app-surface-muted: #1e293b;
+  --app-surface-elevated: #1f2937;
+
+  // 3) Typography
+  --app-text: #f8fafc;
+  --app-text-muted: #94a3b8;
+  --app-text-subtle: #94a3b8;
+
+  // 4) Borders & inputs
+  --app-border: rgba(255, 255, 255, 0.1);
+  --app-border-strong: rgba(255, 255, 255, 0.1);
+  --app-input-bg: #1e293b;
+  --app-input-border: rgba(255, 255, 255, 0.1);
+
+  // Brand accent (focus glow)
+  --app-accent: #ff6600;
+  --app-accent-hover: #ff7a1a;
+  --app-focus-ring: 0 0 0 3px rgba(255, 102, 0, 0.45);
+
+  // Chrome
+  --app-sidebar-bg: #0b0f19;
+  --app-sidebar-text: #f8fafc;
+  --app-header-bg: #0b0f19;
+  --app-dialog-scrim: rgba(3, 7, 18, 0.82);
+  --app-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --app-shadow: 0 20px 56px rgba(0, 0, 0, 0.6);
+
+  --app-hero-overlay: linear-gradient(
+    135deg,
+    rgba(255, 102, 0, 0.7) 0%,
+    rgba(11, 15, 25, 0.94) 55%,
+    rgba(3, 7, 18, 0.98) 100%
+  );
+  --app-landing-bg: linear-gradient(180deg, #0b0f19 0%, #0b0f19 55%, #0b0f19 100%);
+
+  // Material bridges
+  --mat-sys-surface: #1e293b;
+  --mat-sys-on-surface: #f8fafc;
+  --mat-sys-surface-container: #1e293b;
+  --mat-sys-outline: rgba(255, 255, 255, 0.1);
+}
+
+#{$dark-body} {
+  background-color: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+// 5) Dialog backdrop — dark + blur
+#{$dark-root} .cdk-overlay-dark-backdrop,
+#{$dark-root} .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  background: rgba(3, 7, 18, 0.82) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#{$dark-root} {
+  // Page shells
+  .dash,
+  .dash-content,
+  .auth-panel,
+  .landing-page,
+  .auth-split {
+    background-color: #0b0f19;
+    color: #f8fafc;
+  }
+
+  // === mat-dialog (critical) ===
+  .mat-mdc-dialog-container,
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    --mdc-dialog-container-color: #1f2937 !important;
+    background: #1f2937 !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 56px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .membership-purchase-panel .mat-mdc-dialog-container .mdc-dialog__surface,
+  .product-shop-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+    background: #1f2937 !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  // === mat-card ===
+  .mat-mdc-card {
+    --mdc-elevated-card-container-color: #1e293b;
+    --mdc-outlined-card-container-color: #1e293b;
+  }
+
+  .mat-mdc-card:not(.summary-card) {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .mat-mdc-card.gym-card {
+    background: #1e293b !important;
+
+    .gym-card__body,
+    .mat-mdc-card-content.gym-card__body {
+      background: #1e293b !important;
+      color: #f8fafc !important;
+    }
+
+    .gym-card__info-label {
+      color: #ff6600 !important;
+    }
+
+    .gym-card__info-value {
+      color: #f8fafc !important;
+    }
+  }
+
+  .mat-mdc-card.product-card h3,
+  .mat-mdc-card.trainer-card h3,
+  .mat-mdc-card.plan-card .plan-card__price,
+  .mat-mdc-card.plan-card .plan-card__price strong {
+    color: #f8fafc !important;
+  }
+
+  .mat-mdc-card.product-card p,
+  .mat-mdc-card.trainer-card p {
+    color: #94a3b8 !important;
+  }
+
+  // Custom cards
+  .stat-card,
+  .profile-user-card,
+  .profile-panel,
+  .profile-skeleton-card,
+  .admin-panel-card,
+  .header-card,
+  .form-card,
+  .training-row {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  // === Tables ===
+  table.admin-table.mat-mdc-table,
+  table.purchase-table.mat-mdc-table,
+  table.items-table.mat-mdc-table,
+  table.purchase-table {
+    background: #1e293b !important;
+
+    .mat-mdc-header-cell,
+    th {
+      background: #1e293b !important;
+      color: #94a3b8 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .mat-mdc-cell,
+    .mat-mdc-footer-cell,
+    td {
+      background: #1e293b !important;
+      color: #f8fafc !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .mat-mdc-row:hover {
+      background: #1f2937 !important;
+    }
+  }
+
+  // === mat-form-field ===
+  .mat-mdc-form-field {
+    --mdc-outlined-text-field-container-color: #1e293b;
+    --mdc-outlined-text-field-input-text-color: #f8fafc;
+    --mdc-outlined-text-field-label-text-color: #94a3b8;
+    --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.1);
+    --mdc-outlined-text-field-hover-outline-color: rgba(255, 255, 255, 0.1);
+    --mdc-outlined-text-field-focus-outline-color: #ff6600;
+    --mdc-outlined-text-field-focus-label-text-color: #ff6600;
+    --mat-form-field-container-text-color: #f8fafc;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background: #1e293b !important;
+  }
+
+  .mat-mdc-select-value,
+  .mat-mdc-select-arrow {
+    color: #f8fafc !important;
+  }
+
+  .mat-mdc-select-panel {
+    background: #1f2937 !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .mat-mdc-option {
+    color: #f8fafc !important;
+
+    &:hover:not(.mdc-list-item--disabled),
+    &.mat-mdc-option-active,
+    &.mdc-list-item--selected {
+      background: rgba(255, 102, 0, 0.14) !important;
+    }
+  }
+
+  // === Native inputs ===
+  input:not([type='checkbox']):not([type='radio']),
+  textarea,
+  select {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+    &::placeholder {
+      color: #94a3b8 !important;
+      opacity: 1;
+    }
+
+    &:focus {
+      border-color: #ff6600 !important;
+      box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.45) !important;
+      outline: none;
+    }
+
+    &[readonly] {
+      background: #1e293b !important;
+      color: #94a3b8 !important;
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+      -webkit-text-fill-color: #f8fafc !important;
+      caret-color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      -webkit-box-shadow: 0 0 0 1000px #1e293b inset !important;
+      box-shadow: 0 0 0 1000px #1e293b inset !important;
+    }
+
+    &:focus:-webkit-autofill {
+      border-color: #ff6600 !important;
+      -webkit-box-shadow:
+        0 0 0 1000px #1e293b inset,
+        0 0 0 3px rgba(255, 102, 0, 0.45) !important;
+      box-shadow:
+        0 0 0 1000px #1e293b inset,
+        0 0 0 3px rgba(255, 102, 0, 0.45) !important;
+    }
+  }
+
+  .auth-field input.invalid {
+    background: #1e293b !important;
+    border-color: #ef4444 !important;
+  }
+
+  // === Toolbar / header ===
+  .dash-header.mat-toolbar {
+    --mat-toolbar-container-background-color: #0b0f19;
+    background: #0b0f19 !important;
+    color: #f8fafc !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .dash-menu-btn {
+    color: #f8fafc !important;
+  }
+
+  // === Typography hierarchy ===
+  h1,
+  h2,
+  h3,
+  h4,
+  .page-title,
+  .auth-form__title,
+  .profile-head h1,
+  .profile-user-card h2,
+  .profile-panel h2,
+  strong {
+    color: #f8fafc !important;
+  }
+
+  p,
+  .page-sub,
+  .page-hint,
+  .empty-msg,
+  .auth-form__subtitle,
+  .profile-head p,
+  label,
+  .auth-field label {
+    color: #94a3b8;
+  }
+
+  .auth-form-wrap,
+  .auth-panel,
+  .dash-content {
+    color: #f8fafc;
+  }
+
+  // === Buttons ===
+  .mat-mdc-outlined-button:not(.option-btn):not(.slot-btn):not(.dash-logout) {
+    --mdc-outlined-button-label-text-color: #f8fafc;
+    --mdc-outlined-button-outline-color: rgba(255, 255, 255, 0.1);
+
+    .mdc-button__label {
+      color: #f8fafc !important;
+    }
+  }
+
+  .mat-mdc-chip-option {
+    --mdc-chip-elevated-container-color: #1e293b;
+    --mdc-chip-label-text-color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+    &.mat-mdc-chip-selected {
+      background: rgba(255, 102, 0, 0.18) !important;
+      color: #ff6600 !important;
+      border-color: rgba(255, 102, 0, 0.45) !important;
+    }
+  }
+
+  // Dialog inner content
+  .product-dialog,
+  .purchase-dialog,
+  .already-dialog,
+  .group-dialog,
+  .add-trainer-dialog__content {
+    color: #f8fafc !important;
+  }
+
+  .selected-gym {
+    background: #1e293b !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #f8fafc !important;
+  }
+
+  .selected-gym__label {
+    color: #ff6600 !important;
+  }
+
+  .selected-gym__meta {
+    color: #94a3b8 !important;
+  }
+
+  .selected-gym__info strong {
+    color: #f8fafc !important;
+  }
+
+  .auth-demo {
+    background: #1e293b !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #94a3b8 !important;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(90deg, #1e293b 0%, #1f2937 50%, #1e293b 100%) !important;
+  }
+
+  .locale-theme-toolbar button {
+    color: #f8fafc !important;
+  }
+
+  .auth-alert--error,
+  .profile-alert--error {
+    background: #450a0a !important;
+    border: 1px solid #991b1b !important;
+    color: #fecaca !important;
+  }
+}

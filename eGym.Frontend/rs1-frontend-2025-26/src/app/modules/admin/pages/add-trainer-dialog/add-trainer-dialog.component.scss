@@ -1,7 +1,10 @@
+@import '../../../client/styles/dashboard-theme';
+
 .add-trainer-dialog__content {
   min-width: 400px;
   max-width: 480px;
   padding-top: 8px !important;
+  color: $text-dark;
 }
 
 .add-trainer-dialog__search {
@@ -19,18 +22,19 @@
 .add-trainer-dialog__hint {
   margin: 0 0 8px;
   font-size: 13px;
-  color: #64748b;
+  color: $text-muted;
 }
 
 .add-trainer-dialog__list {
   max-height: 320px;
   overflow-y: auto;
-  border: 1px solid #e2e8f0;
+  border: 1px solid $border;
   border-radius: 10px;
   padding: 8px 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  background: $surface-muted;
 }
 
 .add-trainer-dialog__item {
@@ -39,7 +43,7 @@
   align-items: flex-start;
   width: 100%;
   padding: 8px 4px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid $border;
 
   &:last-child {
     border-bottom: none;
@@ -49,20 +53,20 @@
 .add-trainer-dialog__details {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid $border;
 
   h3 {
     margin: 0 0 8px;
     font-size: 15px;
     font-weight: 700;
-    color: #0f1724;
+    color: $text-dark;
   }
 }
 
 .add-trainer-dialog__picked {
   margin: 0 0 12px;
   font-size: 13px;
-  color: #64748b;
+  color: $text-muted;
 }
 
 .add-trainer-dialog__field {
@@ -73,16 +77,16 @@
 .add-trainer-dialog__name {
   display: block;
   font-weight: 600;
-  color: #0f1724;
+  color: $text-dark;
 }
 
 .add-trainer-dialog__email {
   display: block;
   font-size: 12px;
-  color: #64748b;
+  color: $text-muted;
 }
 
 .add-trainer-dialog__apply {
-  background: #ff6600 !important;
+  background: $accent !important;
   color: #fff !important;
 }

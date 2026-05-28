@@ -13,10 +13,12 @@ public sealed class GetMyActiveUserMembershipQueryHandler(IAppDbContext ctx, IAp
 
         var today = DateTime.UtcNow.Date;
 
+        // Left join — membership must not disappear when plan row missing/deleted
         var row = await (
             from m in ctx.UserMemberships.AsNoTracking()
-            join p in ctx.MembershipPlans.AsNoTracking() on m.MembershipPlanId equals p.Id
-            where m.UserId == userId && m.EndDate >= today
+            join p in ctx.MembershipPlans.AsNoTracking() on m.MembershipPlanId equals p.Id into plans
+            from p in plans.DefaultIfEmpty()
+            where m.UserId == userId && m.EndDate.Date >= today
             orderby m.EndDate descending
             select new { m, p }
         ).FirstOrDefaultAsync(ct);
@@ -24,17 +26,19 @@ public sealed class GetMyActiveUserMembershipQueryHandler(IAppDbContext ctx, IAp
         if (row is null)
             return null;
 
-        var discount = row.p.Price * row.p.DiscountPercentage / 100m;
-        var finalPrice = Math.Round(row.p.Price - discount, 2, MidpointRounding.AwayFromZero);
+        var price = row.p?.Price ?? 0m;
+        var discountPct = row.p?.DiscountPercentage ?? 0m;
+        var discount = price * discountPct / 100m;
+        var finalPrice = Math.Round(price - discount, 2, MidpointRounding.AwayFromZero);
 
         return new GetMyActiveUserMembershipQueryDto
         {
             UserMembershipId = row.m.Id,
-            MembershipPlanId = row.p.Id,
-            PlanName = row.p.Name,
-            DurationDays = row.p.DurationDays,
-            Price = row.p.Price,
-            DiscountPercentage = row.p.DiscountPercentage,
+            MembershipPlanId = row.m.MembershipPlanId,
+            PlanName = row.p?.Name ?? "Membership",
+            DurationDays = row.p?.DurationDays ?? Math.Max(1, (row.m.EndDate.Date - row.m.StartDate.Date).Days),
+            Price = price,
+            DiscountPercentage = discountPct,
             FinalPrice = finalPrice,
             StartDate = row.m.StartDate,
             EndDate = row.m.EndDate,

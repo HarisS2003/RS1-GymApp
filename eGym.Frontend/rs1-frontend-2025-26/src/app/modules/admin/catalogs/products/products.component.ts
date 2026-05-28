@@ -31,6 +31,8 @@ export class ProductsComponent
   activeProducts = 0;
   lowStockCount = 0;
 
+  readonly tableColumns = ['id', 'name', 'category', 'price', 'stock', 'status', 'actions'];
+
   constructor() {
     super();
     this.request = new ListProductsRequest();

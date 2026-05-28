@@ -1,15 +1,19 @@
+@import '../../styles/dashboard-theme';
+
 .group-dialog {
   width: min(520px, 90vw);
   padding: 22px;
+  color: $text-dark;
 
   h2 {
     margin: 0 0 6px;
     font-size: 22px;
+    color: $text-dark;
   }
 
   p {
     margin: 0 0 18px;
-    color: #64748b;
+    color: $text-muted;
   }
 
   form {
@@ -18,24 +22,8 @@
     gap: 14px;
   }
 
-  label {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-
-    span {
-      font-size: 13px;
-      font-weight: 700;
-      color: #64748b;
-    }
-  }
-
-  input,
-  textarea {
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 11px 12px;
-    font: inherit;
+  .full-width {
+    width: 100%;
   }
 }
 
@@ -43,6 +31,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .group-dialog__actions {
@@ -50,9 +42,10 @@
   justify-content: flex-end;
   gap: 10px;
   margin-top: 8px;
+  flex-wrap: wrap;
 
   button:last-child {
-    background: #ff6600 !important;
+    background: $accent !important;
     color: #fff !important;
   }
 }

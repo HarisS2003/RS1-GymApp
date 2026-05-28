@@ -1,0 +1,414 @@
+// Neutralize Material defaults so existing app classes keep the same look.
+
+@mixin mat-card-surface-reset {
+  padding: 0;
+  border-radius: inherit;
+
+  .mat-mdc-card-content,
+  .mdc-card__content {
+    padding: 0;
+  }
+}
+
+@mixin app-themed-surface-card {
+  @include mat-card-surface-reset;
+  --mdc-elevated-card-container-color: var(--app-surface, #fff);
+  --mdc-outlined-card-container-color: var(--app-surface, #fff);
+  background: var(--app-surface, #fff) !important;
+  color: var(--app-text, #0f1724);
+  border: 1px solid var(--app-border, #e2e8f0);
+  box-shadow: var(--app-card-shadow, 0 4px 20px rgba(15, 23, 36, 0.06));
+}
+
+// Gradient / custom-bg cards — do not force page surface color
+.mat-mdc-card.summary-card {
+  @include mat-card-surface-reset;
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+}
+
+// Landing gym picker — body must stay on surface (not transparent over dark landing)
+.mat-mdc-card.gym-card {
+  @include app-themed-surface-card;
+  --mat-card-subtitle-text-color: var(--app-text, #0f1724);
+
+  .mat-mdc-card-content,
+  .gym-card__body {
+    background: var(--app-surface, #fff) !important;
+    color: var(--app-text, #0f1724) !important;
+  }
+
+  .gym-card__info-label {
+    color: var(--app-accent, #ff6600) !important;
+  }
+
+  .gym-card__info-value {
+    color: var(--app-text, #0f1724) !important;
+  }
+}
+
+.mat-mdc-card.summary-card {
+  padding: 22px 24px;
+  color: #fff;
+
+  span,
+  strong,
+  small,
+  .mat-mdc-card-content {
+    color: #fff;
+  }
+}
+
+// Standard content cards (light + dark surfaces)
+.mat-mdc-card.product-card,
+.mat-mdc-card.trainer-card,
+.mat-mdc-card.plan-card,
+.mat-mdc-card.group-event-card,
+.mat-mdc-card.admin-shop-card,
+.mat-mdc-card.variant-card,
+.mat-mdc-card.training-row,
+.mat-mdc-card.training-item,
+.mat-mdc-card.daily-item,
+.mat-mdc-card.group-mini-card,
+.mat-mdc-card.header-card,
+.mat-mdc-card.form-card {
+  @include app-themed-surface-card;
+}
+
+.mat-mdc-card.product-card {
+  cursor: pointer;
+
+  h3 {
+    color: var(--app-text, #0f1724);
+  }
+
+  p {
+    color: var(--app-text-muted, #64748b);
+  }
+}
+
+.mat-mdc-card.trainer-card,
+.mat-mdc-card.group-event-card,
+.mat-mdc-card.admin-shop-card {
+  h3 {
+    color: var(--app-text, #0f1724);
+  }
+
+  p {
+    color: var(--app-text-muted, #64748b);
+  }
+}
+
+// Membership plan — colored header must stay white on blue/grey/orange
+.mat-mdc-card.plan-card {
+  .plan-card__head,
+  .plan-card__head h3,
+  .plan-card__head span {
+    color: #fff !important;
+  }
+
+  .plan-card__price,
+  .plan-card__price strong {
+    color: var(--app-text, #0f1724) !important;
+  }
+
+  .plan-badge {
+    background: #fff;
+    color: var(--app-accent, #ff6600);
+  }
+}
+
+.dash-header.mat-toolbar {
+  --mat-toolbar-container-background-color: var(--app-header-bg, #fff);
+  background: var(--app-header-bg, #fff);
+  border-bottom: 1px solid var(--app-border, #e2e8f0);
+  color: var(--app-text, #0f1724);
+  min-height: unset;
+  height: auto;
+  padding: 14px 24px;
+  box-shadow: none;
+}
+
+.dash.mat-sidenav-container {
+  min-height: 100vh;
+  height: 100vh;
+}
+
+.dash-sidebar.mat-drawer {
+  width: 240px;
+  border: none;
+  box-shadow: none;
+  background: var(--app-sidebar-bg, #0f1724);
+  color: #fff;
+
+  .mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px 14px;
+    box-sizing: border-box;
+    background: inherit;
+    color: inherit;
+    overflow-x: hidden;
+  }
+}
+
+.dash-brand {
+  color: #fff;
+
+  > span {
+    color: #fff;
+  }
+}
+
+.dash-sidebar-user {
+  color: #fff;
+
+  strong {
+    color: #fff;
+  }
+}
+
+.dash-nav.mat-mdc-nav-list {
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+
+  .mat-mdc-list-item,
+  a.mat-mdc-list-item {
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.85) !important;
+    height: auto;
+    min-height: 48px;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 6px;
+
+    --mdc-list-list-item-label-text-color: rgba(255, 255, 255, 0.85);
+    --mdc-list-list-item-supporting-text-color: rgba(255, 255, 255, 0.65);
+    --mdc-list-list-item-leading-icon-color: rgba(255, 255, 255, 0.85);
+    --mdc-list-list-item-trailing-icon-color: rgba(255, 255, 255, 0.85);
+    --mdc-list-list-item-hover-label-text-color: #fff;
+    --mdc-list-list-item-focus-label-text-color: #fff;
+    --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.08);
+    --mdc-list-list-item-focus-state-layer-color: rgba(255, 255, 255, 0.08);
+
+    .mdc-list-item__content,
+    .mat-mdc-list-item-unscoped-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+
+    .mdc-list-item__primary-text,
+    .mat-mdc-list-item-title,
+    [matListItemTitle] {
+      color: inherit !important;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .mat-mdc-list-item-icon,
+    mat-icon[matListItemIcon] {
+      color: inherit !important;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    &.active,
+    &.mdc-list-item--activated {
+      background: var(--app-accent, #ff6600) !important;
+      color: #fff !important;
+
+      --mdc-list-list-item-label-text-color: #fff;
+      --mdc-list-list-item-leading-icon-color: #fff;
+
+      .mdc-list-item__primary-text,
+      .mat-mdc-list-item-title,
+      [matListItemTitle],
+      mat-icon[matListItemIcon] {
+        color: #fff !important;
+      }
+    }
+
+    &:hover:not(.active):not(.mdc-list-item--activated) {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #fff !important;
+    }
+  }
+}
+
+table.admin-table.mat-mdc-table,
+table.purchase-table.mat-mdc-table,
+table.items-table.mat-mdc-table {
+  background: transparent;
+
+  .mat-mdc-header-row,
+  .mat-mdc-row,
+  .mat-mdc-footer-row {
+    height: auto;
+  }
+
+  .mat-mdc-header-cell,
+  .mat-mdc-cell,
+  .mat-mdc-footer-cell {
+    border-bottom: 1px solid var(--app-border, #f1f5f9);
+    padding: 16px 18px;
+    font-size: 14px;
+    color: var(--app-text, #0f1724);
+  }
+
+  .mat-mdc-header-cell {
+    background: var(--app-surface-muted, #f8fafc);
+    color: var(--app-text-muted, #64748b);
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .mat-mdc-row:hover {
+    background: var(--app-surface-muted, #fafbfc);
+  }
+}
+
+.shop-filters.mat-mdc-chip-listbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  padding: 0;
+
+  .mat-mdc-chip-option {
+    height: auto;
+    min-height: 36px;
+  }
+}
+
+// App-themed surfaces (light + dark via CSS vars)
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background: var(--app-surface-elevated, var(--app-surface, #fff)) !important;
+  color: var(--app-text, #0f1724) !important;
+  border: 1px solid var(--app-border, #e2e8f0);
+}
+
+.product-shop-dialog-panel,
+.membership-purchase-panel {
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    background: var(--app-surface, #fff) !important;
+    color: var(--app-text, #0f1724) !important;
+  }
+}
+
+.dash-content {
+  .page-title,
+  h1.page-title,
+  h2.section-block > h2,
+  .schedule-panel__head h2 {
+    color: var(--app-text, #0f1724);
+  }
+
+  .page-sub,
+  .page-hint,
+  .empty-msg,
+  .section-sub,
+  .stock {
+    color: var(--app-text-muted, #64748b);
+  }
+}
+
+.product-dialog,
+.purchase-dialog,
+.already-dialog,
+.group-dialog,
+.add-trainer-dialog__content {
+  color: var(--app-text, #0f1724);
+}
+
+.product-dialog {
+  max-width: min(520px, calc(100vw - 32px));
+}
+
+// Custom toggle chips (size/flavor/slots) when wrapped in mat-stroked-button
+.option-btn.mat-mdc-button,
+.slot-btn {
+  &.mat-mdc-outlined-button .mdc-button__label {
+    color: inherit;
+  }
+}
+
+// mat-form-field + stroked buttons readable in dialogs + main content
+.mat-mdc-dialog-container,
+.dash-content,
+.auth-form-wrap {
+  .mat-mdc-form-field {
+    --mdc-outlined-text-field-container-color: var(--app-input-bg, #fff);
+    --mdc-outlined-text-field-label-text-color: var(--app-text-muted, #64748b);
+    --mdc-outlined-text-field-input-text-color: var(--app-text, #0f1724);
+    --mdc-outlined-text-field-outline-color: var(--app-input-border, var(--app-border, #e2e8f0));
+    --mdc-outlined-text-field-hover-outline-color: var(--app-border-strong, var(--app-border, #e2e8f0));
+    --mdc-outlined-text-field-focus-outline-color: var(--app-accent, #ff6600);
+    --mdc-outlined-text-field-focus-label-text-color: var(--app-accent, #ff6600);
+    --mat-form-field-container-text-color: var(--app-text, #0f1724);
+  }
+
+  .mat-mdc-outlined-button:not(.option-btn):not(.slot-btn):not(.dash-logout) {
+    --mdc-outlined-button-label-text-color: var(--app-text, #0f1724);
+    --mdc-outlined-button-outline-color: var(--app-border, #e2e8f0);
+
+    .mdc-button__label {
+      color: var(--app-text, #0f1724);
+    }
+  }
+}
+
+// Admin summary gradient cards — always light text
+.mat-mdc-card.summary-card.summary-card--blue,
+.mat-mdc-card.summary-card.summary-card--orange,
+.mat-mdc-card.summary-card.summary-card--green {
+  span,
+  strong,
+  small {
+    color: #fff !important;
+  }
+}
+
+// Stat / panel cards on home
+.stat-card {
+  background: var(--app-surface, #fff);
+  color: var(--app-text, #0f1724);
+  border: 1px solid var(--app-border, #e2e8f0);
+  box-shadow: var(--app-card-shadow, 0 4px 20px rgba(15, 23, 36, 0.06));
+
+  strong {
+    color: var(--app-text, #0f1724);
+  }
+
+  span {
+    color: var(--app-text-muted, #64748b);
+  }
+}
+
+@media (max-width: 600px) {
+  .product-dialog {
+    min-width: 0;
+    padding: 4px 0;
+  }
+
+  .product-dialog__hero {
+    flex-direction: column;
+    padding-right: 0;
+  }
+
+  .option-grid {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  }
+
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    max-width: calc(100vw - 16px) !important;
+  }
+}

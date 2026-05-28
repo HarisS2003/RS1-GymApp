@@ -1,4 +1,4 @@
-<article class="gym-card">
+<mat-card class="gym-card" appearance="outlined">
   <div class="gym-card__header" [ngClass]="'gym-card__header--' + (accentIndex % 3)">
     <div class="gym-card__header-overlay"></div>
     <div class="gym-card__header-caption">
@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <div class="gym-card__body">
+  <mat-card-content class="gym-card__body">
     <div class="gym-card__info-row">
       <mat-icon>place</mat-icon>
       <div>
@@ -31,5 +31,5 @@
       {{ 'LANDING.SELECT_GYM' | translate }}
       <mat-icon>arrow_forward</mat-icon>
     </button>
-  </div>
-</article>
+  </mat-card-content>
+</mat-card>

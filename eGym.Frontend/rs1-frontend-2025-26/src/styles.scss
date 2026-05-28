@@ -69,6 +69,11 @@ body {
   --app-sidebar-text: #ffffff;
   --app-header-bg: #ffffff;
   --app-input-bg: #ffffff;
+  --app-input-border: #e2e8f0;
+  --app-border-strong: #cbd5e1;
+  --app-card-shadow: 0 4px 20px rgba(15, 23, 36, 0.06);
+  --app-shadow: 0 12px 40px rgba(15, 23, 36, 0.12);
+  --app-focus-ring: 0 0 0 3px rgba(255, 102, 0, 0.22);
   --app-hero-overlay: linear-gradient(
     135deg,
     rgba(255, 102, 0, 0.88) 0%,
@@ -78,36 +83,64 @@ body {
   --app-landing-bg: linear-gradient(180deg, #0f1724 0%, #1a2332 55%, #141c28 100%);
 }
 
-:root.theme-dark {
+:root.theme-dark,
+:root.dark,
+:root.dark-theme {
   color-scheme: dark;
-  --app-bg: #0b1220;
-  --app-surface: #111827;
+  --app-bg: #0b0f19;
+  --app-surface: #1e293b;
   --app-surface-muted: #1e293b;
-  --app-text: #f1f5f9;
+  --app-surface-elevated: #1f2937;
+  --app-text: #f8fafc;
   --app-text-muted: #94a3b8;
-  --app-border: #334155;
-  --app-accent: #ff7a1a;
-  --app-sidebar-bg: #070d18;
-  --app-sidebar-text: #f8fafc;
-  --app-header-bg: #111827;
+  --app-text-subtle: #94a3b8;
+  --app-border: rgba(255, 255, 255, 0.1);
+  --app-border-strong: rgba(255, 255, 255, 0.1);
   --app-input-bg: #1e293b;
+  --app-input-border: rgba(255, 255, 255, 0.1);
+  --app-accent: #ff6600;
+  --app-sidebar-bg: #0b0f19;
+  --app-sidebar-text: #f8fafc;
+  --app-header-bg: #0b0f19;
+  --app-dialog-scrim: rgba(3, 7, 18, 0.82);
+  --app-focus-ring: 0 0 0 3px rgba(255, 102, 0, 0.45);
+  --app-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --app-shadow: 0 20px 56px rgba(0, 0, 0, 0.6);
   --app-hero-overlay: linear-gradient(
     135deg,
-    rgba(255, 102, 0, 0.75) 0%,
-    rgba(15, 23, 36, 0.95) 55%,
-    rgba(5, 8, 14, 0.98) 100%
+    rgba(255, 102, 0, 0.7) 0%,
+    rgba(11, 15, 25, 0.94) 55%,
+    rgba(3, 7, 18, 0.98) 100%
   );
-  --app-landing-bg: linear-gradient(180deg, #05080f 0%, #0f1724 55%, #0b1220 100%);
+  --app-landing-bg: linear-gradient(180deg, #0b0f19 0%, #0b0f19 55%, #0b0f19 100%);
 }
 
-body.theme-dark {
-  background-color: var(--app-bg);
-  color: var(--app-text);
+body.theme-dark,
+body.dark,
+body.dark-theme {
+  background-color: #0b0f19;
+  color: #f8fafc;
 }
 
 body.theme-light {
   background-color: var(--app-bg);
   color: var(--app-text);
+}
+
+// Browser autofill — match themed input surface (no yellow/blue flash)
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-text-fill-color: var(--app-text, #0f1724) !important;
+    caret-color: var(--app-text, #0f1724);
+    -webkit-box-shadow: 0 0 0 1000px var(--app-input-bg, #ffffff) inset !important;
+    box-shadow: 0 0 0 1000px var(--app-input-bg, #ffffff) inset !important;
+    transition: background-color 600000s ease-in-out 0s;
+  }
 }
 
 
@@ -169,7 +202,70 @@ body.theme-light {
   }
 }
 
-.membership-purchase-panel .mat-mdc-dialog-surface {
+.membership-purchase-panel .mat-mdc-dialog-surface,
+.product-shop-dialog-panel .mat-mdc-dialog-surface {
   border-radius: 18px !important;
   overflow: hidden;
+  background: var(--app-surface, #fff) !important;
+  color: var(--app-text, #0f1724) !important;
+}
+
+.product-shop-dialog-panel .mat-mdc-dialog-container {
+  --mat-dialog-transition-duration: 0ms;
+}
+
+@import 'styles/material-compat';
+@import 'styles/dark-theme';
+
+// Routed view host — pairs with routeAnimations (grid stack + overflow hidden)
+.route-outlet-host {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  width: 100%;
+  isolation: isolate;
+
+  > *:not(router-outlet) {
+    grid-area: 1 / 1;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  > app-auth-layout {
+    position: relative !important;
+    min-height: 100vh;
+    transform: none;
+  }
+}
+
+.dash-main.mat-sidenav-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dash-content .route-outlet-host {
+  flex: 0 0 auto;
+  min-height: calc(100vh - 72px - 48px);
+  overflow: hidden;
+}
+
+.auth-panel__body .route-outlet-host--auth {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  overflow: visible;
+  min-height: 0;
+  position: static;
+
+  > *:not(router-outlet) {
+    grid-area: unset;
+    position: relative;
+    width: 100%;
+    transform: none;
+    backface-visibility: visible;
+  }
 }

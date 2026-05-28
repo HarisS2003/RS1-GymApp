@@ -86,39 +86,49 @@
         <mat-card-title>{{ 'ORDERS.DETAILS.ORDER_ITEMS' | translate }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <table class="items-table">
-          <thead>
-          <tr>
-            <th>{{ 'ORDERS.DETAILS.PRODUCT' | translate }}</th>
-            <th class="text-right">{{ 'ORDERS.DETAILS.QUANTITY' | translate }}</th>
-            <th class="text-right">{{ 'ORDERS.DETAILS.UNIT_PRICE' | translate }}</th>
-            <th class="text-right">{{ 'ORDERS.DETAILS.DISCOUNT' | translate }}</th>
-            <th class="text-right">{{ 'ORDERS.DETAILS.TOTAL' | translate }}</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let item of order.items">
-            <td class="product-cell">
+        <table mat-table [dataSource]="orderItems" class="items-table">
+          <ng-container matColumnDef="product">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ORDERS.DETAILS.PRODUCT' | translate }}</th>
+            <td mat-cell *matCellDef="let item" class="product-cell">
               <span class="product-name">{{ item.product.productName }}</span>
             </td>
-            <td class="text-right">{{ item.quantity }}</td>
-            <td class="text-right">{{ item.unitPrice | currency:'BAM':'symbol':'1.2-2' }}</td>
-            <td class="text-right discount-cell">
+            <td mat-footer-cell *matFooterCellDef colspan="4" class="text-right">
+              <strong>{{ 'ORDERS.DETAILS.ORDER_TOTAL' | translate }}</strong>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="qty">
+            <th mat-header-cell *matHeaderCellDef class="text-right">{{ 'ORDERS.DETAILS.QUANTITY' | translate }}</th>
+            <td mat-cell *matCellDef="let item" class="text-right">{{ item.quantity }}</td>
+          </ng-container>
+          <ng-container matColumnDef="unitPrice">
+            <th mat-header-cell *matHeaderCellDef class="text-right">{{ 'ORDERS.DETAILS.UNIT_PRICE' | translate }}</th>
+            <td mat-cell *matCellDef="let item" class="text-right">
+              {{ item.unitPrice | currency: 'BAM' : 'symbol' : '1.2-2' }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="discount">
+            <th mat-header-cell *matHeaderCellDef class="text-right">{{ 'ORDERS.DETAILS.DISCOUNT' | translate }}</th>
+            <td mat-cell *matCellDef="let item" class="text-right discount-cell">
               <span *ngIf="item.discountAmount && item.discountAmount > 0">
-                -{{ item.discountAmount | currency:'BAM':'symbol':'1.2-2' }}
+                -{{ item.discountAmount | currency: 'BAM' : 'symbol' : '1.2-2' }}
                 <span class="discount-percent" *ngIf="item.discountPercent">({{ item.discountPercent }}%)</span>
               </span>
               <span *ngIf="!item.discountAmount || item.discountAmount === 0">-</span>
             </td>
-            <td class="text-right total-cell">{{ item.total | currency:'BAM':'symbol':'1.2-2' }}</td>
-          </tr>
-          </tbody>
-          <tfoot>
-          <tr class="total-row">
-            <td colspan="4" class="text-right"><strong>{{ 'ORDERS.DETAILS.ORDER_TOTAL' | translate }}</strong></td>
-            <td class="text-right total-amount"><strong>{{ order.totalAmount | currency:'BAM':'symbol':'1.2-2' }}</strong></td>
-          </tr>
-          </tfoot>
+          </ng-container>
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef class="text-right">{{ 'ORDERS.DETAILS.TOTAL' | translate }}</th>
+            <td mat-cell *matCellDef="let item" class="text-right total-cell">
+              {{ item.total | currency: 'BAM' : 'symbol' : '1.2-2' }}
+            </td>
+            <td mat-footer-cell *matFooterCellDef class="text-right total-amount">
+              <strong>{{ order.totalAmount | currency: 'BAM' : 'symbol' : '1.2-2' }}</strong>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="itemTableColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: itemTableColumns"></tr>
+          <tr mat-footer-row *matFooterRowDef="['product', 'total']"></tr>
         </table>
       </mat-card-content>
     </mat-card>

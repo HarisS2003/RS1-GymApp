@@ -644,7 +644,7 @@
       "GYM_LABEL": "Gym",
       "PRICE": "Price",
       "RENEW": "Renew membership",
-      "NO_PLAN": "No membership plans for your gym.",
+      "NO_PLAN": "You do not have an active membership.",
       "PERSONAL_DATA": "Personal Data",
       "EDIT": "Edit",
       "FULL_NAME": "Full name",

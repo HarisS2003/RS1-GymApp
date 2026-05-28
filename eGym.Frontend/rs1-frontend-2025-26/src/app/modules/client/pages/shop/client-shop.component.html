@@ -6,47 +6,46 @@
 } @else if (products.length === 0) {
   <p class="empty-msg">{{ 'CLIENT.HOME.NO_PRODUCTS' | translate }}</p>
 } @else {
-  <div class="shop-filters">
-    <button
-      type="button"
-      class="filter-chip"
-      [class.filter-chip--active]="!selectedCategory"
-      (click)="selectCategory(null)"
-    >
+  <mat-chip-listbox class="shop-filters" [value]="selectedCategory ?? ''" (change)="onCategoryChipChange($event)">
+    <mat-chip-option value="" [selected]="!selectedCategory">
       {{ 'CLIENT.SHOP.ALL_CATEGORIES' | translate }}
-    </button>
+    </mat-chip-option>
     @for (category of categories; track category) {
-      <button
-        type="button"
-        class="filter-chip"
-        [class.filter-chip--active]="selectedCategory === category"
-        (click)="selectCategory(category)"
-      >
+      <mat-chip-option [value]="category" [selected]="selectedCategory === category">
         {{ category }}
-      </button>
+      </mat-chip-option>
     }
-  </div>
+  </mat-chip-listbox>
 
   @if (filteredProducts.length === 0) {
     <p class="empty-msg">{{ 'CLIENT.SHOP.NO_CATEGORY' | translate }}</p>
   } @else {
-    <div class="products-grid">
+    <div class="products-grid" [@productGrid]="productGridKey">
       @for (product of filteredProducts; track product.id) {
-        <article class="product-card" (click)="openProduct(product)" role="button" tabindex="0">
-          <span class="product-badge">{{ product.categoryName }}</span>
-          <div class="product-card__img"><mat-icon>inventory_2</mat-icon></div>
-          <h3>{{ product.name }}</h3>
-          @if (product.description) {
-            <p>{{ product.description }}</p>
-          }
-          <span class="stock">{{ 'CLIENT.SHOP.STOCK' | translate }}: {{ product.stockQuantity }}</span>
-          <div class="product-card__footer">
-            <strong>{{ displayPrice(product) | number: '1.2-2' }} KM</strong>
-            <button mat-flat-button type="button" (click)="$event.stopPropagation(); openProduct(product)">
-              {{ 'CLIENT.SHOP.VIEW' | translate }}
-            </button>
-          </div>
-        </article>
+        <mat-card
+          class="product-card"
+          appearance="outlined"
+          (click)="openProduct(product)"
+          (keydown.enter)="openProduct(product)"
+          tabindex="0"
+          role="button"
+        >
+          <mat-card-content>
+            <span class="product-badge">{{ product.categoryName }}</span>
+            <div class="product-card__img"><mat-icon>inventory_2</mat-icon></div>
+            <h3>{{ product.name }}</h3>
+            @if (product.description) {
+              <p>{{ product.description }}</p>
+            }
+            <span class="stock">{{ 'CLIENT.SHOP.STOCK' | translate }}: {{ product.stockQuantity }}</span>
+            <div class="product-card__footer">
+              <strong>{{ displayPrice(product) | number: '1.2-2' }} KM</strong>
+              <button mat-flat-button type="button" (click)="$event.stopPropagation(); openProduct(product)">
+                {{ 'CLIENT.SHOP.VIEW' | translate }}
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   }

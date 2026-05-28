@@ -13,7 +13,8 @@
 
   <div class="variants-list" formArrayName="variants">
     @for (variant of variants.controls; track $index; let i = $index) {
-      <article class="variant-card" [formGroupName]="i">
+      <mat-card class="variant-card" appearance="outlined" [formGroupName]="i">
+        <mat-card-content>
         <div class="variant-card__head">
           <strong>{{ 'PRODUCTS.VARIANTS.ITEM' | translate: { index: i + 1 } }}</strong>
           <button
@@ -63,7 +64,8 @@
             </mat-error>
           </mat-form-field>
         </div>
-      </article>
+        </mat-card-content>
+      </mat-card>
     }
   </div>
 </section>

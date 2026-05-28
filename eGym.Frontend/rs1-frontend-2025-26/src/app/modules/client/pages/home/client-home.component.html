@@ -54,7 +54,8 @@
       } @else {
         <div class="group-events-grid">
           @for (training of groupTrainings; track training.id) {
-            <article class="group-event-card">
+            <mat-card class="group-event-card" appearance="outlined">
+              <mat-card-content>
               <div class="group-event-card__head">
                 <span>{{ formatTrainingTime(training) }}</span>
                 <strong>{{ freePlaces(training) }}/{{ training.capacity }} {{ 'CLIENT.HOME.FREE_PLACES' | translate }}</strong>
@@ -76,7 +77,8 @@
                   {{ 'CLIENT.HOME.JOIN_GROUP' | translate }}
                 }
               </button>
-            </article>
+              </mat-card-content>
+            </mat-card>
           }
         </div>
       }
@@ -91,20 +93,22 @@
     } @else {
       <div class="products-grid">
         @for (product of products; track product.id) {
-          <article class="product-card">
-            <span class="product-badge">{{ product.categoryName }}</span>
-            <div class="product-card__img">
-              <mat-icon>inventory_2</mat-icon>
-            </div>
-            <h3>{{ product.name }}</h3>
-            @if (product.description) {
-              <p>{{ product.description }}</p>
-            }
-            <div class="product-card__footer">
-              <strong>{{ product.price }} KM</strong>
-              <button mat-flat-button type="button">{{ 'COMMON.ADD' | translate }}</button>
-            </div>
-          </article>
+          <mat-card class="product-card" appearance="outlined">
+            <mat-card-content>
+              <span class="product-badge">{{ product.categoryName }}</span>
+              <div class="product-card__img">
+                <mat-icon>inventory_2</mat-icon>
+              </div>
+              <h3>{{ product.name }}</h3>
+              @if (product.description) {
+                <p>{{ product.description }}</p>
+              }
+              <div class="product-card__footer">
+                <strong>{{ product.price }} KM</strong>
+                <button mat-flat-button type="button">{{ 'COMMON.ADD' | translate }}</button>
+              </div>
+            </mat-card-content>
+          </mat-card>
         }
       </div>
     }

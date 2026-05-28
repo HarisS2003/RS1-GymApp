@@ -103,12 +103,16 @@ $accent: #ff6600;
   overflow: auto;
 }
 
-.admin-table {
+.admin-table,
+table.admin-table.mat-mdc-table {
   width: 100%;
   border-collapse: collapse;
 
   th,
-  td {
+  td,
+  .mat-mdc-header-cell,
+  .mat-mdc-cell,
+  .mat-mdc-footer-cell {
     padding: 16px 18px;
     text-align: left;
     border-bottom: 1px solid var(--app-border, #f1f5f9);
@@ -116,14 +120,16 @@ $accent: #ff6600;
     color: var(--app-text, #0f1724);
   }
 
-  th {
+  th,
+  .mat-mdc-header-cell {
     background: var(--app-surface-muted, #f8fafc);
     color: var(--app-text-muted, #64748b);
     font-weight: 700;
     font-size: 13px;
   }
 
-  tbody tr:hover {
+  tbody tr:hover,
+  .mat-mdc-row:hover {
     background: var(--app-surface-muted, #fafbfc);
   }
 }
@@ -202,6 +208,12 @@ $accent: #ff6600;
   border-radius: 14px;
   padding: 22px 24px;
   color: #fff;
+
+  span,
+  strong,
+  small {
+    color: #fff;
+  }
 
   span {
     display: block;

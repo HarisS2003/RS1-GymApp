@@ -9,7 +9,12 @@
 } @else {
   <div class="plans-row">
     @for (plan of plans; track plan.id; let i = $index) {
-      <article class="plan-card" [class]="'plan-card--' + (i % 4)" [class.plan-card--featured]="isRecommended(plan)">
+      <mat-card
+        class="plan-card"
+        appearance="outlined"
+        [ngClass]="'plan-card--' + (i % 4)"
+        [class.plan-card--featured]="isRecommended(plan)"
+      >
         @if (isRecommended(plan)) {
           <span class="plan-badge">{{ 'CLIENT.HOME.RECOMMENDED' | translate }}</span>
         }
@@ -17,26 +22,28 @@
           <h3>{{ plan.name }}</h3>
           <span>{{ formatDuration(plan.durationDays) }}</span>
         </div>
-        <div class="plan-card__price">
-          {{ finalPrice(plan) }} KM
-          @if (plan.discountPercentage > 0) {
-            <small>-{{ plan.discountPercentage }}%</small>
-          }
-        </div>
-        <button
-          mat-flat-button
-          type="button"
-          class="plan-card__btn plan-card__btn--buy"
-          [disabled]="purchasingId !== null"
-          (click)="buyPlan(plan)"
-        >
-          @if (purchasingId === plan.id) {
-            <mat-spinner diameter="22"></mat-spinner>
-          } @else {
-            {{ 'CLIENT.MEMBERSHIPS.BUY' | translate }}
-          }
-        </button>
-      </article>
+        <mat-card-content class="plan-card__body">
+          <div class="plan-card__price">
+            {{ finalPrice(plan) }} KM
+            @if (plan.discountPercentage > 0) {
+              <small>-{{ plan.discountPercentage }}%</small>
+            }
+          </div>
+          <button
+            mat-flat-button
+            type="button"
+            class="plan-card__btn plan-card__btn--buy"
+            [disabled]="purchasingId !== null"
+            (click)="buyPlan(plan)"
+          >
+            @if (purchasingId === plan.id) {
+              <mat-spinner diameter="22"></mat-spinner>
+            } @else {
+              {{ 'CLIENT.MEMBERSHIPS.BUY' | translate }}
+            }
+          </button>
+        </mat-card-content>
+      </mat-card>
     }
   </div>
 }

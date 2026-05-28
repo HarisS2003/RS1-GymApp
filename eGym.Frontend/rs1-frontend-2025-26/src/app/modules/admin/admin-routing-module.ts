@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { withPageAnimation } from '../../core/animations/route-animations';
 
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 import { ProductsComponent } from './catalogs/products/products.component';
@@ -19,55 +20,65 @@ const routes: Routes = [
     path: '',
     component: AdminLayoutComponent,
     children: [
-      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'dashboard', component: AdminDashboardComponent, data: withPageAnimation('AdminDashboard') },
 
       // PRODUCTS
       {
         path: 'products',
         component: ProductsComponent,
+        data: withPageAnimation('AdminProducts'),
       },
       {
         path: 'products/add',
         component: ProductsAddComponent,
+        data: withPageAnimation('AdminProductsAdd'),
       },
       {
         path: 'products/:id/edit',
         component: ProductsEditComponent,
+        data: withPageAnimation('AdminProductsEdit'),
       },
 
       // MEMBERSHIP PLANS
       {
         path: 'membership-plans',
         component: MembershipPlansComponent,
+        data: withPageAnimation('AdminMembershipPlans'),
       },
       {
         path: 'membership-plans/add',
         component: MembershipPlansAddComponent,
+        data: withPageAnimation('AdminMembershipPlansAdd'),
       },
       {
         path: 'membership-plans/:id/edit',
         component: MembershipPlansEditComponent,
+        data: withPageAnimation('AdminMembershipPlansEdit'),
       },
 
       // PRODUCT CATEGORIES
       {
         path: 'product-categories',
         component: ProductCategoriesComponent,
+        data: withPageAnimation('AdminProductCategories'),
       },
 
       {
         path: 'orders',
         component: AdminOrdersComponent,
+        data: withPageAnimation('AdminOrders'),
       },
 
       {
         path: 'shop',
         component: AdminShopComponent,
+        data: withPageAnimation('AdminShop'),
       },
 
       {
         path: 'settings',
         component: AdminSettingsComponent,
+        data: withPageAnimation('AdminSettings'),
       },
 
 

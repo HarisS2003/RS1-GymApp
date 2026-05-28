@@ -2,12 +2,16 @@ $accent: var(--app-accent, #ff6600);
 $sidebar-bg: var(--app-sidebar-bg, #0f1724);
 $sidebar-active: var(--app-accent, #ff6600);
 $page-bg: var(--app-bg, #f1f5f9);
+$surface: var(--app-surface, #ffffff);
+$surface-muted: var(--app-surface-muted, #f8fafc);
 $text-dark: var(--app-text, #0f1724);
 $text-muted: var(--app-text-muted, #64748b);
+$border: var(--app-border, #e2e8f0);
+$input-bg: var(--app-input-bg, #ffffff);
 
 @mixin card {
   background: var(--app-surface, #fff);
   border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(15, 23, 36, 0.06);
+  box-shadow: var(--app-card-shadow, 0 4px 20px rgba(15, 23, 36, 0.06));
   border: 1px solid var(--app-border, transparent);
 }

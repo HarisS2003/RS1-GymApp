@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { MatChipListboxChange } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError, of } from 'rxjs';
 import { ProductsApiService } from '../../../../api-services/products/products-api.service';
@@ -8,12 +9,14 @@ import { UserProfileService } from '../../../../core/services/user-profile.servi
 import { ProductShopDialogComponent } from './product-shop-dialog.component';
 import { ToasterService } from '../../../../core/services/toaster.service';
 import { TranslateService } from '@ngx-translate/core';
+import { productGridAnimation } from '../../../../core/animations/ui.animations';
 
 @Component({
   selector: 'app-client-shop',
   standalone: false,
   templateUrl: './client-shop.component.html',
   styleUrl: './client-shop.component.scss',
+  animations: [productGridAnimation],
 })
 export class ClientShopComponent implements OnInit {
   private productsApi = inject(ProductsApiService);
@@ -62,8 +65,18 @@ export class ClientShopComponent implements OnInit {
     return this.products.filter((p) => p.categoryName === this.selectedCategory);
   }
 
+  /** Changes when filters change — drives stagger animation on the grid. */
+  get productGridKey(): string {
+    return `${this.selectedCategory ?? 'all'}:${this.filteredProducts.length}`;
+  }
+
   selectCategory(category: string | null): void {
     this.selectedCategory = category;
+  }
+
+  onCategoryChipChange(event: MatChipListboxChange): void {
+    const value = event.value as string;
+    this.selectCategory(value ? value : null);
   }
 
   openProduct(product: ListProductsQueryDto): void {
@@ -78,6 +91,8 @@ export class ClientShopComponent implements OnInit {
           width: '520px',
           maxWidth: '95vw',
           panelClass: 'product-shop-dialog-panel',
+          enterAnimationDuration: 0,
+          exitAnimationDuration: 0,
         });
       },
       error: () => {

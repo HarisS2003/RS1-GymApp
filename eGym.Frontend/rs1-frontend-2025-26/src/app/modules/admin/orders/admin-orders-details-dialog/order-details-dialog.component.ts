@@ -22,6 +22,12 @@ export class OrderDetailsDialogComponent {
   isLoading = false;
   errorMessage: string | null = null;
 
+  readonly itemTableColumns = ['product', 'qty', 'unitPrice', 'discount', 'total'];
+
+  get orderItems() {
+    return this.order?.items ?? [];
+  }
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: OrderDetailsDialogData) {}
 
   ngOnInit(): void {

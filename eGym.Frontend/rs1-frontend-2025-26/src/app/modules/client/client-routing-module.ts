@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { withPageAnimation } from '../../core/animations/route-animations';
 import { ClientLayoutComponent } from './layout/client-layout.component';
 import { ClientHomeComponent } from './pages/home/client-home.component';
 import { ClientTrainersComponent } from './pages/trainers/client-trainers.component';
@@ -14,13 +15,17 @@ const routes: Routes = [
     path: '',
     component: ClientLayoutComponent,
     children: [
-      { path: '', component: ClientHomeComponent },
-      { path: 'trainers', component: ClientTrainersComponent },
-      { path: 'trainers/:trainerId/book', component: ClientTrainerBookingComponent },
-      { path: 'shop', component: ClientShopComponent },
-      { path: 'memberships', component: ClientMembershipsComponent },
-      { path: 'profile', component: ClientProfileComponent },
-      { path: 'schedule', component: ClientScheduleComponent },
+      { path: '', component: ClientHomeComponent, data: withPageAnimation('ClientHome') },
+      { path: 'trainers', component: ClientTrainersComponent, data: withPageAnimation('ClientTrainers') },
+      {
+        path: 'trainers/:trainerId/book',
+        component: ClientTrainerBookingComponent,
+        data: withPageAnimation('ClientTrainerBooking'),
+      },
+      { path: 'shop', component: ClientShopComponent, data: withPageAnimation('ClientShop') },
+      { path: 'memberships', component: ClientMembershipsComponent, data: withPageAnimation('ClientMemberships') },
+      { path: 'profile', component: ClientProfileComponent, data: withPageAnimation('ClientProfile') },
+      { path: 'schedule', component: ClientScheduleComponent, data: withPageAnimation('ClientSchedule') },
       { path: '**', redirectTo: '' },
     ],
   },

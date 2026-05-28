@@ -3,27 +3,27 @@
   <p>{{ 'CLIENT.GROUP_TRAINING_DIALOG.SUB' | translate }}</p>
 
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <label>
-      <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.DESCRIPTION' | translate }}</span>
-      <textarea formControlName="description" rows="4"></textarea>
-    </label>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'CLIENT.GROUP_TRAINING_DIALOG.DESCRIPTION' | translate }}</mat-label>
+      <textarea matInput formControlName="description" rows="4"></textarea>
+    </mat-form-field>
 
     <div class="group-dialog__row">
-      <label>
-        <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.DATE' | translate }}</span>
-        <input type="date" formControlName="date" [min]="minDate" />
-      </label>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'CLIENT.GROUP_TRAINING_DIALOG.DATE' | translate }}</mat-label>
+        <input matInput type="date" formControlName="date" [min]="minDate" />
+      </mat-form-field>
 
-      <label>
-        <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.TIME' | translate }}</span>
-        <input type="time" formControlName="startTime" step="1800" />
-      </label>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'CLIENT.GROUP_TRAINING_DIALOG.TIME' | translate }}</mat-label>
+        <input matInput type="time" formControlName="startTime" step="1800" />
+      </mat-form-field>
     </div>
 
-    <label>
-      <span>{{ 'CLIENT.GROUP_TRAINING_DIALOG.CAPACITY' | translate }}</span>
-      <input type="number" formControlName="capacity" min="2" max="100" />
-    </label>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'CLIENT.GROUP_TRAINING_DIALOG.CAPACITY' | translate }}</mat-label>
+      <input matInput type="number" formControlName="capacity" min="2" max="100" />
+    </mat-form-field>
 
     <div class="group-dialog__actions">
       <button mat-stroked-button type="button" (click)="close()">

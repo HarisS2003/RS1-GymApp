@@ -1,18 +1,30 @@
 @import '../styles/dashboard-theme';
 
 .dash {
-  display: grid;
-  grid-template-columns: 240px 1fr;
   min-height: 100vh;
   background: $page-bg;
+}
+
+.dash-header__spacer {
+  flex: 1 1 auto;
+}
+
+.dash-header.mat-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dash-menu-btn {
+  margin-right: 4px;
+  color: var(--app-text, #0f1724);
 }
 
 .dash-sidebar {
   background: $sidebar-bg;
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 14px;
 }
 
 .dash-brand {
@@ -22,6 +34,12 @@
   padding: 8px 10px 24px;
   font-size: 22px;
   font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+
+  > span {
+    color: #fff;
+  }
 
   mat-icon {
     color: $accent;
@@ -34,27 +52,6 @@
   flex-direction: column;
   gap: 6px;
   flex: 1;
-
-  a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    color: rgba(255, 255, 255, 0.85);
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.2s;
-
-    &.active {
-      background: $sidebar-active;
-      color: #fff;
-    }
-
-    &:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.08);
-    }
-  }
 }
 
 .dash-sidebar-user {
@@ -65,9 +62,12 @@
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
+  color: #fff;
+  flex-shrink: 0;
 
   strong {
     font-size: 14px;
+    color: #fff;
   }
 
   span {
@@ -79,17 +79,13 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .dash-header {
   background: var(--app-header-bg, #fff);
   border-bottom: 1px solid var(--app-border, #e2e8f0);
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
 }
 
 .dash-header__user {
@@ -151,25 +147,16 @@
 
 .dash-content {
   padding: 24px;
-  flex: 1;
+  flex: 0 0 auto;
+
+  .route-outlet-host {
+    flex: 0 0 auto;
+    min-height: calc(100vh - 72px - 48px);
+    overflow: hidden;
+  }
 }
 
 @media (max-width: 900px) {
-  .dash {
-    grid-template-columns: 1fr;
-  }
-
-  .dash-sidebar {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .dash-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
   .dash-sidebar-user {
     display: none;
   }
