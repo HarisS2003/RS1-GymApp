@@ -1,3 +1,5 @@
+using Market.Shared.Validation;
+
 namespace Market.Application.Modules.Catalog.Users.Commands.Create;
 
 public class CreateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<UserEntity> hasher)
@@ -13,6 +15,9 @@ public class CreateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<UserEnt
 
         var normalizedEmail = request.Email.Trim();
         if (string.IsNullOrWhiteSpace(normalizedEmail)) throw new ValidationException("Email is required.");
+
+        if (!BosnianPhoneNumberValidator.IsValid(request.PhoneNumber, out var normalizedPhone))
+            throw new ValidationException("Invalid Bosnian phone number format.");
 
         var normalizedPassword = request.Password.Trim();
         if (string.IsNullOrWhiteSpace(normalizedPassword)) throw new ValidationException("Password is required.");
@@ -34,6 +39,7 @@ public class CreateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<UserEnt
             FirstName = normalizedFirst,
             LastName = normalizedLast,
             Email = normalizedEmail,
+            PhoneNumber = normalizedPhone!,
             RoleId = request.RoleId,
             GymId = request.GymId
         };

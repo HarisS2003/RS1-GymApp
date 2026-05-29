@@ -3,13 +3,16 @@
   width: 100%;
   min-height: 100vh;
   position: relative;
+  overflow-x: clip;
 }
 
 .auth-split {
   min-height: 100vh;
   width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
@@ -81,6 +84,8 @@
   position: relative;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .auth-panel__toolbar {
@@ -89,6 +94,15 @@
   flex-shrink: 0;
   width: 100%;
   max-width: 440px;
+  min-width: 0;
+  overflow: hidden;
+
+  .locale-theme-toolbar {
+    max-width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
 }
 
 .auth-panel__body {
@@ -104,8 +118,9 @@
     width: 100%;
     max-width: 440px;
     margin: 0 auto;
-    overflow: visible;
+    overflow-x: clip;
     min-height: 0;
+    min-width: 0;
     position: static;
   }
 }

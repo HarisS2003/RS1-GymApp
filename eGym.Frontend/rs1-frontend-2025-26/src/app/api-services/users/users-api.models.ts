@@ -12,6 +12,7 @@ export interface ListUsersQueryDto {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   roleId: number;
   gymId: number;
 }
@@ -23,6 +24,7 @@ export interface GetUserByIdQueryDto {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   roleId: number;
   gymId: number;
 }
@@ -32,6 +34,7 @@ export interface CreateUserCommand {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   password: string;
   roleId: number;
   gymId: number;
@@ -42,6 +45,7 @@ export interface UpdateUserCommand {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   password?: string | null;
   roleId: number;
   gymId: number;

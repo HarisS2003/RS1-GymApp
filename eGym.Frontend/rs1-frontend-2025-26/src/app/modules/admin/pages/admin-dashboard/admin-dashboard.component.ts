@@ -163,6 +163,7 @@ export class AdminDashboardComponent implements OnInit {
         firstName: u.firstName,
         lastName: u.lastName,
         email: u.email,
+        phoneNumber: u.phoneNumber,
         roleId: TRAINER_ROLE_ID,
         gymId: u.gymId,
       })

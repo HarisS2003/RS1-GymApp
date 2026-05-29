@@ -14,6 +14,7 @@ export interface UserProfileView {
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   roleId: number;
   gymId: number;
   gymName: string;
@@ -48,6 +49,7 @@ export class UserProfileService {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            phoneNumber: user.phoneNumber,
             roleId: user.roleId,
             gymId: user.gymId,
             gymName: gym.name,
@@ -59,6 +61,7 @@ export class UserProfileService {
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
+              phoneNumber: user.phoneNumber,
               roleId: user.roleId,
               gymId: user.gymId,
               gymName: '',

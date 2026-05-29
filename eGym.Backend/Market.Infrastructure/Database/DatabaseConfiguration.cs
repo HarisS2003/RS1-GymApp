@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Common;
+using Market.Infrastructure.Database.Encryption;
 using Market.Infrastructure.Database.Seeders;
 using System.Linq.Expressions;
 
@@ -46,6 +47,7 @@ public partial class DatabaseContext
 
         // učitaj sve konfiguracije iz Infrastructure.Database.Configurations
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
+        modelBuilder.ApplyEncryptedStringConverters(_encryption);
 
         ApplyGlobalFielters(modelBuilder);
 

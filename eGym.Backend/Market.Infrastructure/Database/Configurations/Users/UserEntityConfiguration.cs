@@ -23,6 +23,11 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasMaxLength(200);
 
         builder
+            .Property(x => x.PhoneNumber)
+            .IsRequired()
+            .HasMaxLength(512);
+
+        builder
             .Property(x => x.PasswordHash)
             .IsRequired();
 

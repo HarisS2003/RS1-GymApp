@@ -28,6 +28,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   readonly demo = DEMO_LOGIN;
   hidePassword = true;
+  submitted = false;
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -48,7 +49,11 @@ export class LoginComponent extends BaseComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid || this.isLoading) return;
+    this.submitted = true;
+    if (this.form.invalid || this.isLoading) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.startLoading();
 

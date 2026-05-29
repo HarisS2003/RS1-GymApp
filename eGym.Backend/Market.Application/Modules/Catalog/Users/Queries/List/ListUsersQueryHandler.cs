@@ -28,6 +28,7 @@ public sealed class ListUsersQueryHandler(IAppDbContext ctx)
             FirstName = x.FirstName,
             LastName = x.LastName,
             Email = x.Email,
+            PhoneNumber = x.PhoneNumber,
             RoleId = x.RoleId,
             GymId = x.GymId
         });

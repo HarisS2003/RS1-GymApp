@@ -20,12 +20,12 @@
         formControlName="email"
         [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate"
         autocomplete="email"
-        [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+        [class.invalid]="submitted && form.get('email')?.invalid"
       />
-      @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+      @if (submitted && form.get('email')?.hasError('required')) {
         <span class="auth-field-error">{{ 'AUTH.EMAIL_REQUIRED' | translate }}</span>
       }
-      @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+      @if (submitted && form.get('email')?.hasError('email')) {
         <span class="auth-field-error">{{ 'AUTH.EMAIL_INVALID' | translate }}</span>
       }
     </div>
@@ -38,16 +38,17 @@
         formControlName="password"
         [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
         autocomplete="current-password"
-        [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+        [class.invalid]="submitted && form.get('password')?.invalid"
       />
       <button
         type="button"
+        tabindex="-1"
         (click)="hidePassword = !hidePassword"
         [attr.aria-label]="'AUTH.SHOW_PASSWORD' | translate"
       >
         <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
       </button>
-      @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+      @if (submitted && form.get('password')?.hasError('required')) {
         <span class="auth-field-error">{{ 'AUTH.PASSWORD_REQUIRED' | translate }}</span>
       }
     </div>
@@ -60,7 +61,7 @@
       <a routerLink="/auth/forgot-password">{{ 'AUTH.FORGOT_PASSWORD' | translate }}</a>
     </div>
 
-    <button class="auth-submit" type="submit" [disabled]="form.invalid || isLoading">
+    <button class="auth-submit" type="submit" [disabled]="isLoading">
       @if (isLoading) {
         {{ 'AUTH.LOGIN.LOADING' | translate }}
       } @else {
@@ -74,7 +75,7 @@
     </p>
   </form>
 
-  <div class="auth-demo">
+  <div class="auth-demo" aria-hidden="true">
     <strong>{{ 'AUTH.DEMO_TITLE' | translate }}</strong>
     <p>Email: {{ demo.email }}</p>
     <p>{{ 'AUTH.DEMO_PASSWORD' | translate }}: {{ demo.password }}</p>

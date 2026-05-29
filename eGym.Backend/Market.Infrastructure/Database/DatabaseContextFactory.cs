@@ -1,3 +1,5 @@
+using Market.Infrastructure.Security;
+using Market.Shared.Options;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -20,9 +22,15 @@ public sealed class DatabaseContextFactory : IDesignTimeDbContextFactory<Databas
         var cs = configuration.GetSection("ConnectionStrings")["Main"]
                  ?? throw new InvalidOperationException("Missing ConnectionStrings:Main.");
 
+        var encryptionKey = configuration.GetSection(EncryptionOptions.SectionName)["Key"]
+                            ?? throw new InvalidOperationException("Missing Encryption:Key.");
+
         var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
         optionsBuilder.UseSqlServer(cs);
 
-        return new DatabaseContext(optionsBuilder.Options, TimeProvider.System);
+        return new DatabaseContext(
+            optionsBuilder.Options,
+            TimeProvider.System,
+            new AesEncryptionHelper(encryptionKey));
     }
 }

@@ -258,8 +258,9 @@ select {
   width: 100%;
   max-width: 440px;
   margin: 0 auto;
-  overflow: visible;
+  overflow-x: clip;
   min-height: 0;
+  min-width: 0;
   position: static;
 
   > *:not(router-outlet) {

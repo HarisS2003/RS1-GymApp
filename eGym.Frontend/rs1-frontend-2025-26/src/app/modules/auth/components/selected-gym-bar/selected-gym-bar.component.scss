@@ -5,6 +5,8 @@ $accent: var(--app-accent, #ff5722);
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
+  max-width: 100%;
   background: var(--app-surface-muted, #fff7ed);
   border: 1px solid color-mix(in srgb, var(--app-accent, #ff5722) 28%, var(--app-border, #e2e8f0));
   border-radius: 12px;
@@ -68,10 +70,17 @@ $accent: var(--app-accent, #ff5722);
   font-family: inherit;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   padding: 4px 0;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 

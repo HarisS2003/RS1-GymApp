@@ -1,5 +1,6 @@
 ﻿using Market.Application.Abstractions;
 using Market.Domain.Entities;
+using Market.Infrastructure.Security;
 
 namespace Market.Infrastructure.Database;
 
@@ -26,9 +27,15 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<ReviewEntity> Reviews => Set<ReviewEntity>();
 
     private readonly TimeProvider _clock;
-    public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock)
-     : base(options)
+    private readonly AesEncryptionHelper _encryption;
+
+    public DatabaseContext(
+        DbContextOptions<DatabaseContext> options,
+        TimeProvider clock,
+        AesEncryptionHelper encryption)
+        : base(options)
     {
         _clock = clock;
+        _encryption = encryption;
     }
 }

@@ -16,6 +16,7 @@ import { GymSelectionService } from '../../public/services/gym-selection.service
 import { ADMIN_ROLE_ID, MEMBER_ROLE_ID } from '../constants/auth.constants';
 import { UserProfileService } from '../../../core/services/user-profile.service';
 import { TranslateService } from '@ngx-translate/core';
+import { bosnianPhoneValidator } from '../../../core/validators/bosnian-phone.validator';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password')?.value;
@@ -47,6 +48,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', [Validators.required, bosnianPhoneValidator()]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     },
@@ -91,13 +93,14 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
     this.startLoading();
 
-    const { firstName, lastName, email, password } = this.form.getRawValue();
+    const { firstName, lastName, email, phoneNumber, password } = this.form.getRawValue();
 
     this.usersApi
       .create({
         firstName: firstName ?? '',
         lastName: lastName ?? '',
         email: email ?? '',
+        phoneNumber: phoneNumber ?? '',
         password: password ?? '',
         roleId: MEMBER_ROLE_ID,
         gymId: gym.id,

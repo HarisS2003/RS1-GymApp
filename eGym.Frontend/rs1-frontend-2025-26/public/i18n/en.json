@@ -29,6 +29,9 @@
     "PASSWORD_MIN": "Minimum 6 characters",
     "PASSWORD_MISMATCH": "Passwords do not match",
     "NAME_REQUIRED": "Required field",
+    "PHONE": "Phone number",
+    "PHONE_PLACEHOLDER": "+38761123456 or 061123456",
+    "PHONE_REQUIRED": "Phone number is required",
     "SHOW_PASSWORD": "Show password",
     "PASSWORD_STRENGTH": {
       "LABEL": "Password strength",
@@ -649,6 +652,7 @@
       "EDIT": "Edit",
       "FULL_NAME": "Full name",
       "EMAIL": "Email",
+      "PHONE": "Phone number",
       "GYM": "Gym",
       "ROLE": "Role",
       "UPCOMING_TRAININGS": "Upcoming trainings",

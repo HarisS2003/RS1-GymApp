@@ -29,6 +29,9 @@
     "PASSWORD_MIN": "Minimum 6 karaktera",
     "PASSWORD_MISMATCH": "Lozinke se ne poklapaju",
     "NAME_REQUIRED": "Obavezno polje",
+    "PHONE": "Broj telefona",
+    "PHONE_PLACEHOLDER": "+38761123456 ili 061123456",
+    "PHONE_REQUIRED": "Broj telefona je obavezan",
     "SHOW_PASSWORD": "Prikaži lozinku",
     "PASSWORD_STRENGTH": {
       "LABEL": "Jačina lozinke",
@@ -41,7 +44,7 @@
     "LOGIN": {
       "TITLE": "Prijava",
       "EMAIL_LABEL": "Email Adresa",
-      "EMAIL_PLACEHOLDER": "vas.email@primer.com",
+      "EMAIL_PLACEHOLDER": "vas.email@primjer.com",
       "PASSWORD_LABEL": "Lozinka",
       "PASSWORD_PLACEHOLDER": "••••••••",
       "REMEMBER_ME": "Zapamti me",
@@ -649,6 +652,7 @@
       "EDIT": "Izmijeni",
       "FULL_NAME": "Ime i Prezime",
       "EMAIL": "Email",
+      "PHONE": "Broj telefona",
       "GYM": "Teretana",
       "ROLE": "Uloga",
       "UPCOMING_TRAININGS": "Predstojeći Treninzi",

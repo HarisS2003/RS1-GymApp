@@ -1,3 +1,5 @@
+using Market.Shared.Validation;
+
 namespace Market.Application.Modules.Catalog.Users.Commands.Update;
 
 public sealed class UpdateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<UserEntity> hasher)
@@ -17,6 +19,9 @@ public sealed class UpdateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<
         var normalizedEmail = request.Email.Trim();
         if (string.IsNullOrWhiteSpace(normalizedEmail)) throw new ValidationException("Email is required.");
 
+        if (!BosnianPhoneNumberValidator.IsValid(request.PhoneNumber, out var normalizedPhone))
+            throw new ValidationException("Invalid Bosnian phone number format.");
+
         if (!await ctx.Roles.AnyAsync(x => x.Id == request.RoleId, ct))
             throw new ValidationException("Invalid RoleId.");
 
@@ -32,6 +37,7 @@ public sealed class UpdateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<
         entity.FirstName = normalizedFirst;
         entity.LastName = normalizedLast;
         entity.Email = normalizedEmail;
+        entity.PhoneNumber = normalizedPhone!;
         entity.RoleId = request.RoleId;
         entity.GymId = request.GymId;
 

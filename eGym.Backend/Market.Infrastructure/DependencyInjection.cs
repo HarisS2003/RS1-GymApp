@@ -1,6 +1,7 @@
 ﻿using Market.Application.Abstractions;
 using Market.Infrastructure.Common;
 using Market.Infrastructure.Database;
+using Market.Infrastructure.Security;
 using Market.Shared.Constants;
 using Market.Shared.Options;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,17 @@ public static class DependencyInjection
             .Bind(configuration.GetSection(ConnectionStringsOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
+
+        services.AddOptions<EncryptionOptions>()
+            .Bind(configuration.GetSection(EncryptionOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddSingleton<AesEncryptionHelper>(sp =>
+        {
+            var key = sp.GetRequiredService<IOptions<EncryptionOptions>>().Value.Key;
+            return new AesEncryptionHelper(key);
+        });
 
         // DbContext: InMemory for test environments; SQL Server otherwise
         services.AddDbContext<DatabaseContext>((sp, options) =>

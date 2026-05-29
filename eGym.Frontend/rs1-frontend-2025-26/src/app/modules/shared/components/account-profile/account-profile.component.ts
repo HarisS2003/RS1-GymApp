@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
@@ -37,6 +38,7 @@ import {
   ListProductsRequest,
 } from '../../../../api-services/products/products-api.models';
 import { TrainingRequestsApiService } from '../../../../api-services/training-requests/training-requests-api.service';
+import { bosnianPhoneValidator } from '../../../../core/validators/bosnian-phone.validator';
 import {
   ListTrainerTrainingRequestQueryDto,
   ListTrainingRequestQueryDto,
@@ -59,6 +61,28 @@ export interface PurchaseHistoryRow {
   typeClass: string;
   itemName: string;
   price: number;
+}
+
+/** Phone errors only after user edits value or clicks save. */
+class ProfilePhoneErrorStateMatcher implements ErrorStateMatcher {
+  constructor(private readonly getSaveAttempted: () => boolean) {}
+
+  isErrorState(
+    control: FormControl | null,
+    _form: FormGroupDirective | NgForm | null,
+  ): boolean {
+    if (!control) return false;
+
+    if (control.hasError('required')) {
+      return this.getSaveAttempted();
+    }
+
+    if (control.hasError('bosnianPhone')) {
+      return (control.dirty && control.touched) || this.getSaveAttempted();
+    }
+
+    return false;
+  }
 }
 
 const fadeIn = trigger('fadeIn', [
@@ -95,7 +119,11 @@ export class AccountProfileComponent implements OnInit {
   saving = false;
   deletingProfile = false;
   editing = false;
+  profileSaveAttempted = false;
   saveError: string | null = null;
+  readonly phoneErrorStateMatcher = new ProfilePhoneErrorStateMatcher(
+    () => this.profileSaveAttempted,
+  );
 
   activeMembership: GetMyActiveUserMembershipQueryDto | null = null;
   trainerRecord: ListTrainersQueryDto | null = null;
@@ -110,6 +138,7 @@ export class AccountProfileComponent implements OnInit {
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
+    phoneNumber: ['', [Validators.required, bosnianPhoneValidator()]],
     password: [''],
     bio: [''],
     experienceYears: [0, [Validators.min(0)]],
@@ -239,13 +268,18 @@ export class AccountProfileComponent implements OnInit {
     if (!p) return;
     this.patchProfileForm(p);
     this.saveError = null;
+    this.profileSaveAttempted = false;
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
     this.editing = true;
   }
 
   cancelEdit(): void {
     this.editing = false;
     this.saveError = null;
+    this.profileSaveAttempted = false;
     this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   deleteProfile(): void {
@@ -278,6 +312,7 @@ export class AccountProfileComponent implements OnInit {
   }
 
   applyChanges(): void {
+    this.profileSaveAttempted = true;
     if (this.form.invalid || this.saving) {
       this.form.markAllAsTouched();
       return;
@@ -286,11 +321,13 @@ export class AccountProfileComponent implements OnInit {
     const p = this.profileService.profile();
     if (!p) return;
 
-    const { firstName, lastName, email, password, bio, experienceYears } = this.form.getRawValue();
+    const { firstName, lastName, email, phoneNumber, password, bio, experienceYears } =
+      this.form.getRawValue();
     const userPayload: UpdateUserCommand = {
       firstName: firstName ?? '',
       lastName: lastName ?? '',
       email: email ?? '',
+      phoneNumber: phoneNumber ?? '',
       roleId: p.roleId,
       gymId: p.gymId,
     };
@@ -318,6 +355,7 @@ export class AccountProfileComponent implements OnInit {
         next: () => {
           this.saving = false;
           this.editing = false;
+          this.profileSaveAttempted = false;
           this.toaster.success(this.translate.instant('CLIENT.PROFILE.SAVE_SUCCESS'));
           this.loadPageData();
         },
@@ -568,6 +606,7 @@ export class AccountProfileComponent implements OnInit {
       firstName: profile.firstName,
       lastName: profile.lastName,
       email: profile.email,
+      phoneNumber: profile.phoneNumber,
       password: '',
       bio: this.trainerRecord?.bio ?? '',
       experienceYears: this.trainerRecord?.experienceYears ?? 0,

@@ -1,4 +1,5 @@
-﻿using Market.Domain.Common;
+﻿using Market.Domain.Attributes;
+using Market.Domain.Common;
 
 namespace Market.Domain.Entities;
 
@@ -7,6 +8,10 @@ public class UserEntity : BaseEntity
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+
+    [Encrypted]
+    public string PhoneNumber { get; set; } = string.Empty;
+
     public string PasswordHash { get; set; } = string.Empty;
     public int RoleId { get; set; }
     public int GymId { get; set; }
