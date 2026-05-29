@@ -27,19 +27,20 @@
           <mat-icon matSuffix>filter_list</mat-icon>
         </mat-form-field>
 
-        <!-- Search -->
-        <mat-form-field class="search-field" appearance="fill">
-          <mat-label>{{ 'ORDERS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
-          <input
-            matInput
-            [formControl]="searchControl"
-            [placeholder]="'ORDERS.SEARCH_INPUT_PLACEHOLDER' | translate"
-          />
-          <mat-icon matSuffix>search</mat-icon>
-          <mat-hint *ngIf="searchControl.value && searchControl.value.length < 3">
-            {{ 'ORDERS.SEARCH_MIN_LENGTH' | translate }}
-          </mat-hint>
-        </mat-form-field>
+        <div class="admin-search-group">
+          <div class="admin-search">
+            <mat-icon>search</mat-icon>
+            <input
+              type="search"
+              [formControl]="searchControl"
+              [placeholder]="'ORDERS.SEARCH_PLACEHOLDER' | translate"
+              (keyup.enter)="onSearchChange(searchControl.value || '')"
+            />
+          </div>
+          @if (searchControl.value && searchControl.value.length < 3) {
+            <span class="admin-search-hint">{{ 'ORDERS.SEARCH_MIN_LENGTH' | translate }}</span>
+          }
+        </div>
 
         <!-- Clear Filters Button -->
         <button

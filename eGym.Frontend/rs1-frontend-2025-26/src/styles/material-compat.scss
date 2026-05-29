@@ -20,14 +20,35 @@
   box-shadow: var(--app-card-shadow, 0 4px 20px rgba(15, 23, 36, 0.06));
 }
 
-// Gradient / custom-bg cards — do not force page surface color
+// Gradient stat cards — keep colored backgrounds in light + dark
 .mat-mdc-card.summary-card {
   @include mat-card-surface-reset;
-  --mdc-elevated-card-container-color: transparent;
-  --mdc-outlined-card-container-color: transparent;
-  background: transparent !important;
   border: none;
-  box-shadow: none;
+  box-shadow: 0 8px 24px rgba(15, 23, 36, 0.12);
+  padding: 22px 24px;
+  color: #fff;
+
+  span,
+  strong,
+  small,
+  .mat-mdc-card-content {
+    color: #fff !important;
+  }
+
+  &.summary-card--blue {
+    --mdc-elevated-card-container-color: #2563eb;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+  }
+
+  &.summary-card--orange {
+    --mdc-elevated-card-container-color: #ea580c;
+    background: linear-gradient(135deg, #ff6600, #ea580c) !important;
+  }
+
+  &.summary-card--green {
+    --mdc-elevated-card-container-color: #15803d;
+    background: linear-gradient(135deg, #22c55e, #15803d) !important;
+  }
 }
 
 // Landing gym picker — body must stay on surface (not transparent over dark landing)
@@ -47,18 +68,6 @@
 
   .gym-card__info-value {
     color: var(--app-text, #0f1724) !important;
-  }
-}
-
-.mat-mdc-card.summary-card {
-  padding: 22px 24px;
-  color: #fff;
-
-  span,
-  strong,
-  small,
-  .mat-mdc-card-content {
-    color: #fff;
   }
 }
 

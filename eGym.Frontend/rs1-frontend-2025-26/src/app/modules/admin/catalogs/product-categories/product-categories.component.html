@@ -23,16 +23,15 @@
         </mat-slide-toggle>
 
         <!-- Search -->
-        <mat-form-field class="search-field" appearance="fill">
-          <mat-label>{{ 'PRODUCT_CATEGORIES.SEARCH_PLACEHOLDER' | translate }}</mat-label>
+        <div class="admin-search">
+          <mat-icon>search</mat-icon>
           <input
-            matInput
+            type="search"
             [(ngModel)]="request.search"
+            [placeholder]="'PRODUCT_CATEGORIES.SEARCH_PLACEHOLDER' | translate"
             (keyup.enter)="onSearchChange(request.search || '')"
-            [placeholder]="'PRODUCT_CATEGORIES.SEARCH_INPUT_PLACEHOLDER' | translate"
           />
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+        </div>
 
         <!-- New Category Button -->
         <button mat-raised-button color="primary" (click)="onCreate()" class="add-button">

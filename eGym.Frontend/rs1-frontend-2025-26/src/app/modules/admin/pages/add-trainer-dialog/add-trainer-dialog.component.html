@@ -1,11 +1,14 @@
 <h2 mat-dialog-title>{{ 'ADMIN_DASH.ADD_TRAINER_TITLE' | translate }}</h2>
 
 <mat-dialog-content class="add-trainer-dialog__content">
-  <mat-form-field appearance="outline" class="add-trainer-dialog__search">
-    <mat-label>{{ 'ADMIN_DASH.SEARCH_USERS' | translate }}</mat-label>
-    <mat-icon matPrefix>search</mat-icon>
-    <input matInput [(ngModel)]="search" [placeholder]="'ADMIN_DASH.SEARCH_PLACEHOLDER' | translate" />
-  </mat-form-field>
+  <div class="admin-search add-trainer-dialog__search">
+    <mat-icon>search</mat-icon>
+    <input
+      type="search"
+      [(ngModel)]="search"
+      [placeholder]="'ADMIN_DASH.SEARCH_USERS' | translate"
+    />
+  </div>
 
   @if (loading) {
     <div class="add-trainer-dialog__loading">

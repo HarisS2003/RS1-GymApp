@@ -188,11 +188,33 @@ $dark-body: 'body.theme-dark, body.dark, body.dark-theme';
     --mdc-outlined-text-field-hover-outline-color: rgba(255, 255, 255, 0.1);
     --mdc-outlined-text-field-focus-outline-color: #ff6600;
     --mdc-outlined-text-field-focus-label-text-color: #ff6600;
+    --mdc-filled-text-field-container-color: #1e293b;
+    --mdc-filled-text-field-input-text-color: #f8fafc;
+    --mdc-filled-text-field-label-text-color: #94a3b8;
+    --mdc-filled-text-field-active-indicator-color: rgba(255, 255, 255, 0.1);
+    --mdc-filled-text-field-focus-active-indicator-color: #ff6600;
+    --mdc-filled-text-field-hover-active-indicator-color: rgba(255, 255, 255, 0.16);
     --mat-form-field-container-text-color: #f8fafc;
+    --mat-form-field-focus-select-arrow-color: #ff6600;
+    --mat-select-enabled-arrow-color: #94a3b8;
   }
 
-  .mat-mdc-text-field-wrapper {
+  .mat-mdc-text-field-wrapper,
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
     background: #1e293b !important;
+  }
+
+  .mat-mdc-form-field-icon-prefix mat-icon,
+  .mat-mdc-form-field-icon-suffix mat-icon {
+    color: #94a3b8 !important;
+  }
+
+  .mat-mdc-input-element::placeholder {
+    color: transparent !important;
+  }
+
+  .admin-dash__search .mat-mdc-input-element::placeholder {
+    color: transparent !important;
   }
 
   .mat-mdc-select-value,
@@ -289,6 +311,35 @@ $dark-body: 'body.theme-dark, body.dark, body.dark-theme';
   .profile-head h1,
   .profile-user-card h2,
   .profile-panel h2,
+  .admin-dash__intro h1 {
+    color: #f8fafc !important;
+  }
+
+  .admin-dash__intro p {
+    color: #94a3b8 !important;
+  }
+
+  .mat-mdc-card.summary-card {
+    span,
+    strong,
+    small,
+    .mat-mdc-card-content {
+      color: #fff !important;
+    }
+
+    &.summary-card--blue {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+    }
+
+    &.summary-card--orange {
+      background: linear-gradient(135deg, #ff6600, #ea580c) !important;
+    }
+
+    &.summary-card--green {
+      background: linear-gradient(135deg, #22c55e, #15803d) !important;
+    }
+  }
+
   strong {
     color: #f8fafc !important;
   }
@@ -378,5 +429,111 @@ $dark-body: 'body.theme-dark, body.dark, body.dark-theme';
     background: #450a0a !important;
     border: 1px solid #991b1b !important;
     color: #fecaca !important;
+  }
+
+  // === Shared paginator ===
+  .paginator-bar {
+    .paginator-container {
+      background: #1e293b !important;
+      border-top-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .paginator-info {
+      color: #94a3b8 !important;
+
+      strong {
+        color: #f8fafc !important;
+      }
+    }
+
+    .paginator-actions {
+      .page-size-field {
+        ::ng-deep {
+          .mat-mdc-text-field-wrapper,
+          .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+            background: #0b0f19 !important;
+          }
+
+          .mat-mdc-select-value {
+            color: #f8fafc !important;
+          }
+        }
+      }
+
+      .nav-btn {
+        background: #1e293b !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #f8fafc !important;
+
+        &:not(:disabled):hover {
+          background: #0b0f19 !important;
+          border-color: #ff6600 !important;
+        }
+
+        &:disabled {
+          background: #0b0f19 !important;
+          color: #64748b !important;
+        }
+      }
+    }
+  }
+
+  // Legacy admin pages (orders, product categories)
+  .container {
+    background: #0b0f19 !important;
+  }
+
+  .header-card,
+  .table-card {
+    background: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #f8fafc !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+
+    h1,
+    h2,
+    h3,
+    strong {
+      color: #f8fafc !important;
+    }
+  }
+
+  .paginator-wrapper {
+    background: #1e293b !important;
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .search-field,
+  .filter-field {
+    ::ng-deep {
+      .mdc-text-field--filled:not(.mdc-text-field--disabled),
+      .mat-mdc-text-field-wrapper {
+        background-color: #1e293b !important;
+      }
+
+      input {
+        color: #f8fafc !important;
+      }
+
+      .mat-icon {
+        color: #94a3b8 !important;
+      }
+    }
+  }
+
+  .admin-error {
+    background: #450a0a !important;
+    border-color: #991b1b !important;
+    color: #fecaca !important;
+  }
+
+  .admin-table-wrap {
+    background: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .admin-table-footer {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
   }
 }

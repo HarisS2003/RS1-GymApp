@@ -1,26 +1,21 @@
-<div class="logout-wrapper" @fadeInUp>
-  <mat-card class="logout-card">
-    <mat-card-header>
-      <div class="header-icon">
-        <mat-icon>logout</mat-icon>
-      </div>
-      <mat-card-title>{{ 'AUTH.LOGOUT.TITLE' | translate }}</mat-card-title>
-    </mat-card-header>
+<div class="auth-form-wrap logout-wrap" @fadeInUp>
+  <div class="logout-icon-badge">
+    <mat-icon>logout</mat-icon>
+  </div>
 
-    <mat-card-content>
-      <div class="logout-icon-container">
-        <mat-icon class="logout-icon">check_circle</mat-icon>
-      </div>
+  <h2 class="auth-form__title">{{ 'AUTH.LOGOUT.TITLE' | translate }}</h2>
+  <p class="auth-form__subtitle">{{ 'AUTH.LOGOUT.MESSAGE' | translate }}</p>
 
-      <p class="logout-message">{{ 'AUTH.LOGOUT.MESSAGE' | translate }}</p>
+  <div class="logout-status">
+    <div class="logout-status__success">
+      <mat-icon>check_circle</mat-icon>
+    </div>
 
-      <div class="logout-progress">
-        <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
-        <div class="logout-countdown">
-          <mat-icon class="countdown-icon">schedule</mat-icon>
-          <span>{{ 'AUTH.LOGOUT.REDIRECT_IN' | translate : { seconds: countdownSeconds } }}</span>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+    <mat-progress-bar mode="indeterminate" class="logout-status__bar"></mat-progress-bar>
+
+    <div class="logout-status__countdown">
+      <mat-icon>schedule</mat-icon>
+      <span>{{ 'AUTH.LOGOUT.REDIRECT_IN' | translate : { seconds: countdownSeconds } }}</span>
+    </div>
+  </div>
 </div>

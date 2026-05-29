@@ -1,13 +1,9 @@
-// Teget paleta
-$primary-color: #4976b5;
-$primary-light: #6b96d1;
-$primary-lighter: #e8f0f9;
-$primary-dark: #3a5e91;
-
-$text-primary: #2c3e50;
-$text-secondary: #546e7a;
-$border-color: rgba(73, 118, 181, 0.15);
-$hover-bg: rgba(73, 118, 181, 0.08);
+$accent: var(--app-accent, #ff6600);
+$text: var(--app-text, #0f1724);
+$text-muted: var(--app-text-muted, #64748b);
+$surface: var(--app-surface, #fff);
+$surface-muted: var(--app-surface-muted, #f8fafc);
+$border: var(--app-border, #e2e8f0);
 
 .paginator-bar {
   padding: 0;
@@ -20,16 +16,16 @@ $hover-bg: rgba(73, 118, 181, 0.08);
     gap: 24px;
     flex-wrap: wrap;
     padding: 16px 24px;
-    background: white;
-    border-radius: 0 0 16px 16px;
+    background: $surface;
+    border-top: 1px solid $border;
+    border-radius: 0;
   }
 
-  // Info Section
   .paginator-info {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: $text-secondary;
+    color: $text-muted;
     font-size: 14px;
     flex-wrap: wrap;
 
@@ -37,7 +33,7 @@ $hover-bg: rgba(73, 118, 181, 0.08);
       font-size: 20px;
       width: 20px;
       height: 20px;
-      color: $primary-color;
+      color: $accent;
     }
 
     .info-text,
@@ -47,32 +43,30 @@ $hover-bg: rgba(73, 118, 181, 0.08);
       gap: 4px;
 
       strong {
-        color: $primary-color;
+        color: $text;
         font-weight: 600;
       }
     }
 
     .info-divider {
-      color: rgba(73, 118, 181, 0.3);
+      color: $border;
       font-weight: bold;
     }
   }
 
-  // Actions Section
   .paginator-actions {
     display: flex;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
 
-    // Page Size Selector
     .page-size-selector {
       display: flex;
       align-items: center;
       gap: 10px;
 
       .selector-label {
-        color: $text-secondary;
+        color: $text-muted;
         font-size: 14px;
         font-weight: 500;
         white-space: nowrap;
@@ -80,60 +74,53 @@ $hover-bg: rgba(73, 118, 181, 0.08);
 
       .page-size-field {
         width: 80px;
-        height: 65px;
+        height: 56px;
 
         ::ng-deep {
-          .mat-form-field-wrapper {
-            padding-bottom: 0;
-            margin: 0;
-          }
-          .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-            background-color: white !important;
+          .mat-mdc-form-field-subscript-wrapper {
+            display: none;
           }
 
-          .mat-form-field-flex {
+          .mat-mdc-text-field-wrapper {
+            background: $surface-muted !important;
+            border-radius: 8px !important;
+          }
+
+          .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+            background-color: $surface-muted !important;
+          }
+
+          .mat-mdc-form-field-flex {
             height: 40px;
             align-items: center;
             padding: 0 8px;
           }
 
-          .mat-form-field-outline {
-            color: $border-color;
-          }
-
-          .mat-form-field-outline-thick {
-            color: $primary-color;
-          }
-
-          .mat-form-field-infix {
+          .mat-mdc-form-field-infix {
             padding: 8px 0;
             border-top: none;
             width: auto;
+            min-height: unset;
           }
 
-          .mat-select {
-            padding: 0;
-          }
-
-          .mat-select-value {
-            color: $primary-color;
+          .mat-mdc-select-value {
+            color: $text !important;
             font-weight: 600;
             font-size: 15px;
           }
 
-          .mat-select-arrow {
-            color: $primary-color;
-            margin: 0 0 0 4px;
+          .mat-mdc-select-arrow {
+            color: $accent !important;
           }
 
-          .mat-form-field-subscript-wrapper {
-            display: none;
+          .mdc-line-ripple::before,
+          .mdc-line-ripple::after {
+            border-bottom-color: $border !important;
           }
         }
       }
     }
 
-    // Navigation Buttons
     .nav-buttons {
       display: flex;
       align-items: center;
@@ -145,36 +132,34 @@ $hover-bg: rgba(73, 118, 181, 0.08);
         gap: 6px;
         height: 40px;
         padding: 0 16px;
-        border: 2px solid $border-color;
+        border: 1px solid $border !important;
         border-radius: 8px;
-        color: $primary-color;
+        color: $text !important;
         font-weight: 500;
-        transition: all 0.3s ease;
-        background: white;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+        background: $surface !important;
 
         mat-icon {
           font-size: 20px;
           width: 20px;
           height: 20px;
+          color: $accent;
         }
 
         &:not(:disabled):hover {
-          background: $primary-lighter;
-          border-color: $primary-color;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(73, 118, 181, 0.2);
-        }
-
-        &:not(:disabled):active {
-          transform: translateY(0);
+          background: $surface-muted !important;
+          border-color: $accent !important;
         }
 
         &:disabled {
-          opacity: 0.4;
+          opacity: 0.45;
           cursor: not-allowed;
-          background: #f5f5f5;
-          border-color: #e0e0e0;
-          color: $text-secondary;
+          background: $surface-muted !important;
+          color: $text-muted !important;
+
+          mat-icon {
+            color: $text-muted;
+          }
         }
       }
 
@@ -184,42 +169,17 @@ $hover-bg: rgba(73, 118, 181, 0.08);
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
-        color: white;
+        background: $accent;
+        color: #fff;
         font-weight: 700;
         font-size: 16px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(73, 118, 181, 0.3);
         padding: 0 12px;
       }
     }
   }
 }
 
-// Mat Select Panel Styling
-::ng-deep .mat-select-panel {
-  .mat-option {
-    font-size: 14px;
-    height: 44px;
-
-    &.mat-selected {
-      background: $primary-lighter;
-      color: $primary-dark;
-      font-weight: 600;
-    }
-
-    &:hover {
-      background: $hover-bg;
-    }
-
-    .mat-option-text {
-      display: flex;
-      align-items: center;
-    }
-  }
-}
-
-// Responzivnost
 @media (max-width: 768px) {
   .paginator-bar {
     .paginator-container {
@@ -265,14 +225,6 @@ $hover-bg: rgba(73, 118, 181, 0.08);
           span {
             display: none;
           }
-
-          &.prev-btn {
-            justify-content: center;
-          }
-
-          &.next-btn {
-            justify-content: center;
-          }
         }
 
         .page-indicator {
@@ -297,22 +249,16 @@ $hover-bg: rgba(73, 118, 181, 0.08);
       }
     }
 
-    .paginator-actions {
-      .nav-buttons {
-        .nav-btn {
-          padding: 0 12px;
+    .paginator-actions .nav-buttons {
+      .nav-btn mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
 
-          mat-icon {
-            font-size: 18px;
-            width: 18px;
-            height: 18px;
-          }
-        }
-
-        .page-indicator {
-          min-width: 44px;
-          font-size: 14px;
-        }
+      .page-indicator {
+        min-width: 44px;
+        font-size: 14px;
       }
     }
   }

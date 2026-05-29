@@ -3,11 +3,14 @@ using Market.Application.Modules.Catalog.Products.Queries.GetById;
 using Market.Application.Modules.Catalog.Products.Commands.Create;
 using Market.Application.Modules.Catalog.Products.Commands.Delete;
 using Market.Application.Modules.Catalog.Products.Commands.Update;
+using Market.API.Configuration;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[EnableRateLimiting(RateLimitingServiceExtensions.ApiFixedWindowPolicy)]
 public class ProductsController(ISender sender) : ControllerBase
 {
     [HttpPost]

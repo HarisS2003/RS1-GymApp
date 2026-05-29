@@ -1,4 +1,5 @@
 ﻿using Market.API;
+using Market.API.Configuration;
 using Market.API.Middleware;
 using Market.Application;
 using Market.Infrastructure;
@@ -49,6 +50,8 @@ public partial class Program
                 .AddInfrastructure(builder.Configuration, builder.Environment)
                 .AddApplication();
 
+            builder.Services.AddApiRateLimiting(builder.Configuration);
+
             // CORS policy to allow Angular dev server access
             builder.Services.AddCors(options =>
             {
@@ -84,8 +87,10 @@ public partial class Program
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseRateLimiter();
 
-            app.MapControllers();
+            app.MapControllers()
+                .RequireRateLimiting(RateLimitingServiceExtensions.ApiFixedWindowPolicy);
 
             // Database migrations + seeding
             await app.Services.InitializeDatabaseAsync(app.Environment);

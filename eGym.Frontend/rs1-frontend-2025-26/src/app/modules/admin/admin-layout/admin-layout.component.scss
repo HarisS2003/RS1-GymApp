@@ -143,6 +143,6 @@
   .route-outlet-host {
     flex: 0 0 auto;
     min-height: calc(100vh - 72px - 48px);
-    overflow: hidden;
+    overflow: visible;
   }
 }

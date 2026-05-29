@@ -5,16 +5,15 @@
       <p>{{ 'ADMIN_DASH.MEMBERSHIPS_SUB' | translate }}</p>
     </div>
     <div class="admin-dash__top-actions">
-      <mat-form-field appearance="outline" class="admin-dash__search">
-        <mat-label>{{ 'MEMBERSHIP_PLANS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
-        <mat-icon matPrefix>search</mat-icon>
+      <div class="admin-search">
+        <mat-icon>search</mat-icon>
         <input
-          matInput
+          type="search"
           [(ngModel)]="request.search"
-          [placeholder]="'MEMBERSHIP_PLANS.SEARCH_INPUT_PLACEHOLDER' | translate"
+          [placeholder]="'MEMBERSHIP_PLANS.SEARCH_PLACEHOLDER' | translate"
           (keyup.enter)="onSearch()"
         />
-      </mat-form-field>
+      </div>
       <button mat-flat-button type="button" class="add-panel-btn" (click)="onCreate()">
         <mat-icon>add</mat-icon>
         {{ 'MEMBERSHIP_PLANS.NEW_PLAN' | translate }}
