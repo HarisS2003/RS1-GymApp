@@ -26,6 +26,12 @@ public partial class Program
             //
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.WebHost.UseSentry(o =>
+            {
+                o.Dsn = "https://7c770e973adffc04c757319731792d71@o4511520978763776.ingest.de.sentry.io/4511520989380688";
+                o.Debug = true;
+            });
+
             // 2) Promote Serilog to full configuration from builder.Configuration
             //    (reads "Serilog" section from appsettings + ENV overrides)
             //

@@ -48,6 +48,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
     }
   }
 
+  testSentry(): void {
+    throw new Error('Angular Sentry test');
+  }
+
   onSubmit(): void {
     this.submitted = true;
     if (this.form.invalid || this.isLoading) {

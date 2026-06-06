@@ -193,7 +193,6 @@
             <mat-form-field
               appearance="outline"
               class="profile-fields__full profile-phone-field"
-              [errorStateMatcher]="phoneErrorStateMatcher"
             >
               <mat-label>{{ 'CLIENT.PROFILE.PHONE' | translate }}</mat-label>
               <input
@@ -201,6 +200,7 @@
                 type="tel"
                 formControlName="phoneNumber"
                 autocomplete="tel"
+                [errorStateMatcher]="phoneErrorStateMatcher"
               />
               @if (profileSaveAttempted && form.get('phoneNumber')?.hasError('required')) {
                 <mat-error>{{ 'AUTH.PHONE_REQUIRED' | translate }}</mat-error>
