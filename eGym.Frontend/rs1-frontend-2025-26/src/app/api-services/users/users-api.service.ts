@@ -8,6 +8,8 @@ import {
   GetUserByIdQueryDto,
   ListUsersRequest,
   ListUsersResponse,
+  ListUsersWithMembershipRequest,
+  ListUsersWithMembershipResponse,
   UpdateUserCommand,
 } from './users-api.models';
 
@@ -21,6 +23,15 @@ export class UsersApiService {
   list(request?: ListUsersRequest): Observable<ListUsersResponse> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.http.get<ListUsersResponse>(this.baseUrl, { params });
+  }
+
+  listWithMemberships(
+    request?: ListUsersWithMembershipRequest,
+  ): Observable<ListUsersWithMembershipResponse> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.http.get<ListUsersWithMembershipResponse>(`${this.baseUrl}/with-memberships`, {
+      params,
+    });
   }
 
   getById(id: number): Observable<GetUserByIdQueryDto> {

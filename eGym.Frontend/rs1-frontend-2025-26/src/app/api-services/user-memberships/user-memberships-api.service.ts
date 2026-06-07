@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  GetMembershipHistoryQueryDto,
   GetMyActiveUserMembershipQueryDto,
   ListMyMembershipPurchaseHistoryQueryDto,
   PurchaseMembershipPlanCommand,
@@ -33,5 +34,24 @@ export class UserMembershipsApiService {
       `${this.baseUrl}/purchase`,
       payload,
     );
+  }
+
+  getHistory(
+    userMembershipId: number,
+    asOfDate?: string,
+  ): Observable<GetMembershipHistoryQueryDto> {
+    const params = asOfDate ? { asOfDate } : undefined;
+    return this.http.get<GetMembershipHistoryQueryDto>(
+      `${this.baseUrl}/${userMembershipId}/history`,
+      { params },
+    );
+  }
+
+  freeze(userMembershipId: number, reason?: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${userMembershipId}/freeze`, { reason });
+  }
+
+  activate(userMembershipId: number, reason?: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${userMembershipId}/activate`, { reason });
   }
 }

@@ -3,6 +3,7 @@ using Market.Application.Modules.Catalog.Users.Commands.Delete;
 using Market.Application.Modules.Catalog.Users.Commands.Update;
 using Market.Application.Modules.Catalog.Users.Queries.GetById;
 using Market.Application.Modules.Catalog.Users.Queries.List;
+using Market.Application.Modules.Catalog.Users.Queries.ListWithMembership;
 
 namespace Market.API.Controllers;
 
@@ -44,5 +45,13 @@ public class UsersController(ISender sender) : ControllerBase
     {
         var result = await sender.Send(query, ct);
         return result;
+    }
+
+    [HttpGet("with-memberships")]
+    public async Task<PageResult<ListUsersWithMembershipQueryDto>> ListWithMemberships(
+        [FromQuery] ListUsersWithMembershipQuery query,
+        CancellationToken ct)
+    {
+        return await sender.Send(query, ct);
     }
 }

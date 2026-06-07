@@ -19,6 +19,24 @@ export interface ListUsersQueryDto {
 
 export type ListUsersResponse = PageResult<ListUsersQueryDto>;
 
+export class ListUsersWithMembershipRequest extends BasePagedQuery {
+  search?: string | null;
+  gymId?: number | null;
+  roleId?: number | null;
+}
+
+export interface ListUsersWithMembershipQueryDto {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  userMembershipId: number | null;
+  currentMembershipName: string | null;
+  membershipStatus: string;
+}
+
+export type ListUsersWithMembershipResponse = PageResult<ListUsersWithMembershipQueryDto>;
+
 export interface GetUserByIdQueryDto {
   id: number;
   firstName: string;

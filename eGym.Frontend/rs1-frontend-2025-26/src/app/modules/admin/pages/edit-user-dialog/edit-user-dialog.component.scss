@@ -1,0 +1,16 @@
+.edit-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 320px;
+}
+
+.full {
+  width: 100%;
+}
+
+.dialog-loading {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}

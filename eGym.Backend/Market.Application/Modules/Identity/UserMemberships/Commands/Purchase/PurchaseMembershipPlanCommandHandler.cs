@@ -1,3 +1,5 @@
+using Market.Application.Modules.Identity.UserMemberships.Services;
+
 namespace Market.Application.Modules.Identity.UserMemberships.Commands.Purchase;
 
 public sealed class PurchaseMembershipPlanCommandHandler(IAppDbContext ctx, IAppCurrentUser currentUser)
@@ -71,6 +73,36 @@ public sealed class PurchaseMembershipPlanCommandHandler(IAppDbContext ctx, IApp
             EndDate = endDate,
         };
         ctx.UserMemberships.Add(membership);
+
+        MembershipEventRecorder.AppendForMembership(
+            ctx,
+            membership,
+            MembershipEventTypes.Created,
+            new
+            {
+                userId,
+                membershipPlanId = plan.Id,
+                planName = plan.Name,
+                startDate,
+                endDate,
+                amountPaid = amount,
+            },
+            now);
+
+        foreach (var existing in activeMemberships)
+        {
+            MembershipEventRecorder.Append(
+                ctx,
+                existing.Id,
+                MembershipEventTypes.EndDateAdjusted,
+                new
+                {
+                    endDate = existing.EndDate,
+                    reason = "upgrade",
+                    replacedByPlanId = plan.Id,
+                },
+                now);
+        }
 
         await ctx.SaveChangesAsync(ct);
 

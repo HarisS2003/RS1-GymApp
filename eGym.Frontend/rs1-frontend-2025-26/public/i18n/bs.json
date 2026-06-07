@@ -374,7 +374,22 @@
     "UNKNOWN": "Nepoznato",
     "N_A": "N/D",
     "OPTIONAL": "Opciono",
-    "REQUIRED": "Obavezno"
+    "REQUIRED": "Obavezno",
+    "LANG": {
+      "BS": "Bosanski",
+      "EN": "English",
+      "LABEL": "Jezik"
+    },
+    "THEME": {
+      "LIGHT": "Svijetla tema",
+      "DARK": "Tamna tema"
+    },
+    "LOGOUT": "Odjavi se",
+    "GYM": "Teretana",
+    "ADDRESS": "Adresa",
+    "CITY": "Grad",
+    "DAYS": "dana",
+    "BUY_NOW": "Kupi Sada"
   },
   "DIALOGS": {
     "TYPES": {
@@ -462,28 +477,6 @@
     "CONFLICT": "Ova akcija je u konfliktu sa postojećim podacima.",
     "VALIDATION": "Provjerite formu za greške.",
     "UNKNOWN": "Nepoznata greška."
-  },
-  "COMMON": {
-    "LANG": {
-      "BS": "Bosanski",
-      "EN": "English",
-      "LABEL": "Jezik"
-    },
-    "THEME": {
-      "LIGHT": "Svijetla tema",
-      "DARK": "Tamna tema"
-    },
-    "LOGOUT": "Odjavi se",
-    "GYM": "Teretana",
-    "LOADING": "Učitavanje...",
-    "RETRY": "Pokušaj ponovo",
-    "ADDRESS": "Adresa",
-    "CITY": "Grad",
-    "DAYS": "dana",
-    "ADD": "Dodaj",
-    "BUY_NOW": "Kupi Sada",
-    "ACTIVE": "Aktivan",
-    "INACTIVE": "Neaktivan"
   },
   "LANDING": {
     "BRAND": "eGym",
@@ -699,6 +692,7 @@
     "TITLE": "Admin Panel",
     "SUB": "Upravljanje trenerima",
     "TAB_TRAINERS": "Treneri",
+    "TAB_USERS": "Korisnici",
     "TAB_PRODUCTS": "Proizvodi",
     "TAB_MEMBERSHIPS": "Članarine",
     "TAB_MEMBERS": "Polaznici",
@@ -769,6 +763,52 @@
     "SUMMARY_AVG_PRICE_SUB": "Po planu (KM)",
     "SUMMARY_WITH_DISCOUNT": "Sa popustom",
     "SUMMARY_WITH_DISCOUNT_SUB": "Planovi s popustom > 0%"
+  },
+  "ADMIN_USERS": {
+    "COL_NO": "Br.",
+    "COL_NAME": "Ime i Prezime",
+    "COL_EMAIL": "Email",
+    "COL_MEMBERSHIP": "Trenutna Članarina",
+    "COL_STATUS": "Status",
+    "COL_ACTIONS": "Akcije",
+    "NO_USERS": "Nema korisnika u sistemu.",
+    "EDIT": "Uredi korisnika",
+    "DELETE": "Obriši korisnika",
+    "HISTORY": "Historija članarine",
+    "EDIT_TITLE": "Uredi korisnika",
+    "EDIT_SUCCESS": "Korisnik ažuriran.",
+    "EDIT_ERROR": "Izmjena korisnika nije sačuvana.",
+    "EDIT_LOAD_ERROR": "Učitavanje korisnika nije uspjelo.",
+    "DELETE_CONFIRM": "Obrisati korisnika {{name}}?",
+    "DELETE_SUCCESS": "{{name}} je obrisan.",
+    "DELETE_ERROR": "Brisanje korisnika nije uspjelo.",
+    "LOAD_ERROR": "Učitavanje korisnika nije uspjelo.",
+    "NO_MEMBERSHIP_HISTORY": "Korisnik nema aktivnu članarinu za historiju.",
+    "HISTORY_TITLE": "Historija članarine",
+    "AS_OF_DATE": "Stanje na datum",
+    "TIME_TRAVEL": "Prikaži stanje",
+    "TIMELINE": "Vremenska linija događaja",
+    "NO_EVENTS": "Nema događaja.",
+    "PERIOD": "Period",
+    "FREEZE": "Zamrzni",
+    "ACTIVATE": "Aktiviraj",
+    "FREEZE_SUCCESS": "Članarina zamrznuta.",
+    "FREEZE_ERROR": "Zamrzavanje nije uspjelo.",
+    "ACTIVATE_SUCCESS": "Članarina aktivirana.",
+    "ACTIVATE_ERROR": "Aktivacija nije uspjela.",
+    "HISTORY_ERROR": "Učitavanje historije nije uspjelo.",
+    "STATUS_ACTIVE": "Aktivna",
+    "STATUS_FROZEN": "Zamrznuta",
+    "STATUS_EXPIRED": "Istekla",
+    "STATUS_NONE": "Bez članarine",
+    "EVENT_MEMBERSHIPCREATED": "Članarina kupljena",
+    "EVENT_MEMBERSHIPFROZEN": "Članarina zaleđena",
+    "EVENT_MEMBERSHIPACTIVATED": "Članarina aktivirana",
+    "EVENT_MEMBERSHIPENDDATEADJUSTED": "Datum isteka izmijenjen",
+    "META_REASON": "Razlog: {{reason}}",
+    "META_PRICE": "Cijena: {{amount}} KM",
+    "META_PLAN": "Plan: {{plan}}",
+    "META_END_DATE": "Novi datum isteka: {{date}}"
   },
   "ADMIN_SHOP": {
     "TITLE": "Prodavnica",

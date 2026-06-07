@@ -10,6 +10,7 @@ public interface IAppDbContext
     DbSet<TrainerEntity> Trainers { get; }
     DbSet<MembershipPlanEntity> MembershipPlans { get; }
     DbSet<UserMembershipEntity> UserMemberships { get; }
+    DbSet<MembershipEvent> MembershipEvents { get; }
     DbSet<PaymentEntity> Payments { get; }
     DbSet<ProductEntity> Products { get; }
     DbSet<ProductVariantEntity> ProductVariants { get; }

@@ -49,7 +49,7 @@ export class AdminDashboardComponent implements OnInit {
   profileService = inject(UserProfileService);
 
   addingTrainers = false;
-  activeTab: 'trainers' | 'products' | 'memberships' = 'trainers';
+  activeTab: 'trainers' | 'users' | 'products' | 'memberships' = 'trainers';
   loading = true;
 
   trainerRows: AdminTrainerRow[] = [];
@@ -67,7 +67,7 @@ export class AdminDashboardComponent implements OnInit {
     this.profileService.loadProfile().subscribe(() => this.load());
   }
 
-  setTab(tab: 'trainers' | 'products' | 'memberships'): void {
+  setTab(tab: 'trainers' | 'users' | 'products' | 'memberships'): void {
     if (tab === 'products') {
       this.router.navigate(['/admin/products']);
       return;
@@ -76,7 +76,7 @@ export class AdminDashboardComponent implements OnInit {
       this.router.navigate(['/admin/membership-plans']);
       return;
     }
-    this.activeTab = tab;
+    this.activeTab = tab === 'users' ? 'users' : 'trainers';
   }
 
   goMembershipPlans(): void {

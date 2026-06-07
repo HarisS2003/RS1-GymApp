@@ -30,6 +30,32 @@ export interface GetMyActiveUserMembershipQueryDto {
   endDate: string;
 }
 
+export interface MembershipHistoryStateDto {
+  hasMembership: boolean;
+  userId: number | null;
+  membershipPlanId: number | null;
+  planName: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  periodDisplay: string | null;
+  status: string;
+  isFrozen: boolean;
+}
+
+export interface MembershipEventTimelineItemDto {
+  id: number;
+  eventType: string;
+  eventData: string;
+  createdAt: string;
+}
+
+export interface GetMembershipHistoryQueryDto {
+  userMembershipId: number;
+  asOfDate: string;
+  state: MembershipHistoryStateDto;
+  timeline: MembershipEventTimelineItemDto[];
+}
+
 export interface ListMyMembershipPurchaseHistoryQueryDto {
   userMembershipId: number;
   planName: string;

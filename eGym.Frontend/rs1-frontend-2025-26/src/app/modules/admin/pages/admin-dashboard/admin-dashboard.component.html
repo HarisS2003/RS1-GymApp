@@ -17,9 +17,13 @@
   </div>
 
   <div class="admin-tabs">
-    <button mat-button type="button" class="active" (click)="setTab('trainers')">
+    <button mat-button type="button" [class.active]="activeTab === 'trainers'" (click)="setTab('trainers')">
       <mat-icon>groups</mat-icon>
       {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
+    </button>
+    <button mat-button type="button" [class.active]="activeTab === 'users'" (click)="setTab('users')">
+      <mat-icon>person</mat-icon>
+      {{ 'ADMIN_DASH.TAB_USERS' | translate }}
     </button>
     <button mat-button type="button" (click)="setTab('products')">
       <mat-icon>shopping_bag</mat-icon>
@@ -31,7 +35,9 @@
     </button>
   </div>
 
-  @if (loading) {
+  @if (activeTab === 'users') {
+    <app-admin-users></app-admin-users>
+  } @else if (loading) {
     <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
   } @else {
     <div class="admin-table-wrap">
@@ -94,6 +100,7 @@
       </table>
     </div>
 
+    @if (activeTab === 'trainers') {
     <section class="admin-summary">
       <mat-card class="summary-card summary-card--blue">
         <mat-card-content>
@@ -117,5 +124,6 @@
         </mat-card-content>
       </mat-card>
     </section>
+    }
   }
 </div>

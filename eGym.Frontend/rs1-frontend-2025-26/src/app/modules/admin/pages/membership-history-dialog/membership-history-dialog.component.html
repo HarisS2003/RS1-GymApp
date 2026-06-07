@@ -1,0 +1,79 @@
+<div class="history-dialog">
+  <div class="history-dialog__header">
+    <h2 class="history-dialog__title">{{ data.userName }}</h2>
+    <p class="history-dialog__subtitle">{{ data.planName }}</p>
+  </div>
+
+  <mat-dialog-content class="history-dialog__content">
+    <div class="history-travel" [formGroup]="form">
+      <label class="history-travel__label">{{ 'ADMIN_USERS.AS_OF_DATE' | translate }}</label>
+      <div class="history-travel__row">
+        <div class="history-travel__input-wrap">
+          <mat-icon class="history-travel__icon">event</mat-icon>
+          <input class="history-travel__input" type="datetime-local" formControlName="asOfDate" />
+        </div>
+        <button mat-flat-button type="button" class="history-travel__btn" (click)="travel()">
+          <mat-icon>history</mat-icon>
+          {{ 'ADMIN_USERS.TIME_TRAVEL' | translate }}
+        </button>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="dialog-loading"><mat-spinner diameter="36"></mat-spinner></div>
+    } @else if (history) {
+      <section class="history-summary">
+        <div class="history-summary__row">
+          <span class="history-summary__label">{{ 'ADMIN_USERS.COL_STATUS' | translate }}</span>
+          <span [class]="statusClass(history.state.status)">{{ statusLabel(history.state.status) }}</span>
+        </div>
+        <div class="history-summary__row">
+          <span class="history-summary__label">{{ 'ADMIN_USERS.COL_MEMBERSHIP' | translate }}</span>
+          <strong class="history-summary__value">
+            {{ history.state.planName || ('ADMIN_USERS.STATUS_NONE' | translate) }}
+          </strong>
+        </div>
+        @if (showPeriod(history.state)) {
+          <div class="history-summary__row">
+            <span class="history-summary__label">{{ 'ADMIN_USERS.PERIOD' | translate }}</span>
+            <strong class="history-summary__value">{{ history.state.periodDisplay }}</strong>
+          </div>
+        }
+      </section>
+
+      <h3 class="history-timeline-title">{{ 'ADMIN_USERS.TIMELINE' | translate }}</h3>
+
+      @if (history.timeline.length) {
+        <ol class="history-timeline">
+          @for (evt of history.timeline; track evt.id; let last = $last) {
+            <li class="history-timeline__item" [class.history-timeline__item--last]="last">
+              <div class="history-timeline__rail">
+                <span class="history-timeline__dot history-timeline__dot--{{ eventTone(evt.eventType) }}"></span>
+                @if (!last) {
+                  <span class="history-timeline__line"></span>
+                }
+              </div>
+              <div class="history-timeline__body">
+                <div class="history-timeline__head">
+                  <strong class="history-timeline__title">{{ eventLabel(evt) }}</strong>
+                  <time class="history-timeline__date">{{ evt.createdAt | date:'dd.MM.yyyy HH:mm' }}</time>
+                </div>
+                @for (meta of eventMeta(evt); track meta) {
+                  <p class="history-timeline__meta">{{ meta }}</p>
+                }
+              </div>
+            </li>
+          }
+        </ol>
+      } @else {
+        <p class="history-timeline__empty">{{ 'ADMIN_USERS.NO_EVENTS' | translate }}</p>
+      }
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="history-dialog__actions" align="end">
+    <button mat-flat-button type="button" class="history-dialog__close" (click)="close()">
+      {{ 'COMMON.CLOSE' | translate }}
+    </button>
+  </mat-dialog-actions>
+</div>
