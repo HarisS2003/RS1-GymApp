@@ -108,7 +108,7 @@ public sealed class PurchaseMembershipPlanCommandHandler(IAppDbContext ctx, IApp
 
         return new PurchaseMembershipPlanResultDto
         {
-            UserMembershipId = membership.Id,
+            PublicId = membership.PublicId,
             PaymentId = payment.Id,
             MembershipPlanId = plan.Id,
             PlanName = plan.Name,

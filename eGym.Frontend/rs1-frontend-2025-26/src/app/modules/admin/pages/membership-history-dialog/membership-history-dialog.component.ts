@@ -11,7 +11,7 @@ import {
 import { ToasterService } from '../../../../core/services/toaster.service';
 
 export interface MembershipHistoryDialogData {
-  userMembershipId: number;
+  membershipPublicId: string;
   userName: string;
   planName: string;
 }
@@ -136,7 +136,7 @@ export class MembershipHistoryDialogComponent implements OnInit {
     const asOfDate = this.toInclusiveAsOfIso(this.form.value.asOfDate);
     this.loading = true;
 
-    this.membershipsApi.getHistory(this.data.userMembershipId, asOfDate).subscribe({
+    this.membershipsApi.getHistory(this.data.membershipPublicId, asOfDate).subscribe({
       next: (dto) => {
         this.history = dto;
         this.loading = false;

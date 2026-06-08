@@ -9,14 +9,14 @@ export interface TrainerAvailableSlotDto {
 }
 
 export interface CreateTrainingRequestCommand {
-  trainerId: number;
+  trainerPublicId: string;
   date: string;
   startTime: string;
 }
 
 export interface CreateTrainingRequestResultDto {
   trainingRequestId: number;
-  trainerId: number;
+  trainerPublicId: string;
   date: string;
   startTime: string;
   status: number;

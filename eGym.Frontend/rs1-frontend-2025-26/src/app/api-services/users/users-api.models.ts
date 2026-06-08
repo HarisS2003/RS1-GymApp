@@ -8,7 +8,7 @@ export class ListUsersRequest extends BasePagedQuery {
 }
 
 export interface ListUsersQueryDto {
-  id: number;
+  publicId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -26,11 +26,11 @@ export class ListUsersWithMembershipRequest extends BasePagedQuery {
 }
 
 export interface ListUsersWithMembershipQueryDto {
-  id: number;
+  publicId: string;
   firstName: string;
   lastName: string;
   email: string;
-  userMembershipId: number | null;
+  membershipPublicId: string | null;
   currentMembershipName: string | null;
   membershipStatus: string;
 }
@@ -38,7 +38,7 @@ export interface ListUsersWithMembershipQueryDto {
 export type ListUsersWithMembershipResponse = PageResult<ListUsersWithMembershipQueryDto>;
 
 export interface GetUserByIdQueryDto {
-  id: number;
+  publicId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -68,3 +68,4 @@ export interface UpdateUserCommand {
   roleId: number;
   gymId: number;
 }
+

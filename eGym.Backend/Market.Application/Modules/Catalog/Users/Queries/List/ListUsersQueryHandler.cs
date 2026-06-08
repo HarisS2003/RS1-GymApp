@@ -1,11 +1,14 @@
 namespace Market.Application.Modules.Catalog.Users.Queries.List;
 
-public sealed class ListUsersQueryHandler(IAppDbContext ctx)
+public sealed class ListUsersQueryHandler(IAppDbContext ctx, IAppCurrentUser currentUser)
     : IRequestHandler<ListUsersQuery, PageResult<ListUsersQueryDto>>
 {
     public async Task<PageResult<ListUsersQueryDto>> Handle(ListUsersQuery request, CancellationToken ct)
     {
-        var q = ctx.Users.AsNoTracking();
+        var currentGymId = await GetCurrentGymIdAsync(ct);
+
+        var q = ctx.Users.AsNoTracking()
+            .Where(x => x.GymId == currentGymId);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -16,15 +19,12 @@ public sealed class ListUsersQueryHandler(IAppDbContext ctx)
                 || x.Email.ToLower().Contains(searchTerm));
         }
 
-        if (request.GymId is int gymId)
-            q = q.Where(x => x.GymId == gymId);
-
         if (request.RoleId is int roleId)
             q = q.Where(x => x.RoleId == roleId);
 
         var projectedQuery = q.Select(x => new ListUsersQueryDto
         {
-            Id = x.Id,
+            PublicId = x.PublicId,
             FirstName = x.FirstName,
             LastName = x.LastName,
             Email = x.Email,
@@ -34,5 +34,20 @@ public sealed class ListUsersQueryHandler(IAppDbContext ctx)
         });
 
         return await PageResult<ListUsersQueryDto>.FromQueryableAsync(projectedQuery, request.Paging, ct);
+    }
+
+    private async Task<int> GetCurrentGymIdAsync(CancellationToken ct)
+    {
+        var userId = currentUser.UserId
+            ?? throw new ValidationException("Current user is required.");
+
+        var gymId = await ctx.Users.AsNoTracking()
+            .Where(x => x.Id == userId)
+            .Select(x => x.GymId)
+            .FirstOrDefaultAsync(ct);
+
+        return gymId == 0
+            ? throw new MarketNotFoundException("User not found.")
+            : gymId;
     }
 }

@@ -1,28 +1,29 @@
 namespace Market.Application.Modules.Catalog.Trainers.Commands.Create;
 
 public sealed class CreateTrainerCommandHandler(IAppDbContext ctx)
-    : IRequestHandler<CreateTrainerCommand, int>
+    : IRequestHandler<CreateTrainerCommand, string>
 {
-    public async Task<int> Handle(CreateTrainerCommand request, CancellationToken ct)
+    public async Task<string> Handle(CreateTrainerCommand request, CancellationToken ct)
     {
-        if (request.UserId <= 0) throw new ValidationException("UserId is required.");
-        if (request.GymId <= 0) throw new ValidationException("GymId is required.");
+        var user = await ctx.Users.AsNoTracking()
+            .FirstOrDefaultAsync(
+                x => x.PublicId == request.UserPublicId && x.GymId == request.GymId && !x.IsDeleted,
+                ct)
+            ?? throw new ValidationException("Invalid UserId.");
+
+        var userId = user.Id;
 
         var normalizedBio = request.Bio.Trim();
         if (string.IsNullOrWhiteSpace(normalizedBio)) throw new ValidationException("Bio is required.");
 
         if (request.ExperienceYears < 0) throw new ValidationException("ExperienceYears must be zero or positive.");
 
-        if (!await ctx.Users.AnyAsync(x => x.Id == request.UserId, ct))
-            throw new ValidationException("Invalid UserId.");
-
         if (!await ctx.Gyms.AnyAsync(x => x.Id == request.GymId && !x.IsDeleted, ct))
             throw new ValidationException("Invalid GymId.");
 
-        // Global query filter hides soft-deleted rows; must bypass to reactivate.
         var existing = await ctx.Trainers
             .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.UserId == request.UserId, ct);
+            .FirstOrDefaultAsync(x => x.UserId == userId, ct);
         if (existing is not null)
         {
             if (!existing.IsDeleted)
@@ -35,12 +36,12 @@ public sealed class CreateTrainerCommandHandler(IAppDbContext ctx)
             existing.ModifiedAtUtc = DateTime.UtcNow;
 
             await ctx.SaveChangesAsync(ct);
-            return existing.Id;
+            return existing.PublicId;
         }
 
         var trainer = new TrainerEntity
         {
-            UserId = request.UserId,
+            UserId = userId,
             GymId = request.GymId,
             Bio = normalizedBio,
             ExperienceYears = request.ExperienceYears
@@ -48,6 +49,6 @@ public sealed class CreateTrainerCommandHandler(IAppDbContext ctx)
 
         ctx.Trainers.Add(trainer);
         await ctx.SaveChangesAsync(ct);
-        return trainer.Id;
+        return trainer.PublicId;
     }
 }

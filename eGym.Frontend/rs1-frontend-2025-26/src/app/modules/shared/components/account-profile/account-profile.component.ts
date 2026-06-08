@@ -29,9 +29,9 @@ import {
   ListTrainersRequest,
 } from '../../../../api-services/trainers/trainers-api.models';
 import { UsersApiService } from '../../../../api-services/users/users-api.service';
-import { UpdateUserCommand } from '../../../../api-services/users/users-api.models';
+import { ListUsersRequest, UpdateUserCommand } from '../../../../api-services/users/users-api.models';
 import { OrdersApiService } from '../../../../api-services/orders/orders-api.service';
-import { ListOrdersWithItemsRequest } from '../../../../api-services/orders/orders-api.models';
+import { ListOrdersRequest } from '../../../../api-services/orders/orders-api.models';
 import { ProductsApiService } from '../../../../api-services/products/products-api.service';
 import {
   ListProductsQueryDto,
@@ -54,7 +54,7 @@ export interface UpcomingTrainingView {
 }
 
 export interface PurchaseHistoryRow {
-  refId: number;
+  refId: string | number;
   sortAt: number;
   status: string;
   typeLabel: string;
@@ -292,7 +292,7 @@ export class AccountProfileComponent implements OnInit {
         if (result?.button !== DialogButton.DELETE) return;
 
         this.deletingProfile = true;
-        this.usersApi.delete(p.id).subscribe({
+        this.usersApi.delete(p.publicId).subscribe({
           next: () => {
             this.profileService.clear();
             this.auth.logout().subscribe(() => {
@@ -338,12 +338,12 @@ export class AccountProfileComponent implements OnInit {
     this.saveError = null;
 
     this.usersApi
-      .update(p.id, userPayload)
+      .update(p.publicId, userPayload)
       .pipe(
         switchMap(() => {
           if (!this.isTrainer || !this.trainerRecord) return of(null);
-          return this.trainersApi.update(this.trainerRecord.id, {
-            userId: p.id,
+          return this.trainersApi.update(this.trainerRecord.publicId, {
+            userPublicId: p.publicId,
             gymId: p.gymId,
             bio: bio ?? '',
             experienceYears: Number(experienceYears) || 0,
@@ -379,18 +379,16 @@ export class AccountProfileComponent implements OnInit {
     this.isLoading = true;
 
     const gymTrainersReq = new ListTrainersRequest();
-    gymTrainersReq.gymId = profile.gymId;
     gymTrainersReq.paging.pageSize = 100;
 
     const myTrainerReq = new ListTrainersRequest();
-    myTrainerReq.userId = profile.id;
-    myTrainerReq.gymId = profile.gymId;
+    myTrainerReq.userPublicId = profile.publicId;
     myTrainerReq.paging.pageSize = 1;
 
     const trainingsReq = new ListTrainingsRequest();
     trainingsReq.paging.pageSize = 100;
 
-    const ordersReq = new ListOrdersWithItemsRequest();
+    const ordersReq = new ListOrdersRequest();
     ordersReq.paging.pageSize = 50;
 
     const productsReq = new ListProductsRequest();
@@ -400,7 +398,7 @@ export class AccountProfileComponent implements OnInit {
       gymTrainers: this.trainersApi.list(gymTrainersReq).pipe(catchError(() => of({ items: [] }))),
       myTrainer: this.trainersApi.list(myTrainerReq).pipe(catchError(() => of({ items: [] }))),
       trainings: this.trainingsApi.list(trainingsReq).pipe(catchError(() => of({ items: [] }))),
-      orders: this.ordersApi.listWithItems(ordersReq).pipe(catchError(() => of({ items: [] }))),
+      orders: this.ordersApi.list(ordersReq).pipe(catchError(() => of({ items: [] }))),
       products: this.productsApi.list(productsReq).pipe(catchError(() => of({ items: [] }))),
       membership: this.membershipsApi.getMyActive().pipe(catchError(() => of(null))),
       membershipHistory: this.membershipsApi.listMyHistory(),
@@ -421,24 +419,25 @@ export class AccountProfileComponent implements OnInit {
         switchMap((data: any) => {
           const trainers = data.gymTrainers.items ?? [];
           if (!trainers.length) {
-            return of({ ...data, trainerUsers: new Map<number, string>() });
+            return of({ ...data, trainerUsers: new Map<string, string>() });
           }
-          return forkJoin<{ trainerId: number; name: string }[]>(
-            trainers.map((t: ListTrainersQueryDto) =>
-              this.usersApi.getById(t.userId).pipe(
-                catchError(() => of(null)),
-                map((user) => ({
-                  trainerId: t.id,
-                  name: user
+          const usersReq = new ListUsersRequest();
+          usersReq.paging.pageSize = 500;
+          return this.usersApi.list(usersReq).pipe(
+            map((usersRes) => {
+              const usersByPublicId = new Map(
+                (usersRes.items ?? []).map((u) => [u.publicId, u]),
+              );
+              const trainerUsers = new Map<string, string>();
+              trainers.forEach((t: ListTrainersQueryDto) => {
+                const user = usersByPublicId.get(t.userPublicId);
+                trainerUsers.set(
+                  t.publicId,
+                  user
                     ? `${user.firstName} ${user.lastName}`.trim()
-                    : this.translate.instant('CLIENT.PROFILE.TRAINER_FALLBACK', { id: t.id }),
-                })),
-              ),
-            ),
-          ).pipe(
-            map((pairs) => {
-              const trainerUsers = new Map<number, string>();
-              pairs.forEach((pair) => trainerUsers.set(pair.trainerId, pair.name));
+                    : this.translate.instant('CLIENT.PROFILE.TRAINER_FALLBACK', { id: t.publicId }),
+                );
+              });
               return { ...data, trainerUsers };
             }),
           );
@@ -456,12 +455,14 @@ export class AccountProfileComponent implements OnInit {
             ? this.resolveActiveMembership(data.membership, membershipHistory)
             : null;
 
-          const trainerNames: Map<number, string> = data.trainerUsers ?? new Map();
+          const trainerNames: Map<string, string> = data.trainerUsers ?? new Map();
           const now = new Date();
           let trainings = (data.trainings.items ?? []) as ListTrainingsQueryDto[];
 
           if (this.isTrainer && this.trainerRecord) {
-            trainings = trainings.filter((t) => t.trainerId === this.trainerRecord!.id);
+            trainings = trainings.filter(
+              (t) => t.trainerPublicId === this.trainerRecord!.publicId,
+            );
             this.pendingTrainerRequests = (data.trainerBookings ??
               []) as ListTrainerTrainingRequestQueryDto[];
           } else {
@@ -487,8 +488,8 @@ export class AccountProfileComponent implements OnInit {
             .map((t) => ({
               training: t,
               trainerName:
-                trainerNames.get(t.trainerId) ??
-                this.translate.instant('CLIENT.PROFILE.TRAINER_FALLBACK', { id: t.trainerId }),
+                trainerNames.get(t.trainerPublicId) ??
+                this.translate.instant('CLIENT.PROFILE.TRAINER_FALLBACK', { id: t.trainerPublicId }),
               typeLabel: this.trainingTypeLabel(t.type),
             }));
 
@@ -499,7 +500,7 @@ export class AccountProfileComponent implements OnInit {
           this.purchases = [];
           for (const m of membershipHistory) {
             this.purchases.push({
-              refId: m.userMembershipId,
+              refId: m.publicId,
               sortAt: new Date(m.purchasedAt).getTime(),
               status: m.isActive
                 ? this.translate.instant('CLIENT.PROFILE.STATUS_ACTIVE')
@@ -579,7 +580,7 @@ export class AccountProfileComponent implements OnInit {
     fromApi: GetMyActiveUserMembershipQueryDto | null | undefined,
     history: ListMyMembershipPurchaseHistoryQueryDto[],
   ): GetMyActiveUserMembershipQueryDto | null {
-    if (fromApi?.userMembershipId) {
+    if (fromApi?.publicId) {
       return fromApi;
     }
 
@@ -589,7 +590,7 @@ export class AccountProfileComponent implements OnInit {
     }
 
     return {
-      userMembershipId: activeRow.userMembershipId,
+      publicId: activeRow.publicId,
       membershipPlanId: 0,
       planName: activeRow.planName,
       durationDays: activeRow.durationDays,

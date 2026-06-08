@@ -23,6 +23,8 @@
 }
 
 .dash-sidebar {
+  width: 240px;
+  min-width: 240px;
   background: $sidebar-bg;
   color: #fff;
 }
@@ -147,12 +149,19 @@
 
 .dash-content {
   padding: 24px;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 
-  .route-outlet-host {
-    flex: 0 0 auto;
+  .route-outlet-host--dash {
+    display: block;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
     min-height: calc(100vh - 72px - 48px);
     overflow: visible;
+    position: relative;
   }
 }
 

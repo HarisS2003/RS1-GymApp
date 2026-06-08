@@ -7,7 +7,7 @@
   <p class="empty-msg">{{ 'CLIENT.TRAINERS_PAGE.NO_TRAINERS' | translate }}</p>
 } @else {
   <div class="trainer-grid">
-    @for (row of rows; track row.trainer.id) {
+    @for (row of rows; track row.trainer.publicId) {
       <mat-card class="trainer-card" appearance="outlined">
         <mat-card-content>
         <div class="trainer-card__avatar"><mat-icon>person</mat-icon></div>
@@ -20,7 +20,7 @@
           mat-flat-button
           type="button"
           class="trainer-card__book"
-          (click)="bookTrainer(row.trainer.id)"
+          (click)="bookTrainer(row.trainer.publicId)"
         >
           {{ 'CLIENT.TRAINERS_PAGE.BOOK' | translate }}
         </button>

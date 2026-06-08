@@ -35,7 +35,7 @@ export class ClientTrainerBookingComponent implements OnInit {
   hasActiveMembership = false;
   slotsLoading = false;
   booking = false;
-  trainerId = 0;
+  trainerPublicId = '';
   trainer: ListTrainersQueryDto | null = null;
   trainerUser: GetUserByIdQueryDto | null = null;
   selectedDate: Date | null = null;
@@ -44,8 +44,8 @@ export class ClientTrainerBookingComponent implements OnInit {
   minDate = new Date();
 
   ngOnInit(): void {
-    this.trainerId = Number(this.route.snapshot.paramMap.get('trainerId'));
-    if (!this.trainerId) {
+    this.trainerPublicId = this.route.snapshot.paramMap.get('trainerId') ?? '';
+    if (!this.trainerPublicId) {
       this.router.navigate(['/client/trainers']);
       return;
     }
@@ -64,7 +64,7 @@ export class ClientTrainerBookingComponent implements OnInit {
   }
 
   trainerName(): string {
-    if (!this.trainerUser) return `#${this.trainerId}`;
+    if (!this.trainerUser) return this.trainerPublicId.slice(0, 8) + '…';
     return `${this.trainerUser.firstName} ${this.trainerUser.lastName}`.trim();
   }
 
@@ -94,7 +94,7 @@ export class ClientTrainerBookingComponent implements OnInit {
 
     this.requestsApi
       .create({
-        trainerId: this.trainerId,
+        trainerPublicId: this.trainerPublicId,
         date: dateIso,
         startTime,
       })
@@ -137,13 +137,15 @@ export class ClientTrainerBookingComponent implements OnInit {
       .pipe(catchError(() => of({ items: [] } as any)))
       .subscribe({
         next: (res) => {
-          const found = (res.items ?? []).find((t: ListTrainersQueryDto) => t.id === this.trainerId);
+          const found = (res.items ?? []).find(
+            (t: ListTrainersQueryDto) => t.publicId === this.trainerPublicId,
+          );
           if (!found) {
             this.loading = false;
             return;
           }
           this.trainer = found;
-          this.usersApi.getById(found.userId).subscribe({
+          this.usersApi.getById(found.userPublicId).subscribe({
             next: (user) => {
               this.trainerUser = user;
               this.loading = false;
@@ -158,7 +160,7 @@ export class ClientTrainerBookingComponent implements OnInit {
   private loadSlots(date: Date): void {
     this.slotsLoading = true;
     this.requestsApi
-      .getAvailableSlots(this.trainerId, this.toDateOnly(date))
+      .getAvailableSlots(this.trainerPublicId, this.toDateOnly(date))
       .pipe(catchError(() => of([])))
       .subscribe({
         next: (slots) => {

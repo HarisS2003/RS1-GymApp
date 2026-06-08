@@ -7,10 +7,7 @@ import { TrainersApiService } from '../../../../api-services/trainers/trainers-a
 import { UsersApiService } from '../../../../api-services/users/users-api.service';
 import { ListTrainersRequest } from '../../../../api-services/trainers/trainers-api.models';
 import { ListTrainersQueryDto } from '../../../../api-services/trainers/trainers-api.models';
-import {
-  GetUserByIdQueryDto,
-  ListUsersQueryDto,
-} from '../../../../api-services/users/users-api.models';
+import { ListUsersRequest, ListUsersQueryDto } from '../../../../api-services/users/users-api.models';
 import { UserProfileService } from '../../../../core/services/user-profile.service';
 import { UserMembershipsApiService } from '../../../../api-services/user-memberships/user-memberships-api.service';
 import { ToasterService } from '../../../../core/services/toaster.service';
@@ -47,60 +44,41 @@ export class ClientTrainersComponent implements OnInit {
     this.load();
   }
 
-  bookTrainer(trainerId: number): void {
+  bookTrainer(trainerPublicId: string): void {
     if (!this.hasActiveMembership) {
       this.toaster.error(this.translate.instant('CLIENT.TRAINER_BOOKING.MEMBERSHIP_REQUIRED'));
       return;
     }
-    this.router.navigate(['/client/trainers', trainerId, 'book']);
+    this.router.navigate(['/client/trainers', trainerPublicId, 'book']);
   }
 
   displayName(row: TrainerRow): string {
     if (row.user) return `${row.user.firstName} ${row.user.lastName}`;
-    return `Trener #${row.trainer.id}`;
+    return `Trener ${row.trainer.publicId.slice(0, 8)}…`;
   }
 
   private load(): void {
-    const gymId = this.profileService.profile()?.gymId;
-    if (!gymId) {
-      this.profileService.loadProfile().subscribe(() => this.load());
-      return;
-    }
+    const trainersReq = new ListTrainersRequest();
+    trainersReq.paging.pageSize = 100;
 
-    const req = new ListTrainersRequest();
-    req.gymId = gymId;
-    req.paging.pageSize = 100;
+    const usersReq = new ListUsersRequest();
+    usersReq.paging.pageSize = 500;
 
-    this.trainersApi
-      .list(req)
-      .pipe(catchError(() => of({ items: [] } as any)))
-      .subscribe({
-        next: (res) => {
-          const trainers = res.items ?? [];
-          if (!trainers.length) {
-            this.rows = [];
-            this.loading = false;
-            return;
-          }
-          forkJoin(
-            trainers.map((t: ListTrainersQueryDto) =>
-              this.usersApi.getById(t.userId).pipe(
-                catchError(() => of(null)),
-                map((user: GetUserByIdQueryDto | null): TrainerRow => ({
-                  trainer: t,
-                  user: user ?? undefined,
-                })),
-              ),
-            ),
-          ).subscribe({
-            next: (rows) => {
-              this.rows = rows as TrainerRow[];
-              this.loading = false;
-            },
-            error: () => (this.loading = false),
-          });
-        },
-        error: () => (this.loading = false),
-      });
+    forkJoin({
+      trainers: this.trainersApi.list(trainersReq).pipe(catchError(() => of({ items: [] }))),
+      users: this.usersApi.list(usersReq).pipe(catchError(() => of({ items: [] }))),
+    }).subscribe({
+      next: ({ trainers, users }) => {
+        const usersByPublicId = new Map(
+          (users.items ?? []).map((u: ListUsersQueryDto) => [u.publicId, u]),
+        );
+        this.rows = (trainers.items ?? []).map((trainer: ListTrainersQueryDto) => ({
+          trainer,
+          user: usersByPublicId.get(trainer.userPublicId),
+        }));
+        this.loading = false;
+      },
+      error: () => (this.loading = false),
+    });
   }
 }

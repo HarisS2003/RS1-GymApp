@@ -34,19 +34,24 @@ export class UsersApiService {
     });
   }
 
-  getById(id: number): Observable<GetUserByIdQueryDto> {
-    return this.http.get<GetUserByIdQueryDto>(`${this.baseUrl}/${id}`);
+  getCurrent(): Observable<GetUserByIdQueryDto> {
+    return this.http.get<GetUserByIdQueryDto>(`${this.baseUrl}/me`);
   }
 
-  create(payload: CreateUserCommand): Observable<number> {
-    return this.http.post<number>(this.baseUrl, payload);
+  getById(publicId: string): Observable<GetUserByIdQueryDto> {
+    return this.http.get<GetUserByIdQueryDto>(`${this.baseUrl}/${publicId}`);
   }
 
-  update(id: number, payload: UpdateUserCommand): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+  create(payload: CreateUserCommand): Observable<string> {
+    return this.http.post<string>(this.baseUrl, payload);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  update(publicId: string, payload: UpdateUserCommand): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${publicId}`, payload);
+  }
+
+  delete(publicId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${publicId}`);
   }
 }
+

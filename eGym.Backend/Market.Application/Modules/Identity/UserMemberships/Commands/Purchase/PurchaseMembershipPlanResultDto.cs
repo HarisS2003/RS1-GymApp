@@ -2,7 +2,7 @@ namespace Market.Application.Modules.Identity.UserMemberships.Commands.Purchase;
 
 public sealed class PurchaseMembershipPlanResultDto
 {
-    public required int UserMembershipId { get; init; }
+    public required string PublicId { get; init; }
     public required int PaymentId { get; init; }
     public required int MembershipPlanId { get; init; }
     public required string PlanName { get; init; }

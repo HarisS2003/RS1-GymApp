@@ -10,7 +10,7 @@ import {
 } from '../../modules/auth/constants/auth.constants';
 
 export interface UserProfileView {
-  id: number;
+  publicId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -35,17 +35,16 @@ export class UserProfileService {
   isAdminRole = computed(() => this._profile()?.roleId === ADMIN_ROLE_ID);
 
   loadProfile(): Observable<UserProfileView | null> {
-    const userId = this.auth.currentUser()?.userId;
-    if (!userId) {
+    if (!this.auth.currentUser()?.userId) {
       this._profile.set(null);
       return of(null);
     }
 
-    return this.usersApi.getById(userId).pipe(
+    return this.usersApi.getCurrent().pipe(
       switchMap((user) =>
         this.gymsApi.getById(user.gymId).pipe(
           map((gym) => ({
-            id: user.id,
+            publicId: user.publicId,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
@@ -57,7 +56,7 @@ export class UserProfileService {
           })),
           catchError(() =>
             of({
-              id: user.id,
+              publicId: user.publicId,
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,

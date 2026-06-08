@@ -77,8 +77,8 @@
     </mat-toolbar>
 
     <div class="dash-content">
-      <div class="route-outlet-host" [@routeAnimations]="prepareRoute(outlet)">
-        <router-outlet #outlet="outlet"></router-outlet>
+      <div class="route-outlet-host route-outlet-host--dash" [@routeAnimations]="animationState">
+        <router-outlet (activate)="onRouteActivate()"></router-outlet>
       </div>
     </div>
   </mat-sidenav-content>

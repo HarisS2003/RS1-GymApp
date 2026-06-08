@@ -1,9 +1,10 @@
-﻿using Market.Domain.Common;
+using Market.Domain.Common;
 
 namespace Market.Domain.Entities;
 
 public class TrainerEntity : BaseEntity
 {
+    public string PublicId { get; set; } = Guid.NewGuid().ToString();
     public int UserId { get; set; }
     public int GymId { get; set; }
     public string Bio { get; set; } = string.Empty;

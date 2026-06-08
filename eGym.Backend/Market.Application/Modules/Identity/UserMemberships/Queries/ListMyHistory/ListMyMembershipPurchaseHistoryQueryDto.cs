@@ -2,7 +2,7 @@ namespace Market.Application.Modules.Identity.UserMemberships.Queries.ListMyHist
 
 public sealed class ListMyMembershipPurchaseHistoryQueryDto
 {
-    public required int UserMembershipId { get; init; }
+    public required string PublicId { get; init; }
     public required string PlanName { get; init; }
     public required decimal AmountPaid { get; init; }
     public required DateTime PurchasedAt { get; init; }

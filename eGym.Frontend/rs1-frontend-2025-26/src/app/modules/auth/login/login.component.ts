@@ -81,13 +81,19 @@ export class LoginComponent extends BaseComponent implements OnInit {
       .pipe(switchMap(() => this.profileService.loadProfile()))
       .subscribe({
       next: (profile) => {
+        if (!this.auth.isAuthenticated()) {
+          this.stopLoading(this.translate.instant('AUTH.LOGIN_ERROR'));
+          return;
+        }
+
         if (profile) this.auth.applyRoleFromProfile(profile.roleId);
+
         this.stopLoading();
         const route =
-          profile?.roleId === ADMIN_ROLE_ID
+          profile?.roleId === ADMIN_ROLE_ID || this.auth.isAdmin()
             ? '/admin/dashboard'
             : this.currentUser.getDefaultRoute();
-        this.router.navigate([route]);
+        void this.router.navigate([route]);
       },
       error: () => {
         this.stopLoading(this.translate.instant('AUTH.LOGIN_ERROR'));

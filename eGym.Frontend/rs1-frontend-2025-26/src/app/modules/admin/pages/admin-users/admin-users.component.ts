@@ -40,7 +40,10 @@ export class AdminUsersComponent implements OnInit {
       this.load();
       return;
     }
-    this.profileService.loadProfile().subscribe(() => this.load());
+    this.profileService.loadProfile().subscribe({
+      next: () => this.load(),
+      error: () => this.load(),
+    });
   }
 
   fullName(row: ListUsersWithMembershipQueryDto): string {
@@ -57,7 +60,7 @@ export class AdminUsersComponent implements OnInit {
     this.dialog
       .open(EditUserDialogComponent, {
         width: '480px',
-        data: { userId: row.id } satisfies EditUserDialogData,
+        data: { userPublicId: row.publicId } satisfies EditUserDialogData,
       })
       .afterClosed()
       .subscribe((ok) => {
@@ -73,7 +76,7 @@ export class AdminUsersComponent implements OnInit {
     const msg = this.translate.instant('ADMIN_USERS.DELETE_CONFIRM', { name });
     if (!confirm(msg)) return;
 
-    this.usersApi.delete(row.id).subscribe({
+    this.usersApi.delete(row.publicId).subscribe({
       next: () => {
         this.toaster.success(this.translate.instant('ADMIN_USERS.DELETE_SUCCESS', { name }));
         this.load();
@@ -89,13 +92,13 @@ export class AdminUsersComponent implements OnInit {
   }
 
   openHistory(row: ListUsersWithMembershipQueryDto): void {
-    if (!row.userMembershipId) {
+    if (!row.membershipPublicId) {
       this.toaster.error(this.translate.instant('ADMIN_USERS.NO_MEMBERSHIP_HISTORY'));
       return;
     }
 
     const data: MembershipHistoryDialogData = {
-      userMembershipId: row.userMembershipId,
+      membershipPublicId: row.membershipPublicId,
       userName: this.fullName(row),
       planName: row.currentMembershipName ?? '—',
     };
@@ -108,11 +111,9 @@ export class AdminUsersComponent implements OnInit {
   }
 
   private load(): void {
-    const gymId = this.profileService.profile()?.gymId;
     const req = new ListUsersWithMembershipRequest();
     req.roleId = MEMBER_ROLE_ID;
     req.paging.pageSize = 500;
-    if (gymId) req.gymId = gymId;
 
     this.loading = true;
     this.usersApi.listWithMemberships(req).subscribe({

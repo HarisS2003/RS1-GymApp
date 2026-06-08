@@ -22,15 +22,15 @@ export class TrainersApiService {
     return this.http.get<ListTrainersResponse>(this.baseUrl, { params });
   }
 
-  create(payload: CreateTrainerCommand): Observable<number> {
-    return this.http.post<number>(this.baseUrl, payload);
+  create(payload: CreateTrainerCommand): Observable<string> {
+    return this.http.post<string>(this.baseUrl, payload);
   }
 
-  update(id: number, payload: UpdateTrainerCommand): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+  update(publicId: string, payload: UpdateTrainerCommand): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${publicId}`, payload);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  delete(publicId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${publicId}`);
   }
 }

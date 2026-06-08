@@ -2,7 +2,7 @@ namespace Market.Application.Modules.Catalog.Trainings.Commands.Create;
 
 public sealed class CreateTrainingCommand : IRequest<int>
 {
-    public int TrainerId { get; set; }
+    public string TrainerPublicId { get; set; } = string.Empty;
     public TrainingType Type { get; set; }
     public string? Description { get; set; }
     public DateTime Date { get; set; }

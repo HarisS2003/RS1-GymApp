@@ -2,6 +2,6 @@ namespace Market.Application.Modules.Catalog.TrainingRequests.Queries.GetAvailab
 
 public sealed class GetTrainerAvailableSlotsQuery : IRequest<List<TrainerAvailableSlotDto>>
 {
-    public int TrainerId { get; set; }
+    public string TrainerPublicId { get; set; } = string.Empty;
     public DateTime Date { get; set; }
 }

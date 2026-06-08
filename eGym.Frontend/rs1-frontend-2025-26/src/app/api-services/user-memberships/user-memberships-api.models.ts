@@ -7,7 +7,7 @@ export interface PurchaseMembershipPlanCommand {
 }
 
 export interface PurchaseMembershipPlanResultDto {
-  userMembershipId: number;
+  publicId: string;
   paymentId: number;
   membershipPlanId: number;
   planName: string;
@@ -19,7 +19,7 @@ export interface PurchaseMembershipPlanResultDto {
 }
 
 export interface GetMyActiveUserMembershipQueryDto {
-  userMembershipId: number;
+  publicId: string;
   membershipPlanId: number;
   planName: string;
   durationDays: number;
@@ -32,7 +32,7 @@ export interface GetMyActiveUserMembershipQueryDto {
 
 export interface MembershipHistoryStateDto {
   hasMembership: boolean;
-  userId: number | null;
+  userPublicId: string | null;
   membershipPlanId: number | null;
   planName: string | null;
   startDate: string | null;
@@ -50,14 +50,14 @@ export interface MembershipEventTimelineItemDto {
 }
 
 export interface GetMembershipHistoryQueryDto {
-  userMembershipId: number;
+  publicId: string;
   asOfDate: string;
   state: MembershipHistoryStateDto;
   timeline: MembershipEventTimelineItemDto[];
 }
 
 export interface ListMyMembershipPurchaseHistoryQueryDto {
-  userMembershipId: number;
+  publicId: string;
   planName: string;
   amountPaid: number;
   purchasedAt: string;

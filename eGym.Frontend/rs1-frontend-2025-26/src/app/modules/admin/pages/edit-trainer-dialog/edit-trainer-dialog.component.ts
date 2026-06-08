@@ -49,8 +49,8 @@ export class EditTrainerDialogComponent implements OnInit {
     this.saving = true;
 
     this.trainersApi
-      .update(t.id, {
-        userId: t.userId,
+      .update(t.publicId, {
+        userPublicId: t.userPublicId,
         gymId: t.gymId,
         bio: bio ?? '',
         experienceYears: Number(experienceYears) || 0,

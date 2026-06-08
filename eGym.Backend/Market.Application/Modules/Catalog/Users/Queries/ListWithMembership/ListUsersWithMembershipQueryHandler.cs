@@ -2,15 +2,18 @@ using Market.Application.Modules.Identity.UserMemberships.Services;
 
 namespace Market.Application.Modules.Catalog.Users.Queries.ListWithMembership;
 
-public sealed class ListUsersWithMembershipQueryHandler(IAppDbContext ctx)
+public sealed class ListUsersWithMembershipQueryHandler(IAppDbContext ctx, IAppCurrentUser currentUser)
     : IRequestHandler<ListUsersWithMembershipQuery, PageResult<ListUsersWithMembershipQueryDto>>
 {
     public async Task<PageResult<ListUsersWithMembershipQueryDto>> Handle(
         ListUsersWithMembershipQuery request,
         CancellationToken ct)
     {
+        var currentGymId = await GetCurrentGymIdAsync(ct);
         var today = DateTime.UtcNow.Date;
-        var q = ctx.Users.AsNoTracking();
+
+        var q = ctx.Users.AsNoTracking()
+            .Where(x => x.GymId == currentGymId);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -21,35 +24,33 @@ public sealed class ListUsersWithMembershipQueryHandler(IAppDbContext ctx)
                 || x.Email.ToLower().Contains(searchTerm));
         }
 
-        if (request.GymId is int gymId)
-        {
-            q = q.Where(x => x.GymId == gymId);
-        }
-
         if (request.RoleId is int roleId)
-        {
             q = q.Where(x => x.RoleId == roleId);
-        }
 
         var page = await PageResult<ListUsersWithMembershipQueryDto>.FromQueryableAsync(
             q.OrderBy(x => x.LastName).ThenBy(x => x.FirstName).Select(x => new ListUsersWithMembershipQueryDto
             {
-                Id = x.Id,
+                PublicId = x.PublicId,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Email = x.Email,
-                UserMembershipId = null,
+                MembershipPublicId = null,
                 CurrentMembershipName = null,
                 MembershipStatus = "None",
             }),
             request.Paging,
             ct);
 
-        var userIds = page.Items.Select(x => x.Id).ToList();
+        var userInternalIds = await ctx.Users.AsNoTracking()
+            .Where(x => page.Items.Select(i => i.PublicId).Contains(x.PublicId))
+            .Select(x => new { x.Id, x.PublicId })
+            .ToListAsync(ct);
+
+        var internalIdByPublicId = userInternalIds.ToDictionary(x => x.PublicId, x => x.Id);
+        var userIds = userInternalIds.Select(x => x.Id).ToList();
+
         if (userIds.Count == 0)
-        {
             return page;
-        }
 
         var activeMemberships = await (
             from m in ctx.UserMemberships.AsNoTracking()
@@ -60,6 +61,7 @@ public sealed class ListUsersWithMembershipQueryHandler(IAppDbContext ctx)
             select new
             {
                 m.Id,
+                m.PublicId,
                 m.UserId,
                 PlanName = p != null ? p.Name : "Membership",
             }
@@ -84,7 +86,8 @@ public sealed class ListUsersWithMembershipQueryHandler(IAppDbContext ctx)
         var now = DateTime.UtcNow;
         var items = page.Items.Select(user =>
         {
-            if (!membershipByUser.TryGetValue(user.Id, out var membership))
+            if (!internalIdByPublicId.TryGetValue(user.PublicId, out var internalUserId)
+                || !membershipByUser.TryGetValue(internalUserId, out var membership))
             {
                 return user;
             }
@@ -98,11 +101,11 @@ public sealed class ListUsersWithMembershipQueryHandler(IAppDbContext ctx)
 
             return new ListUsersWithMembershipQueryDto
             {
-                Id = user.Id,
+                PublicId = user.PublicId,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                UserMembershipId = membership.Id,
+                MembershipPublicId = membership.PublicId,
                 CurrentMembershipName = membership.PlanName,
                 MembershipStatus = status,
             };
@@ -117,5 +120,20 @@ public sealed class ListUsersWithMembershipQueryHandler(IAppDbContext ctx)
             IncludedTotal = page.IncludedTotal,
             TotalPages = page.TotalPages,
         };
+    }
+
+    private async Task<int> GetCurrentGymIdAsync(CancellationToken ct)
+    {
+        var userId = currentUser.UserId
+            ?? throw new ValidationException("Current user is required.");
+
+        var gymId = await ctx.Users.AsNoTracking()
+            .Where(x => x.Id == userId)
+            .Select(x => x.GymId)
+            .FirstOrDefaultAsync(ct);
+
+        return gymId == 0
+            ? throw new MarketNotFoundException("User not found.")
+            : gymId;
     }
 }

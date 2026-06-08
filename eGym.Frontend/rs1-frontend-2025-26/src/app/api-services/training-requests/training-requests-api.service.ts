@@ -18,8 +18,8 @@ export class TrainingRequestsApiService {
   private readonly baseUrl = `${environment.apiUrl}/TrainingRequests`;
   private http = inject(HttpClient);
 
-  getAvailableSlots(trainerId: number, date: string): Observable<TrainerAvailableSlotDto[]> {
-    const params = new HttpParams().set('trainerId', trainerId).set('date', date);
+  getAvailableSlots(trainerPublicId: string, date: string): Observable<TrainerAvailableSlotDto[]> {
+    const params = new HttpParams().set('trainerPublicId', trainerPublicId).set('date', date);
     return this.http.get<TrainerAvailableSlotDto[]>(`${this.baseUrl}/available-slots`, { params });
   }
 

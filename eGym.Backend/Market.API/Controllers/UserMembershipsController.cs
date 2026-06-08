@@ -36,35 +36,35 @@ public class UserMembershipsController(ISender sender) : ControllerBase
         return new JsonResult(list) { StatusCode = StatusCodes.Status200OK };
     }
 
-    [HttpGet("{userMembershipId:int}/history")]
+    [HttpGet("{publicId}/history")]
     public async Task<GetMembershipHistoryQueryDto> GetHistory(
-        int userMembershipId,
+        string publicId,
         [FromQuery] DateTime? asOfDate,
         CancellationToken ct)
     {
         return await sender.Send(new GetMembershipHistoryQuery
         {
-            UserMembershipId = userMembershipId,
+            PublicId = publicId,
             AsOfDate = asOfDate ?? DateTime.UtcNow,
         }, ct);
     }
 
-    [HttpPost("{userMembershipId:int}/freeze")]
-    public async Task Freeze(int userMembershipId, [FromBody] FreezeUserMembershipCommand? command, CancellationToken ct)
+    [HttpPost("{publicId}/freeze")]
+    public async Task Freeze(string publicId, [FromBody] FreezeUserMembershipCommand? command, CancellationToken ct)
     {
         await sender.Send(new FreezeUserMembershipCommand
         {
-            UserMembershipId = userMembershipId,
+            PublicId = publicId,
             Reason = command?.Reason,
         }, ct);
     }
 
-    [HttpPost("{userMembershipId:int}/activate")]
-    public async Task Activate(int userMembershipId, [FromBody] ActivateUserMembershipCommand? command, CancellationToken ct)
+    [HttpPost("{publicId}/activate")]
+    public async Task Activate(string publicId, [FromBody] ActivateUserMembershipCommand? command, CancellationToken ct)
     {
         await sender.Send(new ActivateUserMembershipCommand
         {
-            UserMembershipId = userMembershipId,
+            PublicId = publicId,
             Reason = command?.Reason,
         }, ct);
     }

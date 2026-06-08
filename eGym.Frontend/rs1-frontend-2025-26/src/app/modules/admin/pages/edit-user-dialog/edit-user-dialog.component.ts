@@ -7,7 +7,7 @@ import { ToasterService } from '../../../../core/services/toaster.service';
 import { bosnianPhoneValidator } from '../../../../core/validators/bosnian-phone.validator';
 
 export interface EditUserDialogData {
-  userId: number;
+  userPublicId: string;
 }
 
 @Component({
@@ -38,7 +38,7 @@ export class EditUserDialogComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: EditUserDialogData) {}
 
   ngOnInit(): void {
-    this.usersApi.getById(this.data.userId).subscribe({
+    this.usersApi.getById(this.data.userPublicId).subscribe({
       next: (user) => {
         this.form.patchValue({
           firstName: user.firstName,
@@ -68,7 +68,7 @@ export class EditUserDialogComponent implements OnInit {
     const value = this.form.getRawValue();
 
     this.usersApi
-      .update(this.data.userId, {
+      .update(this.data.userPublicId, {
         firstName: value.firstName ?? '',
         lastName: value.lastName ?? '',
         email: value.email ?? '',

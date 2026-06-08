@@ -1,4 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -17,8 +24,9 @@ import { UserProfileService } from '../../../core/services/user-profile.service'
   styleUrl: './client-layout.component.scss',
   animations: [routeAnimations],
 })
-export class ClientLayoutComponent implements OnInit {
+export class ClientLayoutComponent implements OnInit, AfterViewInit {
   @ViewChild('dashMain') private dashMain?: ElementRef<HTMLElement>;
+  @ViewChild(RouterOutlet) private outlet?: RouterOutlet;
 
   auth = inject(AuthFacadeService);
   profileService = inject(UserProfileService);
@@ -30,12 +38,24 @@ export class ClientLayoutComponent implements OnInit {
   readonly isHandset = toSignal(this.layoutResponsive.isHandset$, { initialValue: false });
 
   sidenavOpen = false;
+  animationState = '';
 
   ngOnInit(): void {
     this.profileService.loadProfile().subscribe();
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(() => this.dashMain?.nativeElement.scrollTo(0, 0));
+      .subscribe(() => {
+        this.syncRouteAnimationState();
+        this.scrollMainToTop();
+      });
+  }
+
+  ngAfterViewInit(): void {
+    this.syncRouteAnimationState();
+  }
+
+  onRouteActivate(): void {
+    this.syncRouteAnimationState();
   }
 
   toggleSidenav(): void {
@@ -53,7 +73,16 @@ export class ClientLayoutComponent implements OnInit {
     this.router.navigate(['/auth/logout']);
   }
 
-  prepareRoute(outlet: RouterOutlet): string {
-    return prepareRouteAnimationState(outlet);
+  private syncRouteAnimationState(): void {
+    setTimeout(() => {
+      this.animationState = prepareRouteAnimationState(this.outlet);
+    }, 0);
+  }
+
+  private scrollMainToTop(): void {
+    const el = this.dashMain?.nativeElement;
+    if (el && typeof el.scrollTo === 'function') {
+      el.scrollTo(0, 0);
+    }
   }
 }

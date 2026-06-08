@@ -253,6 +253,18 @@ select {
   overflow: hidden;
 }
 
+.dash-content .route-outlet-host--dash {
+  display: block;
+  overflow: visible;
+
+  > *:not(router-outlet) {
+    position: static;
+    grid-area: unset;
+    transform: none;
+    backface-visibility: visible;
+  }
+}
+
 .auth-panel__body .route-outlet-host--auth {
   display: block;
   width: 100%;

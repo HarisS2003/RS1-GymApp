@@ -19,7 +19,7 @@ export class UserMembershipsApiService {
 
   getMyActive(): Observable<GetMyActiveUserMembershipQueryDto | null> {
     return this.http.get<GetMyActiveUserMembershipQueryDto | null>(`${this.baseUrl}/my`).pipe(
-      map((dto) => (dto && dto.userMembershipId > 0 ? dto : null)),
+      map((dto) => (dto && dto.publicId ? dto : null)),
     );
   }
 
@@ -37,21 +37,22 @@ export class UserMembershipsApiService {
   }
 
   getHistory(
-    userMembershipId: number,
+    publicId: string,
     asOfDate?: string,
   ): Observable<GetMembershipHistoryQueryDto> {
     const params = asOfDate ? { asOfDate } : undefined;
     return this.http.get<GetMembershipHistoryQueryDto>(
-      `${this.baseUrl}/${userMembershipId}/history`,
+      `${this.baseUrl}/${publicId}/history`,
       { params },
     );
   }
 
-  freeze(userMembershipId: number, reason?: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/${userMembershipId}/freeze`, { reason });
+  freeze(publicId: string, reason?: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${publicId}/freeze`, { reason });
   }
 
-  activate(userMembershipId: number, reason?: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/${userMembershipId}/activate`, { reason });
+  activate(publicId: string, reason?: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${publicId}/activate`, { reason });
   }
 }
+

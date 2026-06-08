@@ -1,4 +1,4 @@
-﻿namespace Market.Infrastructure.Database.Configurations.Users;
+namespace Market.Infrastructure.Database.Configurations.Users;
 
 public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 {
@@ -6,6 +6,15 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
     {
         builder
             .ToTable("Users");
+
+        builder
+            .Property(x => x.PublicId)
+            .IsRequired()
+            .HasMaxLength(36);
+
+        builder
+            .HasIndex(x => x.PublicId)
+            .IsUnique();
 
         builder
             .Property(x => x.FirstName)
@@ -30,6 +39,10 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
         builder
             .Property(x => x.PasswordHash)
             .IsRequired();
+
+        builder
+            .Property(x => x.RefreshTokenHash)
+            .HasMaxLength(128);
 
         builder
             .HasIndex(x => x.Email)

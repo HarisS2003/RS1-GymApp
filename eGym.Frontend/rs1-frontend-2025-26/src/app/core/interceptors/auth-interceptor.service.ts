@@ -55,7 +55,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
  */
 function isAuthEndpoint(url: string): boolean {
     const lower = url.toLowerCase();
-    return lower.includes('/auth/') || lower.includes('/users');
+    // Only skip token attach/refresh for auth endpoints — NOT /Users (profile, CRUD need Bearer).
+    return lower.includes('/auth/');
 }
 
 /**

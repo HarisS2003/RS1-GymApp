@@ -2,7 +2,9 @@ using Market.Application.Modules.Catalog.TrainingRequests.Queries.GetAvailableSl
 
 namespace Market.Application.Modules.Catalog.TrainingRequests.Commands.Create;
 
-public sealed class CreateTrainingRequestCommandHandler(IAppDbContext ctx, IAppCurrentUser currentUser)
+public sealed class CreateTrainingRequestCommandHandler(
+    IAppDbContext ctx,
+    IAppCurrentUser currentUser)
     : IRequestHandler<CreateTrainingRequestCommand, CreateTrainingRequestResultDto>
 {
     public async Task<CreateTrainingRequestResultDto> Handle(
@@ -12,28 +14,29 @@ public sealed class CreateTrainingRequestCommandHandler(IAppDbContext ctx, IAppC
         var userId = currentUser.UserId
             ?? throw new ValidationException("Current user is required.");
 
-        if (request.TrainerId <= 0)
-            throw new ValidationException("TrainerId is required.");
+        if (string.IsNullOrWhiteSpace(request.TrainerPublicId))
+            throw new ValidationException("TrainerPublicId is required.");
+
+        var user = await ctx.Users.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == userId, ct)
+            ?? throw new MarketNotFoundException("User not found.");
+
+        var trainer = await ctx.Trainers.AsNoTracking()
+            .FirstOrDefaultAsync(
+                x => x.PublicId == request.TrainerPublicId && x.GymId == user.GymId && !x.IsDeleted,
+                ct)
+            ?? throw new MarketNotFoundException("Trainer not found.");
+
+        var trainerId = trainer.Id;
+
+        if (trainer.UserId == userId)
+            throw new ValidationException("You cannot book yourself.");
 
         var day = request.Date.Date;
         if (day < DateTime.UtcNow.Date)
             throw new ValidationException("Cannot book a past date.");
 
         var startTime = TrainingSlotRules.NormalizeTime(request.StartTime);
-
-        var trainer = await ctx.Trainers.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.TrainerId, ct)
-            ?? throw new MarketNotFoundException("Trainer not found.");
-
-        if (trainer.UserId == userId)
-            throw new ValidationException("You cannot book yourself.");
-
-        var user = await ctx.Users.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == userId, ct)
-            ?? throw new MarketNotFoundException("User not found.");
-
-        if (user.GymId != trainer.GymId)
-            throw new ValidationException("Trainer does not belong to your gym.");
 
         var today = DateTime.UtcNow.Date;
         var hasActiveMembership = await ctx.UserMemberships.AsNoTracking()
@@ -46,7 +49,7 @@ public sealed class CreateTrainingRequestCommandHandler(IAppDbContext ctx, IAppC
 
         var sessions = await GetTrainerAvailableSlotsQueryHandler.LoadSessionsAsync(
             ctx,
-            request.TrainerId,
+            trainerId,
             day,
             ct);
 
@@ -56,7 +59,7 @@ public sealed class CreateTrainingRequestCommandHandler(IAppDbContext ctx, IAppC
         var entity = new TrainingRequestEntity
         {
             UserId = userId,
-            TrainerId = request.TrainerId,
+            TrainerId = trainerId,
             Date = day,
             StartTime = startTime,
             Status = TrainingRequestStatus.Pending,
@@ -68,7 +71,7 @@ public sealed class CreateTrainingRequestCommandHandler(IAppDbContext ctx, IAppC
         return new CreateTrainingRequestResultDto
         {
             TrainingRequestId = entity.Id,
-            TrainerId = entity.TrainerId,
+            TrainerPublicId = trainer.PublicId,
             Date = entity.Date,
             StartTime = entity.StartTime,
             Status = entity.Status,

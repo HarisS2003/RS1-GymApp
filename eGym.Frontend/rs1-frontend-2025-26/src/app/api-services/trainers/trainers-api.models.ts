@@ -4,13 +4,13 @@ import { PageResult } from '../../core/models/paging/page-result';
 export class ListTrainersRequest extends BasePagedQuery {
   search?: string | null;
   gymId?: number | null;
-  userId?: number | null;
+  userPublicId?: string | null;
   minExperienceYears?: number | null;
 }
 
 export interface ListTrainersQueryDto {
-  id: number;
-  userId: number;
+  publicId: string;
+  userPublicId: string;
   gymId: number;
   bio: string;
   experienceYears: number;
@@ -20,7 +20,7 @@ export type ListTrainersResponse = PageResult<ListTrainersQueryDto>;
 
 /** Matches CreateTrainerCommand.cs */
 export interface CreateTrainerCommand {
-  userId: number;
+  userPublicId: string;
   gymId: number;
   bio: string;
   experienceYears: number;
@@ -28,7 +28,7 @@ export interface CreateTrainerCommand {
 
 /** Matches UpdateTrainerCommand.cs */
 export interface UpdateTrainerCommand {
-  userId: number;
+  userPublicId: string;
   gymId: number;
   bio: string;
   experienceYears: number;

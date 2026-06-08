@@ -1,23 +1,41 @@
 namespace Market.Application.Modules.Catalog.TrainingRequests.Queries.GetAvailableSlots;
 
-public sealed class GetTrainerAvailableSlotsQueryHandler(IAppDbContext ctx)
+public sealed class GetTrainerAvailableSlotsQueryHandler(
+    IAppDbContext ctx,
+    IAppCurrentUser currentUser)
     : IRequestHandler<GetTrainerAvailableSlotsQuery, List<TrainerAvailableSlotDto>>
 {
     public async Task<List<TrainerAvailableSlotDto>> Handle(
         GetTrainerAvailableSlotsQuery request,
         CancellationToken ct)
     {
-        if (request.TrainerId <= 0)
-            throw new ValidationException("TrainerId is required.");
+        if (string.IsNullOrWhiteSpace(request.TrainerPublicId))
+            throw new ValidationException("TrainerPublicId is required.");
+
+        var userId = currentUser.UserId
+            ?? throw new ValidationException("Current user is required.");
+
+        var currentGymId = await ctx.Users.AsNoTracking()
+            .Where(x => x.Id == userId)
+            .Select(x => x.GymId)
+            .FirstOrDefaultAsync(ct);
+
+        if (currentGymId == 0)
+            throw new MarketNotFoundException("User not found.");
+
+        var trainer = await ctx.Trainers.AsNoTracking()
+            .FirstOrDefaultAsync(
+                x => x.PublicId == request.TrainerPublicId && x.GymId == currentGymId && !x.IsDeleted,
+                ct)
+            ?? throw new MarketNotFoundException("Trainer not found.");
+
+        var trainerId = trainer.Id;
 
         var day = request.Date.Date;
         if (day < DateTime.UtcNow.Date)
             throw new ValidationException("Cannot book a past date.");
 
-        if (!await ctx.Trainers.AnyAsync(x => x.Id == request.TrainerId, ct))
-            throw new MarketNotFoundException("Trainer not found.");
-
-        var sessions = await LoadSessionsAsync(ctx, request.TrainerId, day, ct);
+        var sessions = await LoadSessionsAsync(ctx, trainerId, day, ct);
         var rentable = TrainingSlotRules.BuildRentableSlots(sessions);
 
         return rentable

@@ -1,4 +1,4 @@
-﻿namespace Market.Infrastructure.Database.Configurations.Trainers;
+namespace Market.Infrastructure.Database.Configurations.Trainers;
 
 public class TrainerEntityConfiguration : IEntityTypeConfiguration<TrainerEntity>
 {
@@ -6,6 +6,15 @@ public class TrainerEntityConfiguration : IEntityTypeConfiguration<TrainerEntity
     {
         builder
             .ToTable("Trainers");
+
+        builder
+            .Property(x => x.PublicId)
+            .IsRequired()
+            .HasMaxLength(36);
+
+        builder
+            .HasIndex(x => x.PublicId)
+            .IsUnique();
 
         builder
             .Property(x => x.Bio)

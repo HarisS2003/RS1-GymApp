@@ -1,4 +1,4 @@
-﻿using Market.API;
+using Market.API;
 using Market.API.Configuration;
 using Market.API.Middleware;
 using Market.Application;
