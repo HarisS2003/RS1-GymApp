@@ -33,7 +33,7 @@ public sealed class GetMyActiveUserMembershipQueryHandler(IAppDbContext ctx, IAp
 
         return new GetMyActiveUserMembershipQueryDto
         {
-            UserMembershipId = row.m.Id,
+            PublicId = row.m.PublicId,
             MembershipPlanId = row.m.MembershipPlanId,
             PlanName = row.p?.Name ?? "Membership",
             DurationDays = row.p?.DurationDays ?? Math.Max(1, (row.m.EndDate.Date - row.m.StartDate.Date).Days),

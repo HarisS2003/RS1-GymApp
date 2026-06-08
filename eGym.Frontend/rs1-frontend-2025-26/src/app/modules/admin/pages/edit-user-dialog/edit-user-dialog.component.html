@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ 'ADMIN_USERS.EDIT_TITLE' | translate }}</h2>
+
+<mat-dialog-content>
+  @if (loading) {
+    <div class="dialog-loading"><mat-spinner diameter="36"></mat-spinner></div>
+  } @else {
+    <form class="edit-user-form" [formGroup]="form">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'AUTH.FIRST_NAME' | translate }}</mat-label>
+        <input matInput formControlName="firstName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'AUTH.LAST_NAME' | translate }}</mat-label>
+        <input matInput formControlName="lastName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }}</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>{{ 'CLIENT.PROFILE.PHONE' | translate }}</mat-label>
+        <input matInput type="tel" formControlName="phoneNumber" />
+      </mat-form-field>
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">{{ 'COMMON.CANCEL' | translate }}</button>
+  <button mat-flat-button type="button" color="primary" [disabled]="loading || saving || form.invalid" (click)="apply()">
+    {{ 'COMMON.SAVE' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -1,6 +1,6 @@
 namespace Market.Application.Modules.Catalog.Users.Commands.Delete;
 
-public class DeleteUserCommand : IRequest<Unit>
+public sealed class DeleteUserCommand : IRequest<Unit>
 {
-    public required int Id { get; set; }
+    public required string PublicId { get; set; }
 }

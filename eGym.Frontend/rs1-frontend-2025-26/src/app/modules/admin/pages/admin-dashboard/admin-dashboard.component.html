@@ -17,9 +17,13 @@
   </div>
 
   <div class="admin-tabs">
-    <button mat-button type="button" class="active" (click)="setTab('trainers')">
+    <button mat-button type="button" [class.active]="activeTab === 'trainers'" (click)="setTab('trainers')">
       <mat-icon>groups</mat-icon>
       {{ 'ADMIN_DASH.TAB_TRAINERS' | translate }}
+    </button>
+    <button mat-button type="button" [class.active]="activeTab === 'users'" (click)="setTab('users')">
+      <mat-icon>person</mat-icon>
+      {{ 'ADMIN_DASH.TAB_USERS' | translate }}
     </button>
     <button mat-button type="button" (click)="setTab('products')">
       <mat-icon>shopping_bag</mat-icon>
@@ -31,14 +35,16 @@
     </button>
   </div>
 
-  @if (loading) {
+  @if (activeTab === 'users') {
+    <app-admin-users></app-admin-users>
+  } @else if (loading) {
     <div class="page-loading"><mat-spinner diameter="40"></mat-spinner></div>
   } @else {
     <div class="admin-table-wrap">
       <table mat-table [dataSource]="trainerRows" class="admin-table">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_NO' | translate }}</th>
-          <td mat-cell *matCellDef="let row"><span class="row-id">#{{ row.trainer.id }}</span></td>
+          <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
         </ng-container>
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN_DASH.COL_NAME' | translate }}</th>
@@ -94,6 +100,7 @@
       </table>
     </div>
 
+    @if (activeTab === 'trainers') {
     <section class="admin-summary">
       <mat-card class="summary-card summary-card--blue">
         <mat-card-content>
@@ -117,5 +124,6 @@
         </mat-card-content>
       </mat-card>
     </section>
+    }
   }
 </div>

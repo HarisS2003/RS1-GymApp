@@ -3,46 +3,48 @@ using Market.Application.Modules.Catalog.Trainers.Commands.Delete;
 using Market.Application.Modules.Catalog.Trainers.Commands.Update;
 using Market.Application.Modules.Catalog.Trainers.Queries.GetById;
 using Market.Application.Modules.Catalog.Trainers.Queries.List;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[AllowAnonymous]
 public class TrainersController(ISender sender) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<int>> Create(CreateTrainerCommand command, CancellationToken ct)
+    [Authorize]
+    public async Task<ActionResult<string>> Create(CreateTrainerCommand command, CancellationToken ct)
     {
-        int id = await sender.Send(command, ct);
-
-        return CreatedAtAction(nameof(GetById), new { id }, new { id });
+        var publicId = await sender.Send(command, ct);
+        return CreatedAtAction(nameof(GetById), new { publicId }, new { publicId });
     }
 
-    [HttpPut("{id:int}")]
-    public async Task Update(int id, UpdateTrainerCommand command, CancellationToken ct)
+    [HttpPut("{publicId}")]
+    [Authorize]
+    public async Task Update(string publicId, UpdateTrainerCommand command, CancellationToken ct)
     {
-        command.Id = id;
+        command.PublicId = publicId;
         await sender.Send(command, ct);
     }
 
-    [HttpDelete("{id:int}")]
-    public async Task Delete(int id, CancellationToken ct)
+    [HttpDelete("{publicId}")]
+    [Authorize]
+    public async Task Delete(string publicId, CancellationToken ct)
     {
-        await sender.Send(new DeleteTrainerCommand { Id = id }, ct);
+        await sender.Send(new DeleteTrainerCommand { PublicId = publicId }, ct);
     }
 
-    [HttpGet("{id:int}")]
-    public async Task<GetTrainerByIdQueryDto> GetById(int id, CancellationToken ct)
+    [HttpGet("{publicId}")]
+    [Authorize]
+    public async Task<GetTrainerByIdQueryDto> GetById(string publicId, CancellationToken ct)
     {
-        var trainer = await sender.Send(new GetTrainerByIdQuery { Id = id }, ct);
-        return trainer;
+        return await sender.Send(new GetTrainerByIdQuery { PublicId = publicId }, ct);
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<PageResult<ListTrainersQueryDto>> List([FromQuery] ListTrainersQuery query, CancellationToken ct)
     {
-        var result = await sender.Send(query, ct);
-        return result;
+        return await sender.Send(query, ct);
     }
 }

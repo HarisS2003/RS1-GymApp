@@ -20,11 +20,11 @@
     <p class="add-trainer-dialog__hint">{{ 'ADMIN_DASH.SELECT_ONE_USER' | translate }}</p>
     <mat-radio-group
       class="add-trainer-dialog__list"
-      [value]="selectedUserId"
+      [value]="selectedUserPublicId"
       (change)="selectUser($event.value)"
     >
-      @for (user of filteredUsers; track user.id) {
-        <mat-radio-button class="add-trainer-dialog__item" [value]="user.id">
+      @for (user of filteredUsers; track user.publicId) {
+        <mat-radio-button class="add-trainer-dialog__item" [value]="user.publicId">
           <span class="add-trainer-dialog__name">{{ user.firstName }} {{ user.lastName }}</span>
           <span class="add-trainer-dialog__email">{{ user.email }}</span>
         </mat-radio-button>

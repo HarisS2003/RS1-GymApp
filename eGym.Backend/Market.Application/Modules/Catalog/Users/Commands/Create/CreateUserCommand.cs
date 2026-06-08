@@ -1,6 +1,6 @@
 namespace Market.Application.Modules.Catalog.Users.Commands.Create;
 
-public class CreateUserCommand : IRequest<int>
+public class CreateUserCommand : IRequest<string>
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

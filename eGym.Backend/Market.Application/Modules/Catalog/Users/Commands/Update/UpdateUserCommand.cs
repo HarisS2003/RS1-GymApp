@@ -2,8 +2,7 @@ namespace Market.Application.Modules.Catalog.Users.Commands.Update;
 
 public sealed class UpdateUserCommand : IRequest<Unit>
 {
-    [JsonIgnore]
-    public int Id { get; set; }
+    public string PublicId { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;

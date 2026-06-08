@@ -8,6 +8,8 @@ import {
   GetUserByIdQueryDto,
   ListUsersRequest,
   ListUsersResponse,
+  ListUsersWithMembershipRequest,
+  ListUsersWithMembershipResponse,
   UpdateUserCommand,
 } from './users-api.models';
 
@@ -23,19 +25,33 @@ export class UsersApiService {
     return this.http.get<ListUsersResponse>(this.baseUrl, { params });
   }
 
-  getById(id: number): Observable<GetUserByIdQueryDto> {
-    return this.http.get<GetUserByIdQueryDto>(`${this.baseUrl}/${id}`);
+  listWithMemberships(
+    request?: ListUsersWithMembershipRequest,
+  ): Observable<ListUsersWithMembershipResponse> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.http.get<ListUsersWithMembershipResponse>(`${this.baseUrl}/with-memberships`, {
+      params,
+    });
   }
 
-  create(payload: CreateUserCommand): Observable<number> {
-    return this.http.post<number>(this.baseUrl, payload);
+  getCurrent(): Observable<GetUserByIdQueryDto> {
+    return this.http.get<GetUserByIdQueryDto>(`${this.baseUrl}/me`);
   }
 
-  update(id: number, payload: UpdateUserCommand): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+  getById(publicId: string): Observable<GetUserByIdQueryDto> {
+    return this.http.get<GetUserByIdQueryDto>(`${this.baseUrl}/${publicId}`);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  create(payload: CreateUserCommand): Observable<string> {
+    return this.http.post<string>(this.baseUrl, payload);
+  }
+
+  update(publicId: string, payload: UpdateUserCommand): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${publicId}`, payload);
+  }
+
+  delete(publicId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${publicId}`);
   }
 }
+

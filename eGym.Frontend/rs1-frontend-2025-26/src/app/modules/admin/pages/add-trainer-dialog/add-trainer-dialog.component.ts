@@ -8,7 +8,7 @@ import { catchError, of } from 'rxjs';
 
 export interface AddTrainerDialogData {
   gymId: number;
-  existingTrainerUserIds: number[];
+  existingTrainerUserPublicIds: string[];
 }
 
 export interface AddTrainerDialogResult {
@@ -31,7 +31,7 @@ export class AddTrainerDialogComponent implements OnInit {
   loading = true;
   search = '';
   users: ListUsersQueryDto[] = [];
-  selectedUserId: number | null = null;
+  selectedUserPublicId: string | null = null;
 
   detailsForm = this.fb.group({
     bio: ['', [Validators.required, Validators.minLength(2)]],
@@ -45,7 +45,7 @@ export class AddTrainerDialogComponent implements OnInit {
     req.gymId = this.data.gymId;
     req.paging.pageSize = 500;
 
-    const existing = new Set(this.data.existingTrainerUserIds);
+    const existing = new Set(this.data.existingTrainerUserPublicIds);
 
     this.usersApi
       .list(req)
@@ -54,7 +54,7 @@ export class AddTrainerDialogComponent implements OnInit {
         next: (res) => {
           this.users = (res.items ?? []).filter(
             (u) =>
-              !existing.has(u.id) &&
+              !existing.has(u.publicId) &&
               u.roleId !== ADMIN_ROLE_ID &&
               (u.roleId === MEMBER_ROLE_ID || u.roleId === TRAINER_ROLE_ID),
           );
@@ -74,12 +74,12 @@ export class AddTrainerDialogComponent implements OnInit {
   }
 
   get selectedUser(): ListUsersQueryDto | null {
-    if (this.selectedUserId == null) return null;
-    return this.users.find((u) => u.id === this.selectedUserId) ?? null;
+    if (!this.selectedUserPublicId) return null;
+    return this.users.find((u) => u.publicId === this.selectedUserPublicId) ?? null;
   }
 
-  selectUser(userId: number): void {
-    this.selectedUserId = userId;
+  selectUser(userPublicId: string): void {
+    this.selectedUserPublicId = userPublicId;
   }
 
   canApply(): boolean {

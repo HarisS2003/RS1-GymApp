@@ -19,6 +19,8 @@ public sealed class LoginCommandHandler(
             throw new MarketConflictException("Pogrešni kredencijali.");
 
         var tokens = jwt.IssueTokens(user);
+        user.RefreshTokenHash = tokens.RefreshTokenHash;
+        user.RefreshTokenExpiresAtUtc = tokens.RefreshTokenExpiresAtUtc;
 
         await ctx.SaveChangesAsync(ct);
 
@@ -26,7 +28,7 @@ public sealed class LoginCommandHandler(
         {
             AccessToken = tokens.AccessToken,
             RefreshToken = tokens.RefreshTokenRaw,
-            ExpiresAtUtc = tokens.RefreshTokenExpiresAtUtc
+            ExpiresAtUtc = tokens.AccessTokenExpiresAtUtc
         };
     }
 }

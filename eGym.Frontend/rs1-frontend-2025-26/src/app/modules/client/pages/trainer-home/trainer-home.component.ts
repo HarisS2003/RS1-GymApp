@@ -49,7 +49,7 @@ export class TrainerHomeComponent implements OnInit {
   groupCount = 0;
   pendingRequests: ListTrainerTrainingRequestQueryDto[] = [];
   bookingActionId: number | null = null;
-  private trainerId: number | null = null;
+  private trainerPublicId: string | null = null;
 
   ngOnInit(): void {
     this.load();
@@ -101,7 +101,7 @@ export class TrainerHomeComponent implements OnInit {
   }
 
   openGroupTrainingDialog(): void {
-    if (!this.trainerId) return;
+    if (!this.trainerPublicId) return;
 
     this.dialog
       .open<GroupTrainingDialogComponent, void, GroupTrainingDialogResult>(
@@ -110,11 +110,11 @@ export class TrainerHomeComponent implements OnInit {
       )
       .afterClosed()
       .subscribe((result) => {
-        if (!result || !this.trainerId) return;
+        if (!result || !this.trainerPublicId) return;
 
         this.trainingsApi
           .create({
-            trainerId: this.trainerId,
+            trainerPublicId: this.trainerPublicId,
             type: 2,
             description: result.description,
             date: result.date,
@@ -144,12 +144,10 @@ export class TrainerHomeComponent implements OnInit {
     }
 
     const trainersReq = new ListTrainersRequest();
-    trainersReq.userId = profile.id;
-    trainersReq.gymId = profile.gymId;
+    trainersReq.userPublicId = profile.publicId;
     trainersReq.paging.pageSize = 1;
 
     const membersReq = new ListUsersRequest();
-    membersReq.gymId = profile.gymId;
     membersReq.roleId = MEMBER_ROLE_ID;
     membersReq.paging.pageSize = 500;
 
@@ -159,16 +157,16 @@ export class TrainerHomeComponent implements OnInit {
         switchMap((res) => {
           const trainer = res.items?.[0];
           if (!trainer) {
-            this.trainerId = null;
+            this.trainerPublicId = null;
             return of({
               trainings: { items: [] },
               members: { totalItems: 0 },
               pending: [] as ListTrainerTrainingRequestQueryDto[],
             });
           }
-          this.trainerId = trainer.id;
+          this.trainerPublicId = trainer.publicId;
           const tReq = new ListTrainingsRequest();
-          tReq.trainerId = trainer.id;
+          tReq.trainerPublicId = trainer.publicId;
           tReq.paging.pageSize = 50;
           return forkJoin({
             trainings: this.trainingsApi.list(tReq).pipe(catchError(() => of({ items: [] } as any))),

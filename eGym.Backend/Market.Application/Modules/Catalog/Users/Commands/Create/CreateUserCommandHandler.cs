@@ -3,9 +3,9 @@ using Market.Shared.Validation;
 namespace Market.Application.Modules.Catalog.Users.Commands.Create;
 
 public class CreateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<UserEntity> hasher)
-    : IRequestHandler<CreateUserCommand, int>
+    : IRequestHandler<CreateUserCommand, string>
 {
-    public async Task<int> Handle(CreateUserCommand request, CancellationToken ct)
+    public async Task<string> Handle(CreateUserCommand request, CancellationToken ct)
     {
         var normalizedFirst = request.FirstName.Trim();
         if (string.IsNullOrWhiteSpace(normalizedFirst)) throw new ValidationException("First name is required.");
@@ -48,6 +48,6 @@ public class CreateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<UserEnt
 
         ctx.Users.Add(user);
         await ctx.SaveChangesAsync(ct);
-        return user.Id;
+        return user.PublicId;
     }
 }

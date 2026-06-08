@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { TrainersApiService } from '../../../../api-services/trainers/trainers-api.service';
 import { UsersApiService } from '../../../../api-services/users/users-api.service';
 import { TrainingsApiService } from '../../../../api-services/trainings/trainings-api.service';
@@ -49,7 +49,7 @@ export class AdminDashboardComponent implements OnInit {
   profileService = inject(UserProfileService);
 
   addingTrainers = false;
-  activeTab: 'trainers' | 'products' | 'memberships' = 'trainers';
+  activeTab: 'trainers' | 'users' | 'products' | 'memberships' = 'trainers';
   loading = true;
 
   trainerRows: AdminTrainerRow[] = [];
@@ -64,10 +64,13 @@ export class AdminDashboardComponent implements OnInit {
       this.load();
       return;
     }
-    this.profileService.loadProfile().subscribe(() => this.load());
+    this.profileService.loadProfile().subscribe({
+      next: () => this.load(),
+      error: () => this.load(),
+    });
   }
 
-  setTab(tab: 'trainers' | 'products' | 'memberships'): void {
+  setTab(tab: 'trainers' | 'users' | 'products' | 'memberships'): void {
     if (tab === 'products') {
       this.router.navigate(['/admin/products']);
       return;
@@ -76,7 +79,7 @@ export class AdminDashboardComponent implements OnInit {
       this.router.navigate(['/admin/membership-plans']);
       return;
     }
-    this.activeTab = tab;
+    this.activeTab = tab === 'users' ? 'users' : 'trainers';
   }
 
   goMembershipPlans(): void {
@@ -85,7 +88,7 @@ export class AdminDashboardComponent implements OnInit {
 
   trainerName(row: AdminTrainerRow): string {
     if (row.user) return `${row.user.firstName} ${row.user.lastName}`;
-    return this.translate.instant('CLIENT.PROFILE.TRAINER_FALLBACK', { id: row.trainer.id });
+    return this.translate.instant('CLIENT.PROFILE.TRAINER_FALLBACK', { id: row.trainer.publicId });
   }
 
   openAddTrainer(): void {
@@ -97,7 +100,7 @@ export class AdminDashboardComponent implements OnInit {
 
     const data: AddTrainerDialogData = {
       gymId,
-      existingTrainerUserIds: this.trainerRows.map((r) => r.trainer.userId),
+      existingTrainerUserPublicIds: this.trainerRows.map((r) => r.trainer.userPublicId),
     };
 
     this.dialog
@@ -137,7 +140,7 @@ export class AdminDashboardComponent implements OnInit {
       return;
     }
 
-    this.trainersApi.delete(row.trainer.id).subscribe({
+    this.trainersApi.delete(row.trainer.publicId).subscribe({
         next: () => {
           this.toaster.success(this.translate.instant('ADMIN_DASH.DEGRADE_SUCCESS', { name }));
           this.load();
@@ -159,7 +162,7 @@ export class AdminDashboardComponent implements OnInit {
     const u = result.user;
 
     this.usersApi
-      .update(u.id, {
+      .update(u.publicId, {
         firstName: u.firstName,
         lastName: u.lastName,
         email: u.email,
@@ -170,7 +173,7 @@ export class AdminDashboardComponent implements OnInit {
       .pipe(
         switchMap(() =>
           this.trainersApi.create({
-            userId: u.id,
+            userPublicId: u.publicId,
             gymId,
             bio: result.bio,
             experienceYears: result.experienceYears,
@@ -206,12 +209,10 @@ export class AdminDashboardComponent implements OnInit {
     const trainerUsersReq = new ListUsersRequest();
     trainerUsersReq.roleId = TRAINER_ROLE_ID;
     trainerUsersReq.paging.pageSize = 500;
-    if (gymId) trainerUsersReq.gymId = gymId;
 
     const membersReq = new ListUsersRequest();
     membersReq.roleId = MEMBER_ROLE_ID;
     membersReq.paging.pageSize = 500;
-    if (gymId) membersReq.gymId = gymId;
 
     const trainingsReq = new ListTrainingsRequest();
     trainingsReq.paging.pageSize = 500;
@@ -236,48 +237,29 @@ export class AdminDashboardComponent implements OnInit {
           0,
         );
 
-        const byUserId = new Map<number, ListTrainersQueryDto>();
+        const byUserPublicId = new Map<string, ListTrainersQueryDto>();
         for (const t of (trainers.items ?? []) as ListTrainersQueryDto[]) {
-          if (!gymId || t.gymId === gymId) {
-            byUserId.set(t.userId, t);
-          }
+          byUserPublicId.set(t.userPublicId, t);
         }
 
-        const matched: ListTrainersQueryDto[] = [];
+        const usersByPublicId = new Map<string, ListUsersQueryDto>();
         for (const u of (trainerUsers.items ?? []) as ListUsersQueryDto[]) {
-          const t = byUserId.get(u.id);
-          if (t) matched.push(t);
+          usersByPublicId.set(u.publicId, u);
         }
 
-        this.mapTrainerRows(matched.length ? matched : [...byUserId.values()]);
-      },
-      error: () => (this.loading = false),
-    });
-  }
-
-  private mapTrainerRows(list: ListTrainersQueryDto[]): void {
-    if (!list.length) {
-      this.trainerRows = [];
-      this.loading = false;
-      return;
-    }
-
-    forkJoin(
-      list.map((t) =>
-        this.usersApi.getById(t.userId).pipe(
-          catchError(() => of(null)),
-          map((user): AdminTrainerRow => ({
+        const matched: AdminTrainerRow[] = [];
+        for (const t of byUserPublicId.values()) {
+          matched.push({
             trainer: t,
-            user: user ?? undefined,
-          })),
-        ),
-      ),
-    ).subscribe({
-      next: (rows) => {
-        this.trainerRows = rows as AdminTrainerRow[];
+            user: usersByPublicId.get(t.userPublicId),
+          });
+        }
+
+        this.trainerRows = matched;
         this.loading = false;
       },
       error: () => (this.loading = false),
     });
   }
+
 }

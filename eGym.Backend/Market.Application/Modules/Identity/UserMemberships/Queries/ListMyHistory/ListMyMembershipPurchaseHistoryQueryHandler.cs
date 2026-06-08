@@ -28,7 +28,7 @@ public sealed class ListMyMembershipPurchaseHistoryQueryHandler(IAppDbContext ct
 
             return new ListMyMembershipPurchaseHistoryQueryDto
             {
-                UserMembershipId = row.m.Id,
+                PublicId = row.m.PublicId,
                 PlanName = row.p.Name,
                 AmountPaid = finalPrice,
                 PurchasedAt = row.m.StartDate,

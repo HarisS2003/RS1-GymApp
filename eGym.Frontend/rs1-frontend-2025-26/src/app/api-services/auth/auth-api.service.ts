@@ -14,11 +14,11 @@ import {
   providedIn: 'root'
 })
 export class AuthApiService {
-  private readonly baseUrl = `${environment.apiUrl}/api/Auth`;
+  private readonly baseUrl = `${environment.apiUrl}/api/auth`;
   private http = inject(HttpClient);
 
   /**
-   * POST /Auth/login
+   * POST /api/auth/login
    * Authenticate user and get access/refresh tokens.
    */
   login(payload: LoginCommand): Observable<LoginCommandDto> {
@@ -26,7 +26,7 @@ export class AuthApiService {
   }
 
   /**
-   * POST /Auth/refresh
+   * POST /api/auth/refresh
    * Refresh access token using refresh token.
    */
   refresh(payload: RefreshTokenCommand): Observable<RefreshTokenCommandDto> {
@@ -34,7 +34,7 @@ export class AuthApiService {
   }
 
   /**
-   * POST /Auth/logout
+   * POST /api/auth/logout
    * Invalidate refresh token and logout user.
    */
   logout(payload: LogoutCommand): Observable<void> {

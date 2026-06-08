@@ -3,31 +3,50 @@ using Market.Application.Modules.Catalog.TrainingRequests.Queries.GetAvailableSl
 
 namespace Market.Application.Modules.Catalog.Trainings.Commands.Create;
 
-public sealed class CreateTrainingCommandHandler(IAppDbContext ctx)
+public sealed class CreateTrainingCommandHandler(
+    IAppDbContext ctx,
+    IAppCurrentUser currentUser)
     : IRequestHandler<CreateTrainingCommand, int>
 {
     public async Task<int> Handle(CreateTrainingCommand request, CancellationToken ct)
     {
-        if (request.TrainerId <= 0) throw new ValidationException("TrainerId is required.");
+        if (string.IsNullOrWhiteSpace(request.TrainerPublicId))
+            throw new ValidationException("TrainerPublicId is required.");
         if (!Enum.IsDefined(typeof(TrainingType), request.Type))
             throw new ValidationException("Invalid training type.");
         if (request.Capacity <= 0) throw new ValidationException("Capacity must be positive.");
 
-        if (!await ctx.Trainers.AnyAsync(x => x.Id == request.TrainerId, ct))
-            throw new ValidationException("Invalid TrainerId.");
+        var userId = currentUser.UserId
+            ?? throw new ValidationException("Current user is required.");
+
+        var currentGymId = await ctx.Users.AsNoTracking()
+            .Where(x => x.Id == userId)
+            .Select(x => x.GymId)
+            .FirstOrDefaultAsync(ct);
+
+        if (currentGymId == 0)
+            throw new MarketNotFoundException("User not found.");
+
+        var trainer = await ctx.Trainers.AsNoTracking()
+            .FirstOrDefaultAsync(
+                x => x.PublicId == request.TrainerPublicId && x.GymId == currentGymId && !x.IsDeleted,
+                ct)
+            ?? throw new MarketNotFoundException("Trainer not found.");
+
+        var trainerId = trainer.Id;
 
         var date = request.Date.Date;
         var startTime = TrainingSlotRules.NormalizeTime(request.StartTime);
 
-        var sessions = await GetTrainerAvailableSlotsQueryHandler.LoadSessionsAsync(ctx, request.TrainerId, date, ct);
+        var sessions = await GetTrainerAvailableSlotsQueryHandler.LoadSessionsAsync(ctx, trainerId, date, ct);
         if (!TrainingSlotRules.IsRentableSlot(sessions, startTime))
             throw new MarketBusinessRuleException("SLOT_TAKEN", "This time slot is no longer available.");
 
-        await DelayOtherSessionsAsync(request.TrainerId, date, startTime, ct);
+        await DelayOtherSessionsAsync(trainerId, date, startTime, ct);
 
         var training = new TrainingEntity
         {
-            TrainerId = request.TrainerId,
+            TrainerId = trainerId,
             Type = request.Type,
             Description = request.Description?.Trim(),
             Date = date,

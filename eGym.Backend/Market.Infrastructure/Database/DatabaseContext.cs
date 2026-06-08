@@ -12,6 +12,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<TrainerEntity> Trainers => Set<TrainerEntity>();
     public DbSet<MembershipPlanEntity> MembershipPlans => Set<MembershipPlanEntity>();
     public DbSet<UserMembershipEntity> UserMemberships => Set<UserMembershipEntity>();
+    public DbSet<MembershipEvent> MembershipEvents => Set<MembershipEvent>();
     public DbSet<PaymentEntity> Payments => Set<PaymentEntity>();
     public DbSet<ProductEntity> Products => Set<ProductEntity>();
     public DbSet<ProductVariantEntity> ProductVariants => Set<ProductVariantEntity>();

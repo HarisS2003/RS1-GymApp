@@ -2,7 +2,7 @@ namespace Market.Application.Modules.Identity.UserMemberships.Queries.GetMyActiv
 
 public sealed class GetMyActiveUserMembershipQueryDto
 {
-    public required int UserMembershipId { get; init; }
+    public required string PublicId { get; init; }
     public required int MembershipPlanId { get; init; }
     public required string PlanName { get; init; }
     public required int DurationDays { get; init; }

@@ -49,6 +49,12 @@ public partial class DatabaseContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
         modelBuilder.ApplyEncryptedStringConverters(_encryption);
 
+        modelBuilder.Entity<MembershipEvent>()
+            .HasOne(e => e.UserMembership)
+            .WithMany()
+            .HasForeignKey(e => e.UserMembershipId)
+            .IsRequired(false);
+
         ApplyGlobalFielters(modelBuilder);
 
         StaticDataSeeder.Seed(modelBuilder); // static data

@@ -1,10 +1,11 @@
-﻿using Market.Domain.Attributes;
+using Market.Domain.Attributes;
 using Market.Domain.Common;
 
 namespace Market.Domain.Entities;
 
 public class UserEntity : BaseEntity
 {
+    public string PublicId { get; set; } = Guid.NewGuid().ToString();
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
@@ -13,6 +14,8 @@ public class UserEntity : BaseEntity
     public string PhoneNumber { get; set; } = string.Empty;
 
     public string PasswordHash { get; set; } = string.Empty;
+    public string? RefreshTokenHash { get; set; }
+    public DateTime? RefreshTokenExpiresAtUtc { get; set; }
     public int RoleId { get; set; }
     public int GymId { get; set; }
 

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  GetMembershipHistoryQueryDto,
   GetMyActiveUserMembershipQueryDto,
   ListMyMembershipPurchaseHistoryQueryDto,
   PurchaseMembershipPlanCommand,
@@ -18,7 +19,7 @@ export class UserMembershipsApiService {
 
   getMyActive(): Observable<GetMyActiveUserMembershipQueryDto | null> {
     return this.http.get<GetMyActiveUserMembershipQueryDto | null>(`${this.baseUrl}/my`).pipe(
-      map((dto) => (dto && dto.userMembershipId > 0 ? dto : null)),
+      map((dto) => (dto && dto.publicId ? dto : null)),
     );
   }
 
@@ -34,4 +35,24 @@ export class UserMembershipsApiService {
       payload,
     );
   }
+
+  getHistory(
+    publicId: string,
+    asOfDate?: string,
+  ): Observable<GetMembershipHistoryQueryDto> {
+    const params = asOfDate ? { asOfDate } : undefined;
+    return this.http.get<GetMembershipHistoryQueryDto>(
+      `${this.baseUrl}/${publicId}/history`,
+      { params },
+    );
+  }
+
+  freeze(publicId: string, reason?: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${publicId}/freeze`, { reason });
+  }
+
+  activate(publicId: string, reason?: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${publicId}/activate`, { reason });
+  }
 }
+

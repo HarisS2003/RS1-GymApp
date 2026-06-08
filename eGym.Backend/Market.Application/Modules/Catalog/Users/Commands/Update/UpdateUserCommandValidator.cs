@@ -6,7 +6,10 @@ public sealed class UpdateUserCommandValidator : AbstractValidator<UpdateUserCom
 {
     public UpdateUserCommandValidator()
     {
-        RuleFor(x => x.Id).GreaterThan(0);
+        RuleFor(x => x.PublicId)
+            .NotEmpty()
+            .Must(PublicIdValidator.IsValid)
+            .WithMessage("PublicId must be a valid GUID.");
         RuleFor(x => x.FirstName).NotEmpty().MaximumLength(100);
         RuleFor(x => x.LastName).NotEmpty().MaximumLength(100);
         RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(200);

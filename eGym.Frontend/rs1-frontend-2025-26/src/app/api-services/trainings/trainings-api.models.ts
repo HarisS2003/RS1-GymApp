@@ -2,7 +2,7 @@ import { BasePagedQuery } from '../../core/models/paging/base-paged-query';
 import { PageResult } from '../../core/models/paging/page-result';
 
 export class ListTrainingsRequest extends BasePagedQuery {
-  trainerId?: number | null;
+  trainerPublicId?: string | null;
   type?: number | null;
   dateFrom?: string | null;
   dateTo?: string | null;
@@ -10,7 +10,7 @@ export class ListTrainingsRequest extends BasePagedQuery {
 
 export interface ListTrainingsQueryDto {
   id: number;
-  trainerId: number;
+  trainerPublicId: string;
   trainerName: string;
   type: number;
   description?: string | null;
@@ -21,7 +21,7 @@ export interface ListTrainingsQueryDto {
 }
 
 export interface CreateTrainingCommand {
-  trainerId: number;
+  trainerPublicId: string;
   type: number;
   description?: string | null;
   date: string;

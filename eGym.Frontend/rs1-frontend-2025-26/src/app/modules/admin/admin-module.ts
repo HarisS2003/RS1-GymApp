@@ -15,8 +15,11 @@ import {SharedModule} from '../shared/shared-module';
 import { OrderDetailsDialogComponent } from './orders/admin-orders-details-dialog/order-details-dialog.component';
 import { ChangeStatusDialogComponent } from './orders/change-status-dialog/change-status-dialog.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { AdminUsersComponent } from './pages/admin-users/admin-users.component';
 import { AddTrainerDialogComponent } from './pages/add-trainer-dialog/add-trainer-dialog.component';
 import { EditTrainerDialogComponent } from './pages/edit-trainer-dialog/edit-trainer-dialog.component';
+import { EditUserDialogComponent } from './pages/edit-user-dialog/edit-user-dialog.component';
+import { MembershipHistoryDialogComponent } from './pages/membership-history-dialog/membership-history-dialog.component';
 import { MembershipPlansComponent } from './catalogs/membership-plans/membership-plans.component';
 import { MembershipPlansAddComponent } from './catalogs/membership-plans/membership-plans-add/membership-plans-add.component';
 import { MembershipPlansEditComponent } from './catalogs/membership-plans/membership-plans-edit/membership-plans-edit.component';
@@ -26,8 +29,11 @@ import { ProductVariantsEditorComponent } from './catalogs/products/product-vari
 @NgModule({
   declarations: [
     AdminDashboardComponent,
+    AdminUsersComponent,
     AddTrainerDialogComponent,
     EditTrainerDialogComponent,
+    EditUserDialogComponent,
+    MembershipHistoryDialogComponent,
     ProductsComponent,
     ProductsAddComponent,
     ProductsEditComponent,

@@ -42,12 +42,14 @@ export class ClientHomeComponent implements OnInit {
   joiningId: number | null = null;
 
   ngOnInit(): void {
-    const gymId = this.profileService.profile()?.gymId;
-    if (!gymId) {
-      this.profileService.loadProfile().subscribe(() => this.loadData());
+    if (this.profileService.profile()?.gymId) {
+      this.loadData();
       return;
     }
-    this.loadData();
+    this.profileService.loadProfile().subscribe({
+      next: () => this.loadData(),
+      error: () => this.loadData(),
+    });
   }
 
   freePlaces(training: ListTrainingsQueryDto): number {
@@ -85,18 +87,12 @@ export class ClientHomeComponent implements OnInit {
 
   private loadData(): void {
     const gymId = this.profileService.profile()?.gymId;
-    if (!gymId) {
-      this.loading = false;
-      return;
-    }
 
     const usersReq = new ListUsersRequest();
-    usersReq.gymId = gymId;
     usersReq.roleId = MEMBER_ROLE_ID;
     usersReq.paging.pageSize = 500;
 
     const trainersReq = new ListTrainersRequest();
-    trainersReq.gymId = gymId;
     trainersReq.paging.pageSize = 500;
 
     const trainingsReq = new ListTrainingsRequest();

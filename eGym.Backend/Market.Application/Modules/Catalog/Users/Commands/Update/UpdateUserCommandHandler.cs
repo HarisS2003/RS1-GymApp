@@ -2,13 +2,20 @@ using Market.Shared.Validation;
 
 namespace Market.Application.Modules.Catalog.Users.Commands.Update;
 
-public sealed class UpdateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<UserEntity> hasher)
+public sealed class UpdateUserCommandHandler(
+    IAppDbContext ctx,
+    IAppCurrentUser currentUser,
+    IPasswordHasher<UserEntity> hasher)
     : IRequestHandler<UpdateUserCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken ct)
     {
-        var entity = await ctx.Users.FirstOrDefaultAsync(x => x.Id == request.Id, ct);
-        if (entity is null) throw new MarketNotFoundException($"User (ID={request.Id}) nije pronađen.");
+        var currentGymId = await GetCurrentGymIdAsync(ct);
+
+        var entity = await ctx.Users.FirstOrDefaultAsync(
+            x => x.PublicId == request.PublicId && x.GymId == currentGymId,
+            ct);
+        if (entity is null) throw new MarketNotFoundException("User not found.");
 
         var normalizedFirst = request.FirstName.Trim();
         if (string.IsNullOrWhiteSpace(normalizedFirst)) throw new ValidationException("First name is required.");
@@ -30,7 +37,7 @@ public sealed class UpdateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<
 
         var emailLower = normalizedEmail.ToLower();
         var exists = await ctx.Users.AnyAsync(
-            x => x.Id != request.Id && x.Email.ToLower() == emailLower,
+            x => x.Id != entity.Id && x.Email.ToLower() == emailLower,
             ct);
         if (exists) throw new MarketConflictException("User with this email already exists.");
 
@@ -50,5 +57,20 @@ public sealed class UpdateUserCommandHandler(IAppDbContext ctx, IPasswordHasher<
 
         await ctx.SaveChangesAsync(ct);
         return Unit.Value;
+    }
+
+    private async Task<int> GetCurrentGymIdAsync(CancellationToken ct)
+    {
+        var userId = currentUser.UserId
+            ?? throw new ValidationException("Current user is required.");
+
+        var gymId = await ctx.Users.AsNoTracking()
+            .Where(x => x.Id == userId)
+            .Select(x => x.GymId)
+            .FirstOrDefaultAsync(ct);
+
+        return gymId == 0
+            ? throw new MarketNotFoundException("User not found.")
+            : gymId;
     }
 }

@@ -7,8 +7,18 @@ public sealed class ListTrainingsQueryHandler(IAppDbContext ctx)
     {
         var q = ctx.Trainings.AsNoTracking();
 
-        if (request.TrainerId is int trainerId)
+        if (!string.IsNullOrWhiteSpace(request.TrainerPublicId))
+        {
+            var trainerId = await ctx.Trainers.AsNoTracking()
+                .Where(x => x.PublicId == request.TrainerPublicId && !x.IsDeleted)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync(ct);
+
+            if (trainerId == 0)
+                throw new MarketNotFoundException("Trainer not found.");
+
             q = q.Where(x => x.TrainerId == trainerId);
+        }
 
         if (request.Type is TrainingType type)
             q = q.Where(x => x.Type == type);
@@ -22,7 +32,7 @@ public sealed class ListTrainingsQueryHandler(IAppDbContext ctx)
         var projectedQuery = q.Select(x => new ListTrainingsQueryDto
         {
             Id = x.Id,
-            TrainerId = x.TrainerId,
+            TrainerPublicId = x.Trainer!.PublicId,
             TrainerName = x.Trainer!.User!.FirstName + " " + x.Trainer.User.LastName,
             Type = x.Type,
             Description = x.Description,

@@ -1,4 +1,4 @@
-﻿namespace Market.Infrastructure.Database.Configurations.UserMemberships;
+namespace Market.Infrastructure.Database.Configurations.UserMemberships;
 
 public class UserMembershipEntityConfiguration : IEntityTypeConfiguration<UserMembershipEntity>
 {
@@ -6,6 +6,15 @@ public class UserMembershipEntityConfiguration : IEntityTypeConfiguration<UserMe
     {
         builder
             .ToTable("UserMemberships");
+
+        builder
+            .Property(x => x.PublicId)
+            .IsRequired()
+            .HasMaxLength(36);
+
+        builder
+            .HasIndex(x => x.PublicId)
+            .IsUnique();
 
         builder
             .HasOne(x => x.User)

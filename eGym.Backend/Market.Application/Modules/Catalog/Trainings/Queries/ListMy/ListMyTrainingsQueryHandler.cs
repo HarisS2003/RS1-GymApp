@@ -19,7 +19,7 @@ public sealed class ListMyTrainingsQueryHandler(IAppDbContext ctx, IAppCurrentUs
             select new ListMyTrainingsQueryDto
             {
                 Id = training.Id,
-                TrainerId = training.TrainerId,
+                TrainerPublicId = trainer.PublicId,
                 TrainerName = (trainerUser.FirstName + " " + trainerUser.LastName).Trim(),
                 Type = training.Type,
                 Description = training.Description,
