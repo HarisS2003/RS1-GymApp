@@ -32,6 +32,7 @@ public class NotificationEntityConfiguration : IEntityTypeConfiguration<Notifica
             .HasOne(x => x.HashtagTag)
             .WithMany(x => x.Notifications)
             .HasForeignKey(x => x.HashtagTagId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired(false);
     }
 }

@@ -30,15 +30,15 @@ public sealed class CreateOrderCommandHandler(IAppDbContext ctx, IAppCurrentUser
             if (item.Quantity > product.StockQuantity)
                 throw new ValidationException($"Insufficient stock for product '{product.Name}'.");
 
-            var lineTotal = Math.Round(product.Price * item.Quantity, 2, MidpointRounding.AwayFromZero);
+            var price = Math.Round(product.Price * item.Quantity, 2, MidpointRounding.AwayFromZero);
             ctx.OrderItems.Add(new OrderItemEntity
             {
                 Order = order,
                 ProductId = item.ProductId,
                 Quantity = item.Quantity,
-                Price = lineTotal
+                Price = price
             });
-            order.TotalAmount += lineTotal;
+            order.TotalAmount += price;
         }
 
         await ctx.SaveChangesAsync(ct);

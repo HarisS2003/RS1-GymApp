@@ -207,7 +207,7 @@ namespace Market.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("HashtagTagId")
+                    b.Property<int?>("HashtagTagId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -843,8 +843,7 @@ namespace Market.Infrastructure.Migrations
                     b.HasOne("Market.Domain.Entities.HashtagTagEntity", "HashtagTag")
                         .WithMany("Notifications")
                         .HasForeignKey("HashtagTagId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Market.Domain.Entities.UserEntity", "User")
                         .WithMany("Notifications")
