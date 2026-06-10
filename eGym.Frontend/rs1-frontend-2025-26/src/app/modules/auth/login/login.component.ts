@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, PLATFORM_ID, inject, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseComponent } from '../../../core/components/base-classes/base-component';
@@ -25,6 +26,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   private gymSelection = inject(GymSelectionService);
   private profileService = inject(UserProfileService);
   private translate = inject(TranslateService);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly demo = DEMO_LOGIN;
   hidePassword = true;
@@ -42,9 +44,11 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return;
     }
 
-    const remembered = localStorage.getItem('rememberedEmail');
-    if (remembered) {
-      this.form.patchValue({ email: remembered, rememberMe: true });
+    if (this.isBrowser) {
+      const remembered = localStorage.getItem('rememberedEmail');
+      if (remembered) {
+        this.form.patchValue({ email: remembered, rememberMe: true });
+      }
     }
   }
 
@@ -64,10 +68,12 @@ export class LoginComponent extends BaseComponent implements OnInit {
     const email = this.form.value.email ?? '';
     const password = this.form.value.password ?? '';
 
-    if (this.form.value.rememberMe) {
-      localStorage.setItem('rememberedEmail', email);
-    } else {
-      localStorage.removeItem('rememberedEmail');
+    if (this.isBrowser) {
+      if (this.form.value.rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
     }
 
     const payload: LoginCommand = {

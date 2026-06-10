@@ -1,5 +1,9 @@
 <app-fit-loading-bar></app-fit-loading-bar>
 
-<div class="route-outlet-host" [@routeAnimations]="prepareRoute(outlet)">
+<div
+  class="route-outlet-host"
+  [@.disabled]="animationsDisabled"
+  [@routeAnimations]="prepareRoute(outlet)"
+>
   <router-outlet #outlet="outlet"></router-outlet>
 </div>

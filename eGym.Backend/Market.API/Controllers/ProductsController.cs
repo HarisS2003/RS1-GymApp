@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [EnableRateLimiting(RateLimitingServiceExtensions.ApiFixedWindowPolicy)]
 public class ProductsController(ISender sender) : ControllerBase
 {

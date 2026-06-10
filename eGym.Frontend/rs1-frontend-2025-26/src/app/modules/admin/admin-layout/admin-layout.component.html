@@ -77,7 +77,11 @@
     </mat-toolbar>
 
     <div class="dash-content">
-      <div class="route-outlet-host route-outlet-host--dash" [@routeAnimations]="animationState">
+      <div
+        class="route-outlet-host route-outlet-host--dash"
+        [@.disabled]="animationsDisabled"
+        [@routeAnimations]="animationState"
+      >
         <router-outlet (activate)="onRouteActivate()"></router-outlet>
       </div>
     </div>

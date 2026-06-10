@@ -9,14 +9,14 @@ import { UserProfileService } from '../../../../core/services/user-profile.servi
 import { ProductShopDialogComponent } from './product-shop-dialog.component';
 import { ToasterService } from '../../../../core/services/toaster.service';
 import { TranslateService } from '@ngx-translate/core';
-import { productGridAnimation } from '../../../../core/animations/ui.animations';
+import { listStagger } from '../../../../core/animations/ui.animations';
 
 @Component({
   selector: 'app-client-shop',
   standalone: false,
   templateUrl: './client-shop.component.html',
   styleUrl: './client-shop.component.scss',
-  animations: [productGridAnimation],
+  animations: [listStagger],
 })
 export class ClientShopComponent implements OnInit {
   private productsApi = inject(ProductsApiService);

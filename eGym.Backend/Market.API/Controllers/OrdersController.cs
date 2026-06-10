@@ -7,7 +7,7 @@ using Market.Application.Modules.Catalog.Orders.Queries.List;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class OrdersController(ISender sender) : ControllerBase
 {
     [HttpPost]

@@ -20,7 +20,7 @@
   @if (filteredProducts.length === 0) {
     <p class="empty-msg">{{ 'CLIENT.SHOP.NO_CATEGORY' | translate }}</p>
   } @else {
-    <div class="products-grid" [@productGrid]="productGridKey">
+    <div class="products-grid" [@listStagger]="filteredProducts.length">
       @for (product of filteredProducts; track product.id) {
         <mat-card
           class="product-card"

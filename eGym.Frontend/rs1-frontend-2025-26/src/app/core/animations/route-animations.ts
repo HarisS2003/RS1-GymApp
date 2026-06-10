@@ -21,12 +21,16 @@ export function withPageAnimation(animation: string): { animation: string } {
  * Requires `.route-outlet-host` (CSS grid stack + overflow hidden).
  * Bind: [@routeAnimations]="prepareRouteAnimationState(outlet)"
  */
+// Absolute positioning is scoped to the animation metadata only (no global CSS
+// changes) so :enter and :leave routes overlap without layout jump.
+const STACK = { position: 'absolute', width: '100%', top: 0, left: 0 } as const;
+
 export const routeAnimations = trigger('routeAnimations', [
   transition('* <=> *', [
-    query(':enter', [style({ opacity: 0, zIndex: 1 })], { optional: true }),
+    query(':enter', [style({ ...STACK, opacity: 0, zIndex: 1 })], { optional: true }),
     query(
       ':leave',
-      [style({ opacity: 1, zIndex: 0, pointerEvents: 'none' })],
+      [style({ ...STACK, opacity: 1, zIndex: 0, pointerEvents: 'none' })],
       { optional: true },
     ),
     group([

@@ -24,12 +24,14 @@ import {
   MembershipAlreadyHaveDialogData,
 } from '../../../shared/components/membership-already-have-dialog/membership-already-have-dialog.component';
 import { GetMyActiveUserMembershipQueryDto } from '../../../../api-services/user-memberships/user-memberships-api.models';
+import { listStagger } from '../../../../core/animations/ui.animations';
 
 @Component({
   selector: 'app-client-memberships',
   standalone: false,
   templateUrl: './client-memberships.component.html',
   styleUrl: './client-memberships.component.scss',
+  animations: [listStagger],
 })
 export class ClientMembershipsComponent implements OnInit {
   private plansApi = inject(MembershipPlansApiService);

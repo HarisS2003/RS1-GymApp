@@ -8,7 +8,7 @@ using Market.Application.Modules.Catalog.TrainingRequests.Queries.ListMy;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TrainingRequestsController(ISender sender) : ControllerBase
 {
     [HttpGet("available-slots")]

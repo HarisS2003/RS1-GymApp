@@ -1,4 +1,5 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 
 export type AppLanguage = 'bs' | 'en';
@@ -12,6 +13,7 @@ export interface LanguageOption {
 export class AppLocaleService {
   private translate = inject(TranslateService);
   private readonly storageKey = 'language';
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly languages: LanguageOption[] = [
     { code: 'bs', labelKey: 'COMMON.LANG.BS' },
@@ -24,13 +26,14 @@ export class AppLocaleService {
     this.translate.addLangs(['en', 'bs']);
     this.translate.setDefaultLang('bs');
 
-    const saved = (localStorage.getItem(this.storageKey) as AppLanguage) || 'bs';
+    const saved =
+      (this.isBrowser ? (localStorage.getItem(this.storageKey) as AppLanguage) : null) || 'bs';
     this.setLanguage(saved, false);
   }
 
   setLanguage(lang: AppLanguage, persist = true): void {
     this.currentLang.set(lang);
-    if (persist) {
+    if (persist && this.isBrowser) {
       localStorage.setItem(this.storageKey, lang);
     }
     this.translate.use(lang).subscribe();

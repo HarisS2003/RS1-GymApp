@@ -7,7 +7,7 @@ using Market.Application.Modules.Catalog.MembershipPlans.Queries.List;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class MembershipPlansController(ISender sender) : ControllerBase
 {
     [HttpPost]

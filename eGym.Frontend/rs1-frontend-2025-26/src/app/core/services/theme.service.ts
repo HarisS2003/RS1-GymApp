@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export type AppTheme = 'light' | 'dark';
 
@@ -6,11 +7,13 @@ export type AppTheme = 'light' | 'dark';
 export class ThemeService {
   private readonly storageKey = 'app-theme';
   private readonly _theme = signal<AppTheme>('light');
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   theme = this._theme.asReadonly();
   isDark = computed(() => this._theme() === 'dark');
 
   init(): void {
+    if (!this.isBrowser) return;
     const saved = localStorage.getItem(this.storageKey) as AppTheme | null;
     this.apply(saved === 'dark' ? 'dark' : 'light');
   }
@@ -25,6 +28,7 @@ export class ThemeService {
 
   private apply(theme: AppTheme): void {
     this._theme.set(theme);
+    if (!this.isBrowser) return;
     localStorage.setItem(this.storageKey, theme);
 
     const root = document.documentElement;

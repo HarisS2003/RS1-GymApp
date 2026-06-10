@@ -2,10 +2,13 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  NgZone,
   OnInit,
+  PLATFORM_ID,
   ViewChild,
   inject,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -32,10 +35,15 @@ export class AdminLayoutComponent implements OnInit, AfterViewInit {
   profileService = inject(UserProfileService);
   private router = inject(Router);
   private layoutResponsive = inject(LayoutResponsiveService);
+  private platformId = inject(PLATFORM_ID);
+  private ngZone = inject(NgZone);
 
   readonly isHandset = toSignal(this.layoutResponsive.isHandset$, { initialValue: false });
   sidenavOpen = false;
   animationState = '';
+
+  /** Disabled during SSR + first client paint to kill the F5 hang/blink. */
+  animationsDisabled = true;
 
   ngOnInit(): void {
     this.profileService.loadProfile().subscribe();
@@ -45,6 +53,12 @@ export class AdminLayoutComponent implements OnInit, AfterViewInit {
         this.syncRouteAnimationState();
         this.scrollMainToTop();
       });
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.ngZone.runOutsideAngular(() => {
+        setTimeout(() => (this.animationsDisabled = false), 100);
+      });
+    }
   }
 
   ngAfterViewInit(): void {

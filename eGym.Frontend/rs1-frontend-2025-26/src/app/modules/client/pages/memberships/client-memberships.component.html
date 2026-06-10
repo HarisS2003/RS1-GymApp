@@ -7,7 +7,7 @@
 } @else if (plans.length === 0) {
   <p class="empty-msg">{{ 'CLIENT.HOME.NO_PLANS' | translate }}</p>
 } @else {
-  <div class="plans-row">
+  <div class="plans-row" [@listStagger]="plans.length">
     @for (plan of plans; track plan.id; let i = $index) {
       <mat-card
         class="plan-card"

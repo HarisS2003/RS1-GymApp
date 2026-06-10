@@ -21,7 +21,7 @@
   } @else if (products.length === 0) {
     <p class="empty-msg">{{ 'CLIENT.HOME.NO_PRODUCTS' | translate }}</p>
   } @else {
-    <div class="admin-shop-grid">
+    <div class="admin-shop-grid" [@listStagger]="products.length">
       @for (product of products; track product.id) {
         <mat-card class="admin-shop-card" appearance="outlined">
           <mat-card-content>

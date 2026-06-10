@@ -9,7 +9,7 @@ using Market.Application.Modules.Catalog.TrainingParticipants.Commands.Join;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [AllowAnonymous]
 public class TrainingsController(ISender sender) : ControllerBase
 {

@@ -7,7 +7,7 @@ using Market.Application.Modules.Catalog.Reviews.Queries.List;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [AllowAnonymous]
 public class ReviewsController(ISender sender) : ControllerBase
 {

@@ -1,7 +1,7 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 import { catchError, throwError } from 'rxjs';
-import { ToasterService } from '../services/toaster.service';
 
 /**
  * HTTP interceptor that logs errors.
@@ -16,9 +16,17 @@ import { ToasterService } from '../services/toaster.service';
  * - Re-throws errors so components can handle them
  */
 export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) => {
+  const isServer = isPlatformServer(inject(PLATFORM_ID));
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Log error to console
+      // Skip logging on the SSR server — backend is unreachable from Node
+      // (CORS/local network), the transferStateInterceptor swallows it and the
+      // browser refetches. Logging here would only flood the console.
+      if (isServer) {
+        return throwError(() => error);
+      }
+
       // In production, send to logging service like Sentry
       console.error('HTTP Error:', {
         url: req.url,

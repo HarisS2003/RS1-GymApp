@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [Authorize]
 public class UserMembershipsController(ISender sender) : ControllerBase
 {

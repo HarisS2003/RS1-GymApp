@@ -11,7 +11,7 @@ using Market.Application.Modules.Catalog.Baskets.Queries.List;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [AllowAnonymous]
 public class BasketsController(ISender sender) : ControllerBase
 {

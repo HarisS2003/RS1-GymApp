@@ -6,12 +6,14 @@ import {
 } from '../../../api-services/products/products-api.models';
 import { ProductsApiService } from '../../../api-services/products/products-api.service';
 import { UserProfileService } from '../../../core/services/user-profile.service';
+import { listStagger } from '../../../core/animations/ui.animations';
 
 @Component({
   selector: 'app-admin-shop',
   standalone: false,
   templateUrl: './admin-shop.component.html',
   styleUrl: './admin-shop.component.scss',
+  animations: [listStagger],
 })
 export class AdminShopComponent implements OnInit {
   private productsApi = inject(ProductsApiService);

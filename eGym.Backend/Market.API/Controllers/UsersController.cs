@@ -22,7 +22,7 @@ namespace Market.API.Controllers;
 
 [ApiController]
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 
 public class UsersController(ISender sender) : ControllerBase
 

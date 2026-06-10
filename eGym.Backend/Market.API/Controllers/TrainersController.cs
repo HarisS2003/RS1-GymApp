@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TrainersController(ISender sender) : ControllerBase
 {
     [HttpPost]

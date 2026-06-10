@@ -7,7 +7,7 @@ using Market.Application.Modules.Catalog.Gyms.Queries.List;
 namespace Market.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [AllowAnonymous]
 public class GymsController(ISender sender) : ControllerBase
 {
